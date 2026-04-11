@@ -93,29 +93,33 @@ export default async function PostPage({ params }: PostPageProps) {
       </article>
 
       <section className="subscribe-section compact">
-        <div className="section-heading">
-          <p className="eyebrow">Email</p>
-          <h2>Get the next reflection.</h2>
+        <div className="subscribe-inner">
+          <div className="section-heading">
+            <p className="eyebrow">Stay in the Word</p>
+            <h2>Get the next reflection.</h2>
+          </div>
+          <SubscribeForm />
         </div>
-        <SubscribeForm />
       </section>
 
       {relatedPosts.length > 0 && (
         <section className="archive-section">
-          <div className="section-heading">
-            <p className="eyebrow">Keep Reading</p>
-            <h2>More from this thread.</h2>
-          </div>
-          <div className="post-list compact">
-            {relatedPosts.map((relatedPost) => (
-              <Link key={relatedPost.slug} className="post-row" href={`/posts/${relatedPost.slug}`}>
-                <div>
-                  <p className="metadata">{formatPostDate(relatedPost.date)}</p>
-                  <h3>{relatedPost.title}</h3>
-                </div>
-                <span aria-hidden="true">Read</span>
-              </Link>
-            ))}
+          <div className="section-inner">
+            <div className="section-heading">
+              <p className="eyebrow">Keep Reading</p>
+              <h2>More from this thread.</h2>
+            </div>
+            <div className="post-list compact">
+              {relatedPosts.map((relatedPost) => (
+                <Link key={relatedPost.slug} className="post-row" href={`/posts/${relatedPost.slug}`}>
+                  <div>
+                    <p className="metadata">{formatPostDate(relatedPost.date)}</p>
+                    <h3>{relatedPost.title}</h3>
+                  </div>
+                  <span aria-hidden="true">Read</span>
+                </Link>
+              ))}
+            </div>
           </div>
         </section>
       )}

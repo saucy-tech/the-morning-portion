@@ -52,12 +52,14 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
       </nav>
 
       <section className="archive-section">
-        <div className="section-heading">
-          <p className="eyebrow">{series.count} Reflections</p>
-          <h1>{series.name}</h1>
-          <p>Read the series in order, from the first reflection to the most recent.</p>
+        <div className="section-inner">
+          <div className="section-heading">
+            <p className="eyebrow">{series.count} Reflections</p>
+            <h1>{series.name}</h1>
+            <p>Read the series in order, from the first reflection to the most recent.</p>
+          </div>
+          <PostList posts={series.posts} />
         </div>
-        <PostList posts={series.posts} />
       </section>
     </main>
   );

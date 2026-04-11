@@ -1,100 +1,173 @@
 # The Daily Word Design System
+## Inspired by Bible Project
 
-Source note: this file is adapted from the Tesla-inspired Awesome DESIGN.md entry requested for this project. The local Awesome Design MD repo only contained a pointer, and `npx getdesign@latest add tesla` failed with `No versions available for getdesign`, so these tokens are derived from the public Tesla preview and tailored for The Daily Word.
+Source: Extracted and adapted from [BibleProject.com](https://bibleproject.com/) visual identity and component patterns. This design system emphasizes **educational accessibility**, **welcoming aesthetics**, and **illustration-driven layouts** suitable for scripture reading and spiritual reflection.
 
 ## Visual Theme & Atmosphere
 
-The interface should feel like a quiet reading room with the restraint of a product launch page: one message per screen, very little chrome, and photography used as atmosphere rather than decoration. Warmth should come from softer language, the morning image, and a restrained coral accent, not from a brown or gold palette.
+The interface should feel like a welcoming, accessible learning space. Think: a nonprofit educational platform focused on helping people understand and explore scripture. The design should:
 
-Use radical subtraction. The page should have fewer things, not smaller things. Large open areas, direct copy, precise alignment, and minimal navigation are the core rules.
+- Use **semantic HTML** with clear, accessible component patterns
+- Emphasize **readability for long-form content** (reflection, study guides, scripture passages)
+- Feature **illustration-heavy design** with geometric, friendly artwork
+- Convey warmth and approachability (not cold, corporate)
+- Support **multiple content types** (videos, guides, classes/lessons, podcasts/reflections)
+- Build **community focus** and accessibility-first design
 
-The Daily Word adaptation replaces automotive language with scripture-first editorial rhythm. Treat the latest reflection as the primary product. Treat the archive as a simple library.
+The philosophy: "We create resources to help people understand [The Daily Word]" — **Educational, Accessible, Welcoming**.
 
 ## Color Palette & Roles
 
-| Token | Value | Role |
-| --- | --- | --- |
-| Electric Blue | `#3E6AE1` | Primary action, focus ring, active link |
-| Warm Coral | `#B6534D` | Small accent for scripture and subscribe moments |
-| Pure White | `#FFFFFF` | Primary background and button surface |
-| Light Ash | `#F4F4F4` | Alternate surface and quiet band |
-| Carbon Dark | `#171A20` | Headings, navigation, dark overlays |
-| Graphite | `#393C41` | Body copy |
-| Pewter | `#5C5E62` | Secondary text and metadata |
-| Silver Fog | `#8E8E8E` | Tertiary text and disabled state |
-| Cloud Gray | `#EEEEEE` | Hairline dividers |
-| Pale Silver | `#D0D1D2` | Input borders and subtle delineation |
-| Frosted Glass | `rgba(255,255,255,0.75)` | Header backdrop when layered over imagery |
+| Token | Value | Role | Notes |
+| --- | --- | --- | --- |
+| Primary White | `#FFFFFF` | Primary background, reading surfaces | Clean, readable for long text |
+| Deep Navy/Dark | `#1A1A2E` | Secondary background, navigation | Dark mode or contrast areas |
+| Accent Blue | `#4A90E2` | Interactive elements, links, CTAs | Clear, accessible blue |
+| Warm Accent | `#C08552` | Scripture highlights, callouts, emphasis | Warm terracotta tone |
+| Text Dark | `#2C3E50` | Body text, headings, primary content | High contrast on white |
+| Text Medium | `#7F8C8D` | Secondary text, metadata, captions | Readable secondary hierarchy |
+| Neutral Light | `#ECF0F1` | Subtle backgrounds, borders, dividers | Minimal visual noise |
+| Illustration Palette | Multi-color | Decorative illustrations, icons, visual interest | Geometric, friendly, varied |
 
-Do not build a gold, beige, brown, purple, or dark-blue theme. Use the project-owned hero image with restraint so the interface still reads white, graphite, blue, and a small coral accent.
+**Dark Mode:** Invert backgrounds (Near-black pages, off-white text), maintain Blue accent and Warm Accent, ensure sufficient contrast for readability.
 
-Dark mode uses the same system in charcoal: near-black page background, warm off-white text, blue action color, and coral scripture accents. The toggle must persist in `localStorage` and respect system preference before the reader chooses a mode.
+Do not use: gold, brown, purple, or corporate grays. Keep the palette warm, accessible, and illustration-friendly.
 
 ## Typography Rules
 
-Use Inter as the practical substitute for Universal Sans.
+Use a readable, friendly system font stack or open-source typeface (e.g., Inter, Outfit, or system fonts).
 
 | Role | Size | Weight | Line Height | Notes |
 | --- | --- | --- | --- | --- |
-| Hero Title | `40px` | `500` | `48px` | Plain sentence case |
-| Hero Kicker | `14px` | `500` | `20px` | Uppercase is allowed with normal letter spacing only |
-| Promo Text | `22px` | `400` | `30px` | Use over darkened image areas |
-| Post Title | `32px` | `500` | `40px` | Reading pages |
-| Nav Item | `14px` | `500` | `18px` | Minimal header links |
-| Body Text | `16px` | `400` | `26px` | Reading optimized |
-| Metadata | `14px` | `400` | `20px` | Pewter |
+| Page Title | `40-48px` | `600` | `1.2` | Educational material headings |
+| Section Title | `28-32px` | `600` | `1.3` | Lesson sections, guides |
+| Card Title | `20-24px` | `600` | `1.3` | Resource cards, module titles |
+| Body Text | `16px` | `400` | `1.6-1.8` | Reading optimized, generous line height |
+| Navigation | `14px` | `500` | `1.5` | Menu items, links |
+| Metadata | `13px` | `400` | `1.5` | Dates, categories, secondary info |
+| Label | `12px` | `500` | `1.4` | Form labels, small UI text |
 
-No negative letter spacing. Do not scale font size with viewport width.
+**Emphasis:** Use weight variation (400 to 600) more than size variation. Generous line heights improve readability for educational content.
 
 ## Component Styling
 
-Buttons are barely rounded rectangles. Radius is `4px`. Primary buttons use Electric Blue with white text. Secondary buttons use white with Carbon Dark text. Text links use Pewter or Carbon Dark and underline on hover.
+### Navigation
+- **Header**: Semantic HTML (`<nav>`), horizontal menu with primary items (Daily Word, Guides, Classes, Podcast, More)
+- **Submenus**: Dropdown patterns for secondary navigation (Languages, User Account, Settings)
+- **Mobile**: Menu toggle button, accessible label. Keep tap targets ≥40px
+- **Accessibility**: Skip-to-content link at top, ARIA labels for all interactive elements
 
-Inputs use white backgrounds, Pale Silver borders, `4px` radius, and Electric Blue focus states.
+### Buttons
+- **Primary CTA**: Accent Blue background, white text, `4px` radius, hover state darkens blue
+- **Secondary**: Outlined or white with text color, `4px` radius
+- **Subscribe/Support**: Warm Accent (#C08552) for call-to-action prominence
+- **Disabled**: Gray text, reduced opacity, no hover effect
 
-Post list items may use a single flat border or none. Avoid shadows. Repeated post items can use a `1px` Cloud Gray divider and a white background.
+### Cards & Components
+- **Resource Cards**: Illustration-based, with rounded corners (`8px`), shadow optional (use sparingly)
+- **Card Content**: Title, brief description, illustration/image at top or side
+- **Lists**: Single flat border or minimal divider (`1px` Neutral Light), white background
+- **Forms**: White inputs with `4px` radius, Blue focus ring, clear labels with `for` attribute
 
-Newsletter forms can be framed as a functional control surface, but do not put cards inside cards.
+### Links
+- **Inline Links**: Accent Blue with underline, hover shows darker blue
+- **External Links**: Indicate with icon or note
+- **Accessible**: Focus ring visible, sufficient color contrast
 
 ## Layout Principles
 
-Use an 8px spacing base.
+Use an **8px base spacing grid**.
 
 | Token | Value | Role |
 | --- | --- | --- |
-| `4px` | Button inner adjustments |
-| `8px` | Base gap |
-| `16px` | Compact content gap |
+| `4px` | Micro adjustments, button internals |
+| `8px` | Base gap between adjacent elements |
+| `16px` | Compact content spacing, nested items |
 | `24px` | Button horizontal padding |
-| `40px` | Section horizontal padding |
-| `80px` | Section vertical padding |
-| `82svh` | Hero height so the next section remains visible |
+| `40px` | Section horizontal padding, medium gaps |
+| `80px` | Section vertical padding, major section spacing |
 
-The homepage should begin with the actual Daily Word experience, not a landing page pitch. Put the latest reflection, subscription action, and archive path above the fold.
+**Structure**: 
+- Hero section at top with featured Daily Word reflection or callout
+- Primary content area (reading, study guide, lesson)
+- Navigation to archive or related resources below
+- Footer with support/community links
+
+**Content Hierarchy**:
+1. Hero section / Featured reflection (dominant)
+2. Primary content area (study material, reflection text)
+3. Related resources or next steps
+4. Archive / browse section (library-style)
+
+Keep layouts **single-column on mobile**, **multi-column on desktop** (if needed). Prioritize **readability and focus** over visual complexity.
 
 ## Depth & Elevation
 
-Default to flat. No decorative shadows. Depth comes from photography, opacity layering, and whitespace.
+Default to **flat design**. Depth comes from:
+- **Whitespace** and breathing room
+- **Typography hierarchy** (size, weight, color)
+- **Photography** (subtle background imagery, never dominating)
+- **Illustration** (friendly, geometric, supporting content)
 
-Use frosted navigation sparingly. Avoid blobs, gradient orbs, bokeh decoration, and framed preview containers.
+Avoid:
+- Decorative shadows (use sparingly, only for layering clarity)
+- Gradient overlays (keep subtle, preserve legibility)
+- Floating blobs or decorative shapes
+- Multiple nested cards
+
+Use **semantic layering** — implied depth through content hierarchy, not visual tricks.
 
 ## Responsive Behavior
 
-Collapse header navigation into a compact row, not a hidden menu, unless the app grows. Keep tap targets at least `40px` tall. Keep hero content readable with a dark image overlay and enough width for long titles.
+- **Breakpoint philosophy**: Mobile-first, expand from narrow to wide
+- **Hero height**: Use `100vh` or `82svh` to keep next section visible (draws reader down)
+- **Navigation**: Collapse to icon-based or vertical menu if needed; keep accessible
+- **Touch targets**: Minimum `40px` height, `44px` recommended
+- **Typography**: Fixed sizes (no viewport scaling), maintain `16px` minimum for accessibility
+- **Content width**: Max-width `65-75ch` (characters per line) for readability on wide screens
 
-Post lists should become single-column on mobile. Forms should stack on mobile and sit inline only when space allows.
+## Accessibility Standards
+
+- **WCAG 2.1 AA minimum**: All text ≥4.5:1 contrast ratio
+- **Semantic HTML**: Use `<nav>`, `<main>`, `<article>`, `<footer>` correctly
+- **ARIA labels**: On icons, buttons without text, and custom components
+- **Keyboard navigation**: Tab through all interactive elements, logical order
+- **Skip links**: "Skip to content" at top
+- **Focus visible**: Clear focus ring on all interactive elements
+- **Images**: Descriptive `alt` text for illustrations, decorative images marked `alt=""`
+- **Forms**: Associated labels, clear error messages, optional vs required indication
+- **Color**: Don't rely on color alone (use text labels, icons, patterns)
 
 ## Do's And Don'ts
 
-Do:
-- Let the latest reflection dominate the first screen.
-- Use the Daily Word hero image as atmosphere, cooled and darkened.
-- Keep copy direct and reader-facing.
-- Prefer `4px` radius for controls and `8px` maximum for repeated items.
+### Do:
+- Let the featured Daily Word reflection or lesson **dominate the first screen**
+- Use **illustrations** to support learning and break text
+- Create **clear hierarchy** through typography and spacing
+- Design for **mobile-first readability** (generous line heights, tap targets)
+- Include **navigation to archive** and related resources
+- Make **accessibility a feature**, not an afterthought (labels, skip links, focus management)
+- Support **multiple content types** (reflections, guides, lessons, podcasts)
+- Use **semantic HTML** throughout
 
-Don't:
-- Use gold-on-green styling from the personal site.
-- Turn the site into a generic newsletter landing page.
-- Add decorative gradients or floating glow shapes.
-- Use self-referential UI copy such as "this page shows".
-- Create a beige, brown, or orange visual system from the banner image.
+### Don't:
+- Create a **generic newsletter layout** — emphasize the content, not the platform
+- Use **dark/corporate color palettes** — keep it warm and welcoming
+- Rely on **tiny text or dense layouts** — this is an educational platform, not a news site
+- Add **decorative gradients or floating shapes** — clarity over decoration
+- Forget **accessibility** — captions, labels, ARIA, keyboard navigation matter
+- Build **complex multi-level menus** — keep navigation simple and flat
+- Use **auto-playing audio or video** — put the user in control
+- Ignore **dark mode** — support both light and dark preferences
+
+## Agent Prompt Guide
+
+When building UI for The Daily Word using this design system:
+
+> Build a reading interface inspired by BibleProject.com. Features: welcoming, accessible educational design with warm accents and illustration support. Navigation: Daily Word (featured), Guides, Classes, Podcast, More. Color: white/dark backgrounds, accent blue (#4A90E2), warm accent (#C08552). Typography: readable sans-serif, generous line heights (1.6-1.8), semantic hierarchy. Components: semantic navigation, card-based resource lists, clear CTAs, form inputs with focus rings. Accessibility first: ARIA labels, skip links, keyboard nav, high contrast. Layout: mobile-first, 8px grid, max-width for reading comfort. Avoid: decorative elements, dark/corporate palettes, inaccessible patterns.
+
+## References
+
+- **Source inspiration**: [BibleProject.com](https://bibleproject.com/)
+- **Design philosophy**: Educational, accessible, community-focused content platform
+- **Format**: Adapted from Google Stitch [DESIGN.md specification](https://stitch.withgoogle.com/docs/design-md/)
