@@ -8,7 +8,7 @@ import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/constants';
 import './globals.css';
 
 export const viewport: Viewport = {
-  themeColor: '#FFFFFF',
+  themeColor: '#FEFAF5',
   width: 'device-width',
   initialScale: 1,
 };

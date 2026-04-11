@@ -47,9 +47,7 @@ export default function SubscribeForm() {
       <button type="submit" disabled={status === 'loading'}>
         {status === 'loading' ? 'Subscribing' : 'Subscribe'}
       </button>
-      <p className="form-note">
-        Free weekday reflections. Unsubscribe anytime.
-      </p>
+      <p className="form-note">Unsubscribe anytime.</p>
       <div className="form-status" aria-live="polite">
         {status === 'success' && <p className="success">Check your inbox for confirmation.</p>}
         {status === 'error' && <p className="error">Something went wrong. Try again.</p>}
