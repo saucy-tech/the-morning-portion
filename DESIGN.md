@@ -1,173 +1,155 @@
-# The Daily Word Design System
-## Inspired by Bible Project
+# The Daily Word — Design System
 
-Source: Extracted and adapted from [BibleProject.com](https://bibleproject.com/) visual identity and component patterns. This design system emphasizes **educational accessibility**, **welcoming aesthetics**, and **illustration-driven layouts** suitable for scripture reading and spiritual reflection.
+Direction A: **Verse-as-typography**. Editorial, cream-paper feel with a single italic-quoted scripture as the daily hero. Warm coral accent, navy ink, hand-drawn sun ornament. Inspired by quiet morning reading rooms and late-19th-century devotional broadsides.
+
+Source prototype: `~/Downloads/The Daily Word/` (three hero directions explored; A shipped). Variants B (split layout + side verse) and C (mission-first warm dark) remain in the prototype folder for a possible future themes feature.
 
 ## Visual Theme & Atmosphere
 
-The interface should feel like a welcoming, accessible learning space. Think: a nonprofit educational platform focused on helping people understand and explore scripture. The design should:
+The page should feel like a single page torn from a printed devotional — cream stock, generous margins, one italic verse holding the screen, a small numbered colophon, no decoration competing with scripture. Photography is not used. A single hand-drawn sun ornament sits at the upper right of the hero as quiet atmosphere.
 
-- Use **semantic HTML** with clear, accessible component patterns
-- Emphasize **readability for long-form content** (reflection, study guides, scripture passages)
-- Feature **illustration-heavy design** with geometric, friendly artwork
-- Convey warmth and approachability (not cold, corporate)
-- Support **multiple content types** (videos, guides, classes/lessons, podcasts/reflections)
-- Build **community focus** and accessibility-first design
-
-The philosophy: "We create resources to help people understand [The Daily Word]" — **Educational, Accessible, Welcoming**.
+Use radical typographic restraint. The verse is the page. Everything else (date row, source, CTA, meta) is small, subordinate, and aligned to a single column.
 
 ## Color Palette & Roles
 
-| Token | Value | Role | Notes |
-| --- | --- | --- | --- |
-| Primary White | `#FFFFFF` | Primary background, reading surfaces | Clean, readable for long text |
-| Deep Navy/Dark | `#1A1A2E` | Secondary background, navigation | Dark mode or contrast areas |
-| Accent Blue | `#4A90E2` | Interactive elements, links, CTAs | Clear, accessible blue |
-| Warm Accent | `#C08552` | Scripture highlights, callouts, emphasis | Warm terracotta tone |
-| Text Dark | `#2C3E50` | Body text, headings, primary content | High contrast on white |
-| Text Medium | `#7F8C8D` | Secondary text, metadata, captions | Readable secondary hierarchy |
-| Neutral Light | `#ECF0F1` | Subtle backgrounds, borders, dividers | Minimal visual noise |
-| Illustration Palette | Multi-color | Decorative illustrations, icons, visual interest | Geometric, friendly, varied |
+| Token | Value | Role |
+| --- | --- | --- |
+| `--tdw-bg` | `#FBF6EC` | Cream page background |
+| `--tdw-bg-alt` | `#F4ECDB` | Subscribe band, soft section alternation |
+| `--tdw-paper` | `#FFFFFF` | Inputs, series cards |
+| `--tdw-ink` | `#1A2236` | Headings, primary buttons, body emphasis |
+| `--tdw-ink-soft` | `#3A4258` | Body copy |
+| `--tdw-ink-mute` | `#6E7080` | Metadata, secondary text |
+| `--tdw-rule` | `#E5DCC8` | Hairline dividers, post-list rules |
+| `--tdw-rule-soft` | `#EDE5D2` | Header bottom border |
+| `--tdw-warm` | `#B5552E` | Coral accent — eyebrows, № stamps, italic accents, hover |
+| `--tdw-warm-deep` | `#8E3F1F` | Coral hover state |
+| `--tdw-blue` | `#2C5FA8` | Reserved for occasional secondary accent |
 
-**Dark Mode:** Invert backgrounds (Near-black pages, off-white text), maintain Blue accent and Warm Accent, ensure sufficient contrast for readability.
+**Dark mode** flips the surface to `#14181F` with ivory ink (`#F2EAD8`) and warmer coral (`#D4825A`). Tokens overridden under `html[data-theme='dark']`. Stored in `localStorage` as `daily-word-theme`; respects `prefers-color-scheme` on first paint via inline script in `layout.tsx`.
 
-Do not use: gold, brown, purple, or corporate grays. Keep the palette warm, accessible, and illustration-friendly.
+Do not introduce gold, brown-paper textures, gradient overlays, or dark navy chrome. Warmth comes from the cream stock + a single coral accent, not from many colors.
 
-## Typography Rules
+## Typography
 
-Use a readable, friendly system font stack or open-source typeface (e.g., Inter, Outfit, or system fonts).
+- **Display/Serif**: Fraunces (variable, axes `SOFT` + `opsz`). Hero verse, post titles, section headings, blockquotes, brand wordmark, № stamps. Loaded via `next/font/google` and exposed as `--tdw-serif`.
+- **Body/Sans**: Inter. Eyebrows, body copy in articles, metadata, buttons. Exposed as `--tdw-sans`.
 
-| Role | Size | Weight | Line Height | Notes |
-| --- | --- | --- | --- | --- |
-| Page Title | `40-48px` | `600` | `1.2` | Educational material headings |
-| Section Title | `28-32px` | `600` | `1.3` | Lesson sections, guides |
-| Card Title | `20-24px` | `600` | `1.3` | Resource cards, module titles |
-| Body Text | `16px` | `400` | `1.6-1.8` | Reading optimized, generous line height |
-| Navigation | `14px` | `500` | `1.5` | Menu items, links |
-| Metadata | `13px` | `400` | `1.5` | Dates, categories, secondary info |
-| Label | `12px` | `500` | `1.4` | Form labels, small UI text |
+Letter-spacing is subtractive on display (`-0.01em`). Italic + light weights are reserved for scripture and № stamps. No uppercase outside the eyebrow.
 
-**Emphasis:** Use weight variation (400 to 600) more than size variation. Generous line heights improve readability for educational content.
+| Role | Family | Size | Weight | Line height | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Hero verse | Fraunces | `90px` (1024–) → `64px` → `44px` (≤860) → `36px` (≤520) | 400 | 1.02 | Italic curly quotes in `--tdw-warm` wrap the verse |
+| Section heading | Fraunces | `44px` → `32px` (≤860) | 500 | 1.1 | Italic-coral accent span permitted (`<span class="accent">`) |
+| Post page H1 | Fraunces | `56px` → `40px` (≤860) | 500 | 1.05 | |
+| Post body H2 | Fraunces | `28px` | 500 | 1.2 | `margin: 56px 0 20px` |
+| Body | Inter | `18px` | 400 | 1.75 | Color `--tdw-ink-soft` |
+| Eyebrow | Inter | `12px` | 600 | — | `letter-spacing: 0.14em`, uppercase, `--tdw-warm` |
+| № stamp | Fraunces italic | `16–18px` | 300 | — | `--tdw-warm` |
+| Metadata | Inter | `13–14px` | 400 | 1.5 | `--tdw-ink-mute` |
 
-## Component Styling
+## Components
 
-### Navigation
-- **Header**: Semantic HTML (`<nav>`), horizontal menu with primary items (Daily Word, Guides, Classes, Podcast, More)
-- **Submenus**: Dropdown patterns for secondary navigation (Languages, User Account, Settings)
-- **Mobile**: Menu toggle button, accessible label. Keep tap targets ≥40px
-- **Accessibility**: Skip-to-content link at top, ARIA labels for all interactive elements
+### Header (`.site-header`)
+Sticky cream-tinted bar with backdrop blur, 72px min-height. Book-mark SVG + serif wordmark left, simple text nav center (Today / Archive / Series), pill ThemeToggle + pill Subscribe right. Single hairline border-bottom in `--tdw-rule-soft`.
 
-### Buttons
-- **Primary CTA**: Accent Blue background, white text, `4px` radius, hover state darkens blue
-- **Secondary**: Outlined or white with text color, `4px` radius
-- **Subscribe/Support**: Warm Accent (#C08552) for call-to-action prominence
-- **Disabled**: Gray text, reduced opacity, no hover effect
+### Hero (`.hero`)
+Cream surface, no photography. Layout (top to bottom inside `.hero-inner`):
 
-### Cards & Components
-- **Resource Cards**: Illustration-based, with rounded corners (`8px`), shadow optional (use sparingly)
-- **Card Content**: Title, brief description, illustration/image at top or side
-- **Lists**: Single flat border or minimal divider (`1px` Neutral Light), white background
-- **Forms**: White inputs with `4px` radius, Blue focus ring, clear labels with `for` attribute
+1. `.hero-meta-row` — eyebrow date · 1px rule · italic № stamp
+2. `.hero-source` — "From today's reading — *Reference*" in muted ink
+3. `.hero-verse` — big Fraunces verse with curly warm quotes
+4. `.hero-actions` — pill primary "Read today's reflection →" + italic post title · reading time
 
-### Links
-- **Inline Links**: Accent Blue with underline, hover shows darker blue
-- **External Links**: Indicate with icon or note
-- **Accessible**: Focus ring visible, sufficient color contrast
+`.hero-ornament` (hand-drawn Sun SVG, 300px) sits absolutely at the upper right with `opacity: 0.18`. Hidden on mobile.
 
-## Layout Principles
+### Buttons (`.button`)
+Pill (`border-radius: 999px`), 14/24 padding, 44px min-height, weight 600.
 
-Use an **8px base spacing grid**.
+- `.primary` — `--tdw-ink` background, cream text. Hover: switches to `--tdw-warm` background.
+- `.ghost` — transparent, inset 1px ink ring, ink text. Hover inverts.
+
+### Theme toggle (`.theme-toggle`)
+Pill, 36×36, 1px rule border, sun/moon SVG.
+
+### Post list (`.post-list`)
+Ordered list, top + bottom hairline rules per row. Each `.post-row` is a 3-column grid: italic № stamp · (date · series + Fraunces title) · → arrow. Hover tints text `--tdw-warm`.
+
+Numbers come from a global `Map<slug, n>` produced by `getPostNumbers()` in `src/lib/posts.ts` so filtered subsets (series page, related list) keep the global devotion number.
+
+### Series grid (`.series-grid`)
+Auto-fill cards, `min(280px)` columns, 16px gap. Card: paper background, 1px rule border, 24px padding, 180px min-height. Footer holds a Fraunces title; header holds count meta. Hover: border tints warm.
+
+### Subscribe band (`.subscribe-section`)
+Background `--tdw-bg-alt`. Two-column grid (title left, form right, 64px gap). Pill submit, 1px-rule input with paper background, focus ring uses `--tdw-ink` color-mix.
+
+### Reading layout (`.reading-layout`)
+720px max-width centered column. Italic № stamp colophon, Fraunces H1, Inter body at 18/1.75, blockquote with 3px warm left border in italic Fraunces. Anchor color `--tdw-warm` underlined.
+
+### Footer (`.site-footer`)
+Single-row, top-rule. Serif wordmark left, two text links right (RSS, saucy.tech).
+
+## Ornaments
+
+`src/components/Ornaments.tsx` — hand-drawn SVG strokes (1.0–1.4 weight, round caps).
+
+| Component | Use |
+| --- | --- |
+| `Sun` | Hero atmosphere, top-right at 0.18 opacity |
+| `Hills` | Reserved for Direction B (not currently rendered) |
+| `Arc` | Reserved for Direction C |
+| `Mark` | Logomark (open book + small dot of light) used in `.brand` |
+
+All take `currentColor` so they inherit ink/warm from the parent.
+
+## Layout & spacing
+
+8px base. Sections share `.section` (64px padding) wrapping a `.section-inner` capped at 1240px.
 
 | Token | Value | Role |
 | --- | --- | --- |
-| `4px` | Micro adjustments, button internals |
-| `8px` | Base gap between adjacent elements |
-| `16px` | Compact content spacing, nested items |
-| `24px` | Button horizontal padding |
-| `40px` | Section horizontal padding, medium gaps |
-| `80px` | Section vertical padding, major section spacing |
+| 4px | Tiny adjustments |
+| 8px | Base gap |
+| 16px | Compact spacing |
+| 24px | Button horizontal padding |
+| 64px | Section padding (24px on ≤860) |
+| 100px / 80px | Hero top / bottom padding (64/56 on ≤860) |
 
-**Structure**: 
-- Hero section at top with featured Daily Word reflection or callout
-- Primary content area (reading, study guide, lesson)
-- Navigation to archive or related resources below
-- Footer with support/community links
+The hero never uses a fixed viewport height. The page reads top-down: hero → archive → subscribe → series → footer.
 
-**Content Hierarchy**:
-1. Hero section / Featured reflection (dominant)
-2. Primary content area (study material, reflection text)
-3. Related resources or next steps
-4. Archive / browse section (library-style)
+## Responsive
 
-Keep layouts **single-column on mobile**, **multi-column on desktop** (if needed). Prioritize **readability and focus** over visual complexity.
+| Breakpoint | Behavior |
+| --- | --- |
+| `≤1024px` | Hero verse 64px |
+| `≤860px` | Header nav hidden, hero verse 44px, sun ornament hidden, sections 24px gutter, subscribe stacks |
+| `≤520px` | Hero verse 36px, hero actions stack full-width, post-row drops the → arrow |
 
-## Depth & Elevation
+All typography uses fixed sizes (no viewport scaling) so reading remains predictable across devices.
 
-Default to **flat design**. Depth comes from:
-- **Whitespace** and breathing room
-- **Typography hierarchy** (size, weight, color)
-- **Photography** (subtle background imagery, never dominating)
-- **Illustration** (friendly, geometric, supporting content)
+## Do / Don't
 
-Avoid:
-- Decorative shadows (use sparingly, only for layering clarity)
-- Gradient overlays (keep subtle, preserve legibility)
-- Floating blobs or decorative shapes
-- Multiple nested cards
+**Do**
+- Let one italic verse hold the screen.
+- Keep the № stamp in italic Fraunces, warm color, never bold.
+- Use the curly quotation marks (`“ ”`) in coral, not straight quotes.
+- Treat the Sun ornament as atmosphere only — never a content marker.
+- Maintain hairline rules for separation; depth comes from typography, not shadows.
 
-Use **semantic layering** — implied depth through content hierarchy, not visual tricks.
+**Don't**
+- Don't add a photographic hero.
+- Don't introduce gradients, frosted blobs, or accent colors beyond coral.
+- Don't bold the № stamp or use uppercase outside the eyebrow.
+- Don't wrap content in cards-inside-cards.
+- Don't scale type with viewport; respect the breakpoint table.
 
-## Responsive Behavior
+## Frontmatter contract for the verse hero
 
-- **Breakpoint philosophy**: Mobile-first, expand from narrow to wide
-- **Hero height**: Use `100vh` or `82svh` to keep next section visible (draws reader down)
-- **Navigation**: Collapse to icon-based or vertical menu if needed; keep accessible
-- **Touch targets**: Minimum `40px` height, `44px` recommended
-- **Typography**: Fixed sizes (no viewport scaling), maintain `16px` minimum for accessibility
-- **Content width**: Max-width `65-75ch` (characters per line) for readability on wide screens
+The hero falls back to the post title when scripture frontmatter is absent. To activate the verse-as-typography hero, add to the latest MDX:
 
-## Accessibility Standards
+```yaml
+verse: "For whosoever will save his life shall lose it..."
+reference: "Matthew 16:25 (KJV)"
+```
 
-- **WCAG 2.1 AA minimum**: All text ≥4.5:1 contrast ratio
-- **Semantic HTML**: Use `<nav>`, `<main>`, `<article>`, `<footer>` correctly
-- **ARIA labels**: On icons, buttons without text, and custom components
-- **Keyboard navigation**: Tab through all interactive elements, logical order
-- **Skip links**: "Skip to content" at top
-- **Focus visible**: Clear focus ring on all interactive elements
-- **Images**: Descriptive `alt` text for illustrations, decorative images marked `alt=""`
-- **Forms**: Associated labels, clear error messages, optional vs required indication
-- **Color**: Don't rely on color alone (use text labels, icons, patterns)
-
-## Do's And Don'ts
-
-### Do:
-- Let the featured Daily Word reflection or lesson **dominate the first screen**
-- Use **illustrations** to support learning and break text
-- Create **clear hierarchy** through typography and spacing
-- Design for **mobile-first readability** (generous line heights, tap targets)
-- Include **navigation to archive** and related resources
-- Make **accessibility a feature**, not an afterthought (labels, skip links, focus management)
-- Support **multiple content types** (reflections, guides, lessons, podcasts)
-- Use **semantic HTML** throughout
-
-### Don't:
-- Create a **generic newsletter layout** — emphasize the content, not the platform
-- Use **dark/corporate color palettes** — keep it warm and welcoming
-- Rely on **tiny text or dense layouts** — this is an educational platform, not a news site
-- Add **decorative gradients or floating shapes** — clarity over decoration
-- Forget **accessibility** — captions, labels, ARIA, keyboard navigation matter
-- Build **complex multi-level menus** — keep navigation simple and flat
-- Use **auto-playing audio or video** — put the user in control
-- Ignore **dark mode** — support both light and dark preferences
-
-## Agent Prompt Guide
-
-When building UI for The Daily Word using this design system:
-
-> Build a reading interface inspired by BibleProject.com. Features: welcoming, accessible educational design with warm accents and illustration support. Navigation: Daily Word (featured), Guides, Classes, Podcast, More. Color: white/dark backgrounds, accent blue (#4A90E2), warm accent (#C08552). Typography: readable sans-serif, generous line heights (1.6-1.8), semantic hierarchy. Components: semantic navigation, card-based resource lists, clear CTAs, form inputs with focus rings. Accessibility first: ARIA labels, skip links, keyboard nav, high contrast. Layout: mobile-first, 8px grid, max-width for reading comfort. Avoid: decorative elements, dark/corporate palettes, inaccessible patterns.
-
-## References
-
-- **Source inspiration**: [BibleProject.com](https://bibleproject.com/)
-- **Design philosophy**: Educational, accessible, community-focused content platform
-- **Format**: Adapted from Google Stitch [DESIGN.md specification](https://stitch.withgoogle.com/docs/design-md/)
+Both are optional. Schema lives in `src/lib/posts.ts`.
