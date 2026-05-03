@@ -1,19 +1,26 @@
 import Link from 'next/link';
 
+import { Mark } from '@/components/Ornaments';
 import ThemeToggle from '@/components/ThemeToggle';
 
 export default function SiteHeader() {
   return (
     <header className="site-header">
       <Link className="brand" href="/">
-        The Daily Word
+        <Mark size={26} />
+        <span>The Daily Word</span>
       </Link>
       <nav aria-label="Main navigation">
-        <Link href="/#latest">Latest</Link>
+        <Link href="/">Today</Link>
         <Link href="/#archive">Archive</Link>
-        <Link href="/#subscribe">Subscribe</Link>
-        <ThemeToggle />
+        <Link href="/#series">Series</Link>
       </nav>
+      <div className="site-header-actions">
+        <ThemeToggle />
+        <Link className="button primary" href="/#subscribe">
+          Subscribe
+        </Link>
+      </div>
     </header>
   );
 }

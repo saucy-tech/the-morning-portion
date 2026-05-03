@@ -6,21 +6,32 @@ import type { PostMeta } from '@/lib/posts';
 interface PostListProps {
   posts: PostMeta[];
   compact?: boolean;
+  totalCount?: number;
 }
 
-export default function PostList({ posts, compact = false }: PostListProps) {
+export default function PostList({ posts, compact = false, totalCount }: PostListProps) {
   return (
-    <div className={compact ? 'post-list compact' : 'post-list'}>
-      {posts.map((post) => (
-        <Link key={post.slug} className="post-row" href={`/posts/${post.slug}`}>
-          <div>
-            <p className="metadata">{formatPostDate(post.date)}</p>
-            <h3>{post.title}</h3>
-            {!compact && <p>{post.excerpt}</p>}
-          </div>
-          <span aria-hidden="true">Read</span>
-        </Link>
-      ))}
-    </div>
+    <ol className="post-list">
+      {posts.map((post, i) => {
+        const number = totalCount ? totalCount - (i + 1) : posts.length - i;
+        return (
+          <li key={post.slug}>
+            <Link className={compact ? 'post-row compact' : 'post-row'} href={`/posts/${post.slug}`}>
+              <span className="stamp">№{String(number).padStart(3, '0')}</span>
+              <div>
+                <p className="row-meta">
+                  {formatPostDate(post.date)}
+                  {post.series ? ` · ${post.series}` : ''}
+                </p>
+                <h3>{post.title}</h3>
+              </div>
+              <span className="arrow" aria-hidden="true">
+                →
+              </span>
+            </Link>
+          </li>
+        );
+      })}
+    </ol>
   );
 }

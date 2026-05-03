@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { notFound } from 'next/navigation';
 
+import PostList from '@/components/PostList';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatPostDate, getReadingTime, seriesSlug } from '@/lib/format';
 import { getAllPostsMeta, getPostBySlug, getPostOgMeta, getPostUrl } from '@/lib/posts';
@@ -34,8 +35,12 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
 
+  const allPosts = getAllPostsMeta();
+  const totalCount = allPosts.length;
+  const indexInList = allPosts.findIndex((p) => p.slug === post.slug);
+  const number = totalCount - indexInList;
   const readingTime = getReadingTime(post.content);
-  const relatedPosts = getAllPostsMeta()
+  const relatedPosts = allPosts
     .filter((candidate) => candidate.slug !== post.slug)
     .filter((candidate) => !post.series || candidate.series === post.series)
     .slice(0, 3);
@@ -69,15 +74,21 @@ export default async function PostPage({ params }: PostPageProps) {
       />
       <nav className="breadcrumb" aria-label="Breadcrumb">
         <Link href="/">The Daily Word</Link>
-        <span>/</span>
+        <span aria-hidden="true">/</span>
+        {post.series && (
+          <>
+            <Link href={`/series/${seriesSlug(post.series)}`}>{post.series}</Link>
+            <span aria-hidden="true">/</span>
+          </>
+        )}
         <span>{post.title}</span>
       </nav>
 
       <article className="reading-layout">
         <header className="post-header">
-          <p className="eyebrow">Daily Word</p>
+          <p className="stamp">№ {String(number).padStart(3, '0')}</p>
           <h1>{post.title}</h1>
-          <p>{post.excerpt}</p>
+          <p className="excerpt">{post.excerpt}</p>
           <div className="post-meta">
             <span>{formatPostDate(post.date)}</span>
             <span>{readingTime} min read</span>
@@ -92,34 +103,28 @@ export default async function PostPage({ params }: PostPageProps) {
         </div>
       </article>
 
-      <section className="subscribe-section compact">
-        <div className="subscribe-inner">
+      <section className="section subscribe-section">
+        <div className="section-inner subscribe-grid">
           <div className="section-heading">
             <p className="eyebrow">Stay in the Word</p>
-            <h2>Get the next reflection.</h2>
+            <h2 className="tdw-display">
+              Get the next <span className="accent">reflection.</span>
+            </h2>
           </div>
           <SubscribeForm />
         </div>
       </section>
 
       {relatedPosts.length > 0 && (
-        <section className="archive-section">
+        <section className="section">
           <div className="section-inner">
             <div className="section-heading">
-              <p className="eyebrow">Keep Reading</p>
-              <h2>More from this thread.</h2>
+              <p className="eyebrow">Keep reading</p>
+              <h2 className="tdw-display">
+                More from this <span className="accent">thread.</span>
+              </h2>
             </div>
-            <div className="post-list compact">
-              {relatedPosts.map((relatedPost) => (
-                <Link key={relatedPost.slug} className="post-row" href={`/posts/${relatedPost.slug}`}>
-                  <div>
-                    <p className="metadata">{formatPostDate(relatedPost.date)}</p>
-                    <h3>{relatedPost.title}</h3>
-                  </div>
-                  <span aria-hidden="true">Read</span>
-                </Link>
-              ))}
-            </div>
+            <PostList posts={relatedPosts} compact totalCount={totalCount} />
           </div>
         </section>
       )}
