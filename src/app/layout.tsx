@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { Fraunces, Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
@@ -7,8 +8,21 @@ import SiteHeader from '@/components/SiteHeader';
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/constants';
 import './globals.css';
 
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--tdw-serif',
+  axes: ['SOFT', 'opsz'],
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--tdw-sans',
+});
+
 export const viewport: Viewport = {
-  themeColor: '#FEFAF5',
+  themeColor: '#FBF6EC',
   width: 'device-width',
   initialScale: 1,
 };
@@ -69,7 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   `;
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${fraunces.variable} ${inter.variable}`} suppressHydrationWarning>
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <SiteHeader />

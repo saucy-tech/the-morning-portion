@@ -16,6 +16,8 @@ export interface PostMeta {
   excerpt: string;
   series?: string;
   tags: string[];
+  verse?: string;
+  reference?: string;
 }
 
 export interface Post extends PostMeta {
@@ -40,6 +42,8 @@ const frontmatterSchema = z.object({
   category: z.string().optional(),
   series: z.string().optional(),
   tags: z.union([z.array(z.string()), z.string()]).optional(),
+  verse: z.string().optional(),
+  reference: z.string().optional(),
 });
 
 // Configure gray-matter to use js-yaml 4.x's load function.
@@ -109,6 +113,8 @@ function toPostMeta(slug: string, data: Record<string, unknown>): PostMeta {
     excerpt: result.data.excerpt,
     series: normalizeText(result.data.series),
     tags: normalizeTags(result.data.tags),
+    verse: normalizeText(result.data.verse),
+    reference: normalizeText(result.data.reference),
   };
 }
 
@@ -172,6 +178,11 @@ export async function getPostBySlug(
 
 export function getLatestPost(): PostMeta | undefined {
   return getAllPostsMeta()[0];
+}
+
+export function getPostNumbers(): Map<string, number> {
+  const all = getAllPostsMeta();
+  return new Map(all.map((post, i) => [post.slug, all.length - i]));
 }
 
 export function getAllSeries(): SeriesMeta[] {

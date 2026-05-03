@@ -1,89 +1,134 @@
 import Link from 'next/link';
 
+import { Sun } from '@/components/Ornaments';
 import PostList from '@/components/PostList';
 import SubscribeForm from '@/components/SubscribeForm';
-import { formatPostDate, seriesSlug } from '@/lib/format';
-import { getAllPostsMeta, getAllSeries, getLatestPost } from '@/lib/posts';
+import { getReadingTime, seriesSlug } from '@/lib/format';
+import {
+  getAllPostsMeta,
+  getAllSeries,
+  getLatestPost,
+  getPostBySlug,
+  getPostNumbers,
+} from '@/lib/posts';
 
-export default function Home() {
-  const posts = getAllPostsMeta();
+function devotionNumber(n: number): string {
+  return `№ ${String(n).padStart(3, '0')}`;
+}
+
+function formatHeroDate(date: string): string {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date.trim());
+  if (!match) return date;
+  const [, year, month, day] = match;
+  const utc = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
+  return new Intl.DateTimeFormat('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(utc);
+}
+
+export default async function Home() {
+  const allPosts = getAllPostsMeta();
   const latest = getLatestPost();
   const series = getAllSeries();
-  const recentPosts = posts.slice(1, 7);
+  const recentPosts = allPosts.slice(1, 7);
+  const totalCount = allPosts.length;
+  const numbers = getPostNumbers();
+
+  const latestFull = latest ? await getPostBySlug(latest.slug) : null;
+  const readingTime = latestFull ? getReadingTime(latestFull.content) : 0;
+  const verse = latest?.verse;
+  const reference = latest?.reference;
 
   return (
     <main>
-      <section className="hero" aria-label="The Daily Word">
-        <div className="hero-image" aria-hidden="true" />
-        <div className="hero-content">
-          <p className="eyebrow">Daily Devotion</p>
-          <h1>The Daily Word</h1>
-          <p>A short Scripture reflection to anchor your morning.</p>
-          <div className="hero-actions">
-            {latest && (
-              <Link className="button primary" href={`/posts/${latest.slug}`}>
-                Read latest
-              </Link>
-            )}
-            <a className="button secondary" href="#subscribe">
-              Subscribe
-            </a>
-          </div>
-        </div>
-      </section>
-
       {latest && (
-        <section className="latest-section" id="latest">
-          <div className="section-inner">
-            <div className="section-heading">
-              <p className="eyebrow">Latest</p>
-              <h2>{latest.title}</h2>
-              <p>{latest.excerpt}</p>
+        <section className="hero" aria-label="Today's reflection">
+          <div className="hero-ornament">
+            <Sun size={300} />
+          </div>
+          <div className="hero-inner">
+            <div className="hero-meta-row">
+              <span className="eyebrow">{formatHeroDate(latest.date)}</span>
+              <span className="rule" aria-hidden="true" />
+              <span className="stamp">{devotionNumber(totalCount)}</span>
             </div>
-            <div className="latest-meta">
-              <span>{formatPostDate(latest.date)}</span>
-              {latest.series && (
-                <Link href={`/series/${seriesSlug(latest.series)}`}>{latest.series}</Link>
+            {reference && (
+              <p className="hero-source">
+                From today&apos;s reading — <em>{reference}</em>
+              </p>
+            )}
+            <h1 className="tdw-display hero-verse">
+              {verse ? (
+                <>
+                  <span className="quote">&ldquo;</span>
+                  {verse}
+                  <span className="quote">&rdquo;</span>
+                </>
+              ) : (
+                latest.title
               )}
+            </h1>
+            <div className="hero-actions">
+              <Link className="button primary" href={`/posts/${latest.slug}`}>
+                Read today&apos;s reflection →
+              </Link>
+              <span className="meta">
+                <em>{latest.title}</em>
+                {readingTime > 0 && ` · ${readingTime} min`}
+              </span>
             </div>
-            <Link className="text-link" href={`/posts/${latest.slug}`}>
-              Continue reading
-            </Link>
           </div>
         </section>
       )}
 
-      <section className="subscribe-section" id="subscribe">
-        <div className="subscribe-inner">
+      <section className="section" id="archive">
+        <div className="section-inner">
           <div className="section-heading">
-            <p className="eyebrow">Stay in the Word</p>
-            <h2>Never miss a morning.</h2>
+            <p className="eyebrow">This week</p>
+            <h2 className="tdw-display">
+              Recent <span className="accent">readings</span>
+            </h2>
+          </div>
+          <PostList
+            posts={recentPosts.length > 0 ? recentPosts : allPosts}
+            numbers={numbers}
+          />
+        </div>
+      </section>
+
+      <section className="section subscribe-section" id="subscribe">
+        <div className="section-inner subscribe-grid">
+          <div className="section-heading">
+            <p className="eyebrow">Email</p>
+            <h2 className="tdw-display">
+              Never miss a <span className="accent">morning.</span>
+            </h2>
             <p>Short, KJV-rooted readings for people who want the Word before the day gets loud.</p>
           </div>
           <SubscribeForm />
         </div>
       </section>
 
-      <section className="archive-section" id="archive">
-        <div className="section-inner">
-          <div className="section-heading">
-            <p className="eyebrow">{posts.length} Reflections</p>
-            <h2>Past Devotions</h2>
-          </div>
-          <PostList posts={recentPosts.length > 0 ? recentPosts : posts} />
-        </div>
-      </section>
-
       {series.length > 0 && (
-        <section className="series-section" aria-label="Series">
+        <section className="section" id="series" aria-label="Series">
           <div className="section-inner">
             <div className="section-heading">
               <p className="eyebrow">{series.length} Series</p>
-              <h2>Study the Series.</h2>
+              <h2 className="tdw-display">
+                Study the <span className="accent">series.</span>
+              </h2>
             </div>
             <div className="series-grid">
               {series.map((item) => (
-                <Link key={item.slug} className="series-item" href={`/series/${item.slug}`}>
+                <Link
+                  key={item.slug}
+                  className="series-item"
+                  href={`/series/${seriesSlug(item.name)}`}
+                >
                   <span>{item.count} readings</span>
                   <h3>{item.name}</h3>
                 </Link>

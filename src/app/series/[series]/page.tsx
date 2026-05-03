@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import PostList from '@/components/PostList';
 import { SITE_NAME, SITE_URL } from '@/lib/constants';
-import { getAllSeries, getSeriesBySlug } from '@/lib/posts';
+import { getAllSeries, getPostNumbers, getSeriesBySlug } from '@/lib/posts';
 
 export async function generateStaticParams() {
   return getAllSeries().map((series) => ({ series: series.slug }));
@@ -43,22 +43,24 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
     notFound();
   }
 
+  const numbers = getPostNumbers();
+
   return (
     <main className="series-page">
       <nav className="breadcrumb" aria-label="Breadcrumb">
         <Link href="/">The Daily Word</Link>
-        <span>/</span>
+        <span aria-hidden="true">/</span>
         <span>{series.name}</span>
       </nav>
 
-      <section className="archive-section">
+      <section className="section">
         <div className="section-inner">
           <div className="section-heading">
             <p className="eyebrow">{series.count} Reflections</p>
-            <h1>{series.name}</h1>
+            <h1 className="tdw-display">{series.name}</h1>
             <p>Read the series in order, from the first reflection to the most recent.</p>
           </div>
-          <PostList posts={series.posts} />
+          <PostList posts={series.posts} numbers={numbers} />
         </div>
       </section>
     </main>
