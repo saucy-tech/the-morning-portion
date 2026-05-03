@@ -5,7 +5,13 @@ import { notFound } from 'next/navigation';
 import PostList from '@/components/PostList';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatPostDate, getReadingTime, seriesSlug } from '@/lib/format';
-import { getAllPostsMeta, getPostBySlug, getPostOgMeta, getPostUrl } from '@/lib/posts';
+import {
+  getAllPostsMeta,
+  getPostBySlug,
+  getPostNumbers,
+  getPostOgMeta,
+  getPostUrl,
+} from '@/lib/posts';
 import { SITE_NAME, SITE_URL } from '@/lib/constants';
 
 export async function generateStaticParams() {
@@ -36,9 +42,8 @@ export default async function PostPage({ params }: PostPageProps) {
   }
 
   const allPosts = getAllPostsMeta();
-  const totalCount = allPosts.length;
-  const indexInList = allPosts.findIndex((p) => p.slug === post.slug);
-  const number = totalCount - indexInList;
+  const numbers = getPostNumbers();
+  const number = numbers.get(post.slug);
   const readingTime = getReadingTime(post.content);
   const relatedPosts = allPosts
     .filter((candidate) => candidate.slug !== post.slug)
@@ -86,7 +91,9 @@ export default async function PostPage({ params }: PostPageProps) {
 
       <article className="reading-layout">
         <header className="post-header">
-          <p className="stamp">№ {String(number).padStart(3, '0')}</p>
+          {typeof number === 'number' && (
+            <p className="stamp">№ {String(number).padStart(3, '0')}</p>
+          )}
           <h1>{post.title}</h1>
           <p className="excerpt">{post.excerpt}</p>
           <div className="post-meta">
@@ -124,7 +131,7 @@ export default async function PostPage({ params }: PostPageProps) {
                 More from this <span className="accent">thread.</span>
               </h2>
             </div>
-            <PostList posts={relatedPosts} compact totalCount={totalCount} />
+            <PostList posts={relatedPosts} compact numbers={numbers} />
           </div>
         </section>
       )}

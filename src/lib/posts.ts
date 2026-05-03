@@ -180,6 +180,11 @@ export function getLatestPost(): PostMeta | undefined {
   return getAllPostsMeta()[0];
 }
 
+export function getPostNumbers(): Map<string, number> {
+  const all = getAllPostsMeta();
+  return new Map(all.map((post, i) => [post.slug, all.length - i]));
+}
+
 export function getAllSeries(): SeriesMeta[] {
   const seriesMap = new Map<string, PostMeta[]>();
 

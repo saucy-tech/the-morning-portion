@@ -4,7 +4,13 @@ import { Sun } from '@/components/Ornaments';
 import PostList from '@/components/PostList';
 import SubscribeForm from '@/components/SubscribeForm';
 import { getReadingTime, seriesSlug } from '@/lib/format';
-import { getAllPostsMeta, getAllSeries, getLatestPost, getPostBySlug } from '@/lib/posts';
+import {
+  getAllPostsMeta,
+  getAllSeries,
+  getLatestPost,
+  getPostBySlug,
+  getPostNumbers,
+} from '@/lib/posts';
 
 function devotionNumber(n: number): string {
   return `№ ${String(n).padStart(3, '0')}`;
@@ -30,6 +36,7 @@ export default async function Home() {
   const series = getAllSeries();
   const recentPosts = allPosts.slice(1, 7);
   const totalCount = allPosts.length;
+  const numbers = getPostNumbers();
 
   const latestFull = latest ? await getPostBySlug(latest.slug) : null;
   const readingTime = latestFull ? getReadingTime(latestFull.content) : 0;
@@ -88,7 +95,7 @@ export default async function Home() {
           </div>
           <PostList
             posts={recentPosts.length > 0 ? recentPosts : allPosts}
-            totalCount={totalCount}
+            numbers={numbers}
           />
         </div>
       </section>

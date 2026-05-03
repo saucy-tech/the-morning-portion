@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import PostList from '@/components/PostList';
 import { SITE_NAME, SITE_URL } from '@/lib/constants';
-import { getAllPostsMeta, getAllSeries, getSeriesBySlug } from '@/lib/posts';
+import { getAllSeries, getPostNumbers, getSeriesBySlug } from '@/lib/posts';
 
 export async function generateStaticParams() {
   return getAllSeries().map((series) => ({ series: series.slug }));
@@ -43,7 +43,7 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
     notFound();
   }
 
-  const totalCount = getAllPostsMeta().length;
+  const numbers = getPostNumbers();
 
   return (
     <main className="series-page">
@@ -60,7 +60,7 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
             <h1 className="tdw-display">{series.name}</h1>
             <p>Read the series in order, from the first reflection to the most recent.</p>
           </div>
-          <PostList posts={series.posts} totalCount={totalCount} />
+          <PostList posts={series.posts} numbers={numbers} />
         </div>
       </section>
     </main>

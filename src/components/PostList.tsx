@@ -6,18 +6,20 @@ import type { PostMeta } from '@/lib/posts';
 interface PostListProps {
   posts: PostMeta[];
   compact?: boolean;
-  totalCount?: number;
+  numbers: Map<string, number>;
 }
 
-export default function PostList({ posts, compact = false, totalCount }: PostListProps) {
+export default function PostList({ posts, compact = false, numbers }: PostListProps) {
   return (
     <ol className="post-list">
-      {posts.map((post, i) => {
-        const number = totalCount ? totalCount - (i + 1) : posts.length - i;
+      {posts.map((post) => {
+        const number = numbers.get(post.slug);
         return (
           <li key={post.slug}>
             <Link className={compact ? 'post-row compact' : 'post-row'} href={`/posts/${post.slug}`}>
-              <span className="stamp">№{String(number).padStart(3, '0')}</span>
+              {typeof number === 'number' && (
+                <span className="stamp">№{String(number).padStart(3, '0')}</span>
+              )}
               <div>
                 <p className="row-meta">
                   {formatPostDate(post.date)}
