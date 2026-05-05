@@ -21,6 +21,36 @@ pnpm install
 pnpm dev
 ```
 
+## Scripts
+
+| Script | Purpose |
+| --- | --- |
+| `pnpm dev` | Next.js dev server on `http://localhost:3000` |
+| `pnpm build` | Production build |
+| `pnpm start` | Run the production build locally |
+| `pnpm lint` | ESLint over the repo |
+| `pnpm sync:posts` | Pull Daily Word MDX from `personal-site` (see below) |
+
+## Project Layout
+
+```
+src/
+  app/                # Next.js App Router routes
+    page.tsx          # Home (verse hero + post list)
+    posts/[slug]/     # Post page + dynamic OG image
+    series/[series]/  # Series index pages
+    api/subscribe/    # ConvertKit subscribe endpoint
+    rss.xml/          # RSS feed
+    sitemap.ts        # Sitemap
+  components/         # SiteHeader, SiteFooter, PostList, SubscribeForm, ThemeToggle, Ornaments
+  content/posts/      # MDX posts (synced from personal-site, do not hand-edit)
+  lib/                # posts.ts (load + zod-validate frontmatter), constants, format, subscribe
+scripts/
+  sync-daily-word-posts.mjs  # Mirrors `category: Daily Word` MDX from personal-site
+public/images/        # Banner + static images
+DESIGN.md             # Visual identity / typography notes
+```
+
 ## Content Sync
 
 Daily Word posts are stored in `src/content/posts`. To refresh them from the local personal-site repo:
