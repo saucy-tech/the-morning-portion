@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Fraunces, Inter } from 'next/font/google';
+import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
@@ -48,9 +49,9 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: '/images/daily-word-hero.svg',
+        url: '/images/daily-word-banner.png',
         width: 1200,
-        height: 480,
+        height: 509,
         alt: SITE_NAME,
       },
     ],
@@ -59,7 +60,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: [`${SITE_URL}/images/daily-word-hero.svg`],
+    images: [`${SITE_URL}/images/daily-word-banner.png`],
   },
   icons: {
     icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
@@ -85,7 +86,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${fraunces.variable} ${inter.variable}`} suppressHydrationWarning>
       <body>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <Script id="daily-word-theme-init" strategy="beforeInteractive">
+          {themeScript}
+        </Script>
         <SiteHeader />
         {children}
         <SiteFooter />

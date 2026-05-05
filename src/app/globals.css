@@ -293,6 +293,10 @@ h3 {
   pointer-events: none;
 }
 
+.brand-band + .hero .hero-ornament {
+  display: none;
+}
+
 .hero-meta-row {
   display: flex;
   align-items: baseline;
@@ -346,6 +350,42 @@ h3 {
 .hero-actions .meta em {
   font-family: var(--tdw-serif), Georgia, serif;
   font-style: italic;
+}
+
+/* Brand band — photo masthead above the verse hero (home only) */
+.brand-band {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  background: var(--tdw-bg);
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+}
+
+.brand-band-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 60%;
+  opacity: 0.85;
+}
+
+html[data-theme='dark'] .brand-band-image {
+  opacity: 0.7;
+  filter: brightness(0.85);
+}
+
+@media (max-width: 860px) {
+  .brand-band {
+    height: 160px;
+  }
+}
+
+@media (max-width: 520px) {
+  .brand-band {
+    height: 120px;
+  }
 }
 
 /* Sections */

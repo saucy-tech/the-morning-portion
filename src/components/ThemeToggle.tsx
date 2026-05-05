@@ -1,12 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
 type Theme = 'light' | 'dark';
 
-function getCurrentTheme(): Theme {
-  if (typeof document === 'undefined') return 'light';
+function subscribeToTheme(callback: () => void): () => void {
+  const observer = new MutationObserver(callback);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+  return () => observer.disconnect();
+}
+
+function getClientTheme(): Theme {
   return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+}
+
+function getServerTheme(): Theme | null {
+  return null;
 }
 
 function SunIcon() {
@@ -54,13 +66,12 @@ function MoonIcon() {
 }
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>(() => getCurrentTheme());
+  const theme = useSyncExternalStore(subscribeToTheme, getClientTheme, getServerTheme);
 
   function toggleTheme() {
     const next: Theme = theme === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
     localStorage.setItem('daily-word-theme', next);
-    setTheme(next);
   }
 
   return (
@@ -69,8 +80,11 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggleTheme}
       aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      suppressHydrationWarning
     >
-      {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+      <span suppressHydrationWarning>
+        {theme === null ? null : theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+      </span>
     </button>
   );
 }

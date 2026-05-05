@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { Sun } from '@/components/Ornaments';
@@ -45,6 +46,19 @@ export default async function Home() {
 
   return (
     <main>
+      {latest && (
+        <section className="brand-band" aria-hidden="true">
+          <Image
+            src="/images/daily-word-banner.png"
+            alt=""
+            width={1200}
+            height={509}
+            priority
+            sizes="100vw"
+            className="brand-band-image"
+          />
+        </section>
+      )}
       {latest && (
         <section className="hero" aria-label="Today's reflection">
           <div className="hero-ornament">
