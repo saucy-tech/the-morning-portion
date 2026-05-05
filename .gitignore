@@ -38,6 +38,3 @@ wrap-up-summary.txt
 # verification artifacts
 .playwright-cli/
 .claude/
-
-# local copied source asset; app uses the project-owned hero SVG instead
-public/images/daily-word-banner.png
