@@ -5,7 +5,7 @@ import { Sun } from '@/components/Ornaments';
 import PostList from '@/components/PostList';
 import SubscribeForm from '@/components/SubscribeForm';
 import { getReadingTime, seriesSlug } from '@/lib/format';
-import { SITE_IMAGE, SITE_NAME } from '@/lib/constants';
+import { SITE_IMAGE, SITE_IMAGE_DARK, SITE_NAME } from '@/lib/constants';
 import {
   getAllPostsMeta,
   getAllSeries,
@@ -49,15 +49,27 @@ export default async function Home() {
     <main>
       {latest && (
         <section className="brand-band" aria-label={SITE_NAME}>
-          <Image
-            src={SITE_IMAGE}
-            alt={SITE_NAME}
-            width={1254}
-            height={1254}
-            priority
-            sizes="(max-width: 860px) 280px, 420px"
-            className="brand-band-image"
-          />
+          <div className="brand-band-logo">
+            <Image
+              src={SITE_IMAGE}
+              alt={SITE_NAME}
+              width={1254}
+              height={1254}
+              priority
+              sizes="(max-width: 860px) 280px, 420px"
+              className="brand-band-image brand-band-image-light"
+            />
+            <Image
+              src={SITE_IMAGE_DARK}
+              alt=""
+              width={1254}
+              height={1254}
+              priority
+              aria-hidden="true"
+              sizes="(max-width: 860px) 280px, 420px"
+              className="brand-band-image brand-band-image-dark"
+            />
+          </div>
         </section>
       )}
       {latest && (

@@ -372,17 +372,36 @@ h3 {
   border-bottom: 1px solid var(--tdw-rule-soft);
 }
 
-.brand-band-image {
+.brand-band-logo {
+  position: relative;
   width: min(420px, 72vw);
-  height: auto;
+  aspect-ratio: 1;
+}
+
+.brand-band-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   opacity: 0.96;
+}
+
+.brand-band-image-light {
   mix-blend-mode: multiply;
 }
 
-html[data-theme='dark'] .brand-band-image {
-  opacity: 0.82;
-  filter: brightness(1.05);
+.brand-band-image-dark {
+  display: none;
+}
+
+html[data-theme='dark'] .brand-band-image-light {
+  display: none;
+}
+
+html[data-theme='dark'] .brand-band-image-dark {
+  display: block;
+  opacity: 0.94;
   mix-blend-mode: normal;
 }
 

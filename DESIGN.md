@@ -2,7 +2,7 @@
 
 The visual identity is **devotional editorial**: a cream-paper reading surface, the selected open-Scripture logo, a single italic-quoted scripture as the daily hero, and a restrained palette of deep ink, muted olive, and warm gold. It should feel like a quiet morning reading room without becoming a coffee brand or church bulletin.
 
-Primary logo asset: `public/images/the-morning-portion-logo.png`.
+Primary logo assets: `public/images/the-morning-portion-logo.png` for light mode and `public/images/the-morning-portion-logo-dark.png` for dark mode.
 
 ## Visual Theme & Atmosphere
 
@@ -54,7 +54,7 @@ Letter-spacing stays at `0`. Italic + light weights are reserved for scripture a
 Sticky cream-tinted bar with backdrop blur, 72px min-height. Open-book/dawn SVG + serif wordmark left, simple text nav center (Today / Archive / Series), pill ThemeToggle + pill Subscribe right. Single hairline border-bottom in `--tdw-rule-soft`.
 
 ### Brand band (`.brand-band`)
-Home-only masthead that centers `the-morning-portion-logo.png` above the verse hero. The image is contained, not cropped, and blends into the cream surface.
+Home-only masthead that centers the theme-appropriate Morning Portion logo above the verse hero. The image is contained, not cropped, blends into the cream surface in light mode, and swaps to the ivory dark-mode variant under `html[data-theme='dark']`.
 
 ### Hero (`.hero`)
 Cream surface, no photography. Layout (top to bottom inside `.hero-inner`):
