@@ -20,13 +20,13 @@ export async function generateMetadata({ params }: { params: Promise<{ series: s
 
   return {
     title: series.name,
-    description: `${series.count} Daily Word reflections from ${series.name}.`,
+    description: `${series.count} Morning Portion reflections from ${series.name}.`,
     alternates: {
       canonical: `${SITE_URL}/series/${series.slug}`,
     },
     openGraph: {
       title: `${series.name} | ${SITE_NAME}`,
-      description: `${series.count} Daily Word reflections from ${series.name}.`,
+      description: `${series.count} Morning Portion reflections from ${series.name}.`,
       url: `${SITE_URL}/series/${series.slug}`,
     },
   };
@@ -48,7 +48,7 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
   return (
     <main className="series-page">
       <nav className="breadcrumb" aria-label="Breadcrumb">
-        <Link href="/">The Daily Word</Link>
+        <Link href="/">{SITE_NAME}</Link>
         <span aria-hidden="true">/</span>
         <span>{series.name}</span>
       </nav>

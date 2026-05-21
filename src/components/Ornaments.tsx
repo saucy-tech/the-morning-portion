@@ -87,14 +87,28 @@ export function Mark({ size = 24, color = 'currentColor' }: SizedProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden="true">
       <path
-        d="M4 10 C 9 8, 14 8, 16 10 C 18 8, 23 8, 28 10 V 26 C 23 24, 18 24, 16 26 C 14 24, 9 24, 4 26 Z"
+        d="M8 10 A8 8 0 0 1 24 10"
+        stroke="var(--tdw-warm)"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M4 13 H14 C15.3 13 16 14.1 16 16 C16 14.1 16.7 13 18 13 H28"
+        stroke="var(--tdw-ink-mute)"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5 15 C 9 13.7, 13.5 13.7, 16 16 C 18.5 13.7, 23 13.7, 27 15 V 27 C 23 25.4, 18.5 25.4, 16 28 C 13.5 25.4, 9 25.4, 5 27 Z"
         stroke={color}
         strokeWidth="1.4"
         strokeLinejoin="round"
         fill="none"
       />
-      <line x1="16" y1="10" x2="16" y2="26" stroke={color} strokeWidth="1.4" />
-      <circle cx="16" cy="5" r="2" fill={color} />
+      <line x1="16" y1="16" x2="16" y2="28" stroke={color} strokeWidth="1.4" />
+      <path d="M10 19 C 12 18.5, 14 18.5, 15 19" stroke={color} strokeWidth="1" />
+      <path d="M17 19 C 19 18.5, 21 18.5, 23 19" stroke={color} strokeWidth="1" />
     </svg>
   );
 }

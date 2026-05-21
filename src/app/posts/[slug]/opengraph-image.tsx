@@ -2,8 +2,9 @@ import { ImageResponse } from 'next/og';
 
 import { formatPostDate } from '@/lib/format';
 import { getAllPostsMeta, getPostBySlug } from '@/lib/posts';
+import { SITE_NAME } from '@/lib/constants';
 
-export const alt = 'The Daily Word preview image';
+export const alt = `${SITE_NAME} preview image`;
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 export const dynamicParams = false;
@@ -25,13 +26,13 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#ffffff',
-          color: '#171A20',
+          background: '#FBF7ED',
+          color: '#0B2633',
           fontSize: '40px',
           fontWeight: 500,
         }}
       >
-        The Daily Word
+        {SITE_NAME}
       </div>,
       { ...size }
     );
@@ -47,21 +48,21 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        background: '#FFFFFF',
-        color: '#171A20',
+        background: '#FBF7ED',
+        color: '#0B2633',
         padding: '64px',
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '24px' }}>
-        <div style={{ display: 'flex', color: '#3E6AE1', fontWeight: 500 }}>
-          The Daily Word
+        <div style={{ display: 'flex', color: '#B8842D', fontWeight: 500 }}>
+          {SITE_NAME}
         </div>
-        <div style={{ display: 'flex', color: '#5C5E62' }}>{formatPostDate(post.date)}</div>
+        <div style={{ display: 'flex', color: '#64705C' }}>{formatPostDate(post.date)}</div>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', maxWidth: '980px' }}>
         {post.series && (
-          <div style={{ display: 'flex', color: '#5C5E62', fontSize: '28px' }}>{post.series}</div>
+          <div style={{ display: 'flex', color: '#64705C', fontSize: '28px' }}>{post.series}</div>
         )}
         <div
           style={{
@@ -73,14 +74,14 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
         >
           {post.title}
         </div>
-        <div style={{ display: 'flex', color: '#393C41', fontSize: '28px', lineHeight: 1.35 }}>
+        <div style={{ display: 'flex', color: '#344553', fontSize: '28px', lineHeight: 1.35 }}>
           {post.excerpt}
         </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '18px', color: '#8E8E8E' }}>
-        <div style={{ width: '56px', height: '4px', background: '#3E6AE1' }} />
-        <div style={{ display: 'flex', fontSize: '22px' }}>Weekday Scripture Reflection</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '18px', color: '#64705C' }}>
+        <div style={{ width: '56px', height: '4px', background: '#B8842D' }} />
+        <div style={{ display: 'flex', fontSize: '22px' }}>Morning Scripture Reflection</div>
       </div>
     </div>,
     { ...size }

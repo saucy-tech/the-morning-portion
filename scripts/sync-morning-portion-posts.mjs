@@ -12,7 +12,9 @@ if (!fs.existsSync(sourceDir)) {
 
 fs.mkdirSync(targetDir, { recursive: true });
 
-const dailyWordFiles = fs
+// The authoring repo still labels this stream as "Daily Word"; this app publishes it
+// as The Morning Portion.
+const morningPortionFiles = fs
   .readdirSync(sourceDir)
   .filter((file) => file.endsWith('.mdx'))
   .filter((file) => {
@@ -22,13 +24,13 @@ const dailyWordFiles = fs
 
 const existingFiles = fs.readdirSync(targetDir).filter((file) => file.endsWith('.mdx'));
 for (const file of existingFiles) {
-  if (!dailyWordFiles.includes(file)) {
+  if (!morningPortionFiles.includes(file)) {
     fs.rmSync(path.join(targetDir, file));
   }
 }
 
-for (const file of dailyWordFiles) {
+for (const file of morningPortionFiles) {
   fs.copyFileSync(path.join(sourceDir, file), path.join(targetDir, file));
 }
 
-console.log(`Synced ${dailyWordFiles.length} Daily Word posts from ${sourceDir}`);
+console.log(`Synced ${morningPortionFiles.length} Morning Portion posts from ${sourceDir}`);

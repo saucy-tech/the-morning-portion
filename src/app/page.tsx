@@ -5,6 +5,7 @@ import { Sun } from '@/components/Ornaments';
 import PostList from '@/components/PostList';
 import SubscribeForm from '@/components/SubscribeForm';
 import { getReadingTime, seriesSlug } from '@/lib/format';
+import { SITE_IMAGE, SITE_NAME } from '@/lib/constants';
 import {
   getAllPostsMeta,
   getAllSeries,
@@ -47,14 +48,14 @@ export default async function Home() {
   return (
     <main>
       {latest && (
-        <section className="brand-band" aria-hidden="true">
+        <section className="brand-band" aria-label={SITE_NAME}>
           <Image
-            src="/images/daily-word-banner.png"
-            alt=""
-            width={1200}
-            height={509}
+            src={SITE_IMAGE}
+            alt={SITE_NAME}
+            width={1254}
+            height={1254}
             priority
-            sizes="100vw"
+            sizes="(max-width: 860px) 280px, 420px"
             className="brand-band-image"
           />
         </section>

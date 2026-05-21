@@ -17,8 +17,8 @@ function getClientTheme(): Theme {
   return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
 }
 
-function getServerTheme(): Theme | null {
-  return null;
+function getServerTheme(): Theme {
+  return 'light';
 }
 
 function SunIcon() {
@@ -71,7 +71,7 @@ export default function ThemeToggle() {
   function toggleTheme() {
     const next: Theme = theme === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
-    localStorage.setItem('daily-word-theme', next);
+    localStorage.setItem('morning-portion-theme', next);
   }
 
   return (
@@ -83,7 +83,7 @@ export default function ThemeToggle() {
       suppressHydrationWarning
     >
       <span suppressHydrationWarning>
-        {theme === null ? null : theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+        {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
       </span>
     </button>
   );
