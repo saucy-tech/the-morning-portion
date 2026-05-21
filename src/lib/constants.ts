@@ -2,6 +2,7 @@ export const SITE_NAME = 'The Morning Portion';
 export const SITE_DESCRIPTION =
   'Morning scripture reflections rooted in the Sunday School lesson series.';
 export const SITE_IMAGE = '/images/the-morning-portion-logo.png';
+export const SITE_IMAGE_DARK = '/images/the-morning-portion-logo-dark.png';
 
 function getVercelUrl() {
   if (!process.env.VERCEL_URL) {

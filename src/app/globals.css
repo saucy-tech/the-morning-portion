@@ -20,6 +20,7 @@
   --tdw-gold: #c89a38;
   --tdw-success: #166534;
   --tdw-error: #b42318;
+  --tdw-logo-image: url('/images/the-morning-portion-logo.png');
 
   --tdw-radius: 6px;
   --tdw-radius-pill: 999px;
@@ -47,6 +48,7 @@ html[data-theme='dark'] {
   --tdw-blue: #7faebd;
   --tdw-success: #8fd19e;
   --tdw-error: #f2a19b;
+  --tdw-logo-image: url('/images/the-morning-portion-logo-dark.png');
 }
 
 * {
@@ -372,17 +374,19 @@ h3 {
   border-bottom: 1px solid var(--tdw-rule-soft);
 }
 
-.brand-band-image {
+.brand-band-logo {
   width: min(420px, 72vw);
-  height: auto;
-  object-fit: contain;
+  aspect-ratio: 1;
+  background-image: var(--tdw-logo-image);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
   opacity: 0.96;
   mix-blend-mode: multiply;
 }
 
-html[data-theme='dark'] .brand-band-image {
-  opacity: 0.82;
-  filter: brightness(1.05);
+html[data-theme='dark'] .brand-band-logo {
+  opacity: 0.94;
   mix-blend-mode: normal;
 }
 

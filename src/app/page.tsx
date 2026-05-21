@@ -1,11 +1,10 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { Sun } from '@/components/Ornaments';
 import PostList from '@/components/PostList';
 import SubscribeForm from '@/components/SubscribeForm';
 import { getReadingTime, seriesSlug } from '@/lib/format';
-import { SITE_IMAGE, SITE_NAME } from '@/lib/constants';
+import { SITE_IMAGE, SITE_IMAGE_DARK, SITE_NAME } from '@/lib/constants';
 import {
   getAllPostsMeta,
   getAllSeries,
@@ -44,21 +43,40 @@ export default async function Home() {
   const readingTime = latestFull ? getReadingTime(latestFull.content) : 0;
   const verse = latest?.verse;
   const reference = latest?.reference;
+  const logoPreloadScript = `
+    (() => {
+      let theme = 'light';
+      try {
+        const stored =
+          localStorage.getItem('morning-portion-theme') ||
+          localStorage.getItem('daily-word-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        theme = stored || (prefersDark ? 'dark' : 'light');
+      } catch {}
+
+      const href = theme === 'dark' ? ${JSON.stringify(SITE_IMAGE_DARK)} : ${JSON.stringify(SITE_IMAGE)};
+      const exists = Array.from(document.head.querySelectorAll('link[rel="preload"][as="image"]'))
+        .some((link) => link.getAttribute('href') === href);
+      if (exists) return;
+
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = href;
+      link.setAttribute('fetchpriority', 'high');
+      document.head.appendChild(link);
+    })();
+  `;
 
   return (
     <main>
       {latest && (
-        <section className="brand-band" aria-label={SITE_NAME}>
-          <Image
-            src={SITE_IMAGE}
-            alt={SITE_NAME}
-            width={1254}
-            height={1254}
-            priority
-            sizes="(max-width: 860px) 280px, 420px"
-            className="brand-band-image"
-          />
-        </section>
+        <>
+          <script dangerouslySetInnerHTML={{ __html: logoPreloadScript }} />
+          <section className="brand-band" aria-label={SITE_NAME}>
+            <div className="brand-band-logo" role="img" aria-label={SITE_NAME} />
+          </section>
+        </>
       )}
       {latest && (
         <section className="hero" aria-label="Today's reflection">
