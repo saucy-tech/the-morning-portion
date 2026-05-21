@@ -67,7 +67,7 @@ export default async function PostPage({ params }: PostPageProps) {
       name: SITE_NAME,
       url: SITE_URL,
     },
-    articleSection: 'Daily Word',
+    articleSection: 'Morning Scripture Reflections',
     keywords: post.tags,
   };
 
@@ -78,7 +78,7 @@ export default async function PostPage({ params }: PostPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <nav className="breadcrumb" aria-label="Breadcrumb">
-        <Link href="/">The Daily Word</Link>
+        <Link href="/">{SITE_NAME}</Link>
         <span aria-hidden="true">/</span>
         {post.series && (
           <>

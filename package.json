@@ -1,5 +1,5 @@
 {
-  "name": "the-daily-word",
+  "name": "the-morning-portion",
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@10.15.0",
@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "sync:posts": "node scripts/sync-daily-word-posts.mjs"
+    "sync:posts": "node scripts/sync-morning-portion-posts.mjs"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.13",

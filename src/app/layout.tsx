@@ -6,7 +6,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import SiteFooter from '@/components/SiteFooter';
 import SiteHeader from '@/components/SiteHeader';
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/constants';
+import { SITE_DESCRIPTION, SITE_IMAGE, SITE_NAME, SITE_URL } from '@/lib/constants';
 import './globals.css';
 
 const fraunces = Fraunces({
@@ -49,9 +49,9 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: '/images/daily-word-banner.png',
-        width: 1200,
-        height: 509,
+        url: SITE_IMAGE,
+        width: 1254,
+        height: 1254,
         alt: SITE_NAME,
       },
     ],
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: [`${SITE_URL}/images/daily-word-banner.png`],
+    images: [`${SITE_URL}${SITE_IMAGE}`],
   },
   icons: {
     icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
@@ -73,7 +73,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const themeScript = `
     (() => {
       try {
-        const stored = localStorage.getItem('daily-word-theme');
+        const stored =
+          localStorage.getItem('morning-portion-theme') ||
+          localStorage.getItem('daily-word-theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const theme = stored || (prefersDark ? 'dark' : 'light');
         document.documentElement.dataset.theme = theme;
@@ -86,7 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${fraunces.variable} ${inter.variable}`} suppressHydrationWarning>
       <body>
-        <Script id="daily-word-theme-init" strategy="beforeInteractive">
+        <Script id="morning-portion-theme-init" strategy="beforeInteractive">
           {themeScript}
         </Script>
         <SiteHeader />

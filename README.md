@@ -1,6 +1,6 @@
-# The Daily Word
+# The Morning Portion
 
-Standalone Next.js application for The Daily Word, a weekday scripture reflection project spun out from `personal-site`.
+Standalone Next.js application for The Morning Portion, a morning scripture reflection project spun out from `personal-site`.
 
 ## Stack
 
@@ -12,7 +12,7 @@ Standalone Next.js application for The Daily Word, a weekday scripture reflectio
 - ConvertKit for the subscribe flow
 - `@vercel/analytics` + `@vercel/speed-insights`
 
-See [DESIGN.md](DESIGN.md) for the visual identity (Direction A: verse-as-typography).
+See [DESIGN.md](DESIGN.md) for the visual identity.
 
 ## Local Development
 
@@ -29,7 +29,7 @@ pnpm dev
 | `pnpm build` | Production build |
 | `pnpm start` | Run the production build locally |
 | `pnpm lint` | ESLint over the repo |
-| `pnpm sync:posts` | Pull Daily Word MDX from `personal-site` (see below) |
+| `pnpm sync:posts` | Pull Morning Portion MDX from `personal-site` (see below) |
 
 ## Project Layout
 
@@ -46,14 +46,14 @@ src/
   content/posts/      # MDX posts (synced from personal-site, do not hand-edit)
   lib/                # posts.ts (load + zod-validate frontmatter), constants, format, subscribe
 scripts/
-  sync-daily-word-posts.mjs  # Mirrors `category: Daily Word` MDX from personal-site
-public/images/        # Banner + static images
+  sync-morning-portion-posts.mjs  # Mirrors the devotional MDX stream from personal-site
+public/images/        # Logo + static images
 DESIGN.md             # Visual identity / typography notes
 ```
 
 ## Content Sync
 
-Daily Word posts are stored in `src/content/posts`. To refresh them from the local personal-site repo:
+Morning Portion posts are stored in `src/content/posts`. To refresh them from the local personal-site repo:
 
 ```bash
 pnpm sync:posts
@@ -64,6 +64,8 @@ By default, the script reads from `../personal-site/src/posts`. Override with:
 ```bash
 PERSONAL_SITE_POSTS_DIR=/path/to/posts pnpm sync:posts
 ```
+
+The authoring repo currently labels this stream as `category: Daily Word`; this app publishes that stream as The Morning Portion.
 
 ## Post frontmatter
 
@@ -94,14 +96,16 @@ No GitHub repository secrets or variables are required right now. This app does 
 
 ### Vercel Environment Variables
 
-Set these in Vercel after connecting `saucy-tech/the-daily-word`:
+Set these in Vercel after connecting or renaming the project:
 
 | Name | Required | Source |
 | --- | --- | --- |
 | `CONVERTKIT_API_KEY` | Yes | Copy the value from `personal-site` |
 | `CONVERTKIT_FORM_ID` | Yes | Copy the value from `personal-site` |
-| `NEXT_PUBLIC_DAILY_WORD_URL` | Recommended | Set to the stable Vercel production URL once Vercel creates it |
+| `NEXT_PUBLIC_MORNING_PORTION_URL` | Recommended | Set to the stable production URL, e.g. `https://morningportion.com` |
 | `NEXT_PUBLIC_PERSONAL_SITE_URL` | Optional | Defaults to `https://saucy.tech` |
+
+`NEXT_PUBLIC_DAILY_WORD_URL` is still honored as a legacy fallback during the rename.
 
 Do not copy `CK_SECRET_KEY`, `CK_PUBLISHER_ID`, or `KIT_API_KEY` unless a future broadcast workflow is added to this repo. Those are not used by the current app.
 
