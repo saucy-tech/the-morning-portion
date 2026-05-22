@@ -2,6 +2,9 @@ import nextConfig from 'eslint-config-next/core-web-vitals';
 import globals from 'globals';
 
 const eslintConfig = [
+  {
+    ignores: ['.next/**', 'out/**', 'build/**', '.worktrees/**', '.playwright-cli/**'],
+  },
   ...nextConfig,
   {
     files: ['scripts/**/*.mjs'],
