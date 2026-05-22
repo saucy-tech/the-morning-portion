@@ -1,9 +1,14 @@
 name: Devotion Broadcast Draft
 
-# Manually creates a Kit draft for one Morning Portion post.
+# Creates a Kit draft for one Morning Portion post.
+# Auto-fires when a PR labeled `devotion` is merged into main (defaults to the Morning Portion audience).
+# Can also be triggered manually via workflow_dispatch with a slug.
 # This workflow never schedules or sends the email; final review and send happen in Kit.
 
 on:
+  pull_request:
+    types: [closed]
+    branches: [main]
   workflow_dispatch:
     inputs:
       slug:
@@ -26,10 +31,17 @@ on:
 jobs:
   create_draft:
     name: Create Kit Draft
+    # On PR: only run when merged with the `devotion` label.
+    # On manual dispatch: always run.
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.merged == true &&
+       contains(github.event.pull_request.labels.*.name, 'devotion'))
     runs-on: ubuntu-latest
     environment: morning-portion-broadcast
     permissions:
       contents: read
+      pull-requests: write
 
     env:
       NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL }}
@@ -41,6 +53,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -59,24 +73,41 @@ jobs:
       - name: Resolve post file
         id: post
         env:
+          EVENT_NAME: ${{ github.event_name }}
           INPUT_SLUG: ${{ inputs.slug }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.merge_commit_sha }}
         run: |
           set -euo pipefail
 
-          if ! [[ "$INPUT_SLUG" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
-            echo "::error::Invalid post slug: $INPUT_SLUG"
-            exit 1
-          fi
-
-          mdx_file="src/content/posts/${INPUT_SLUG}.mdx"
-          if [ ! -f "$mdx_file" ]; then
-            echo "::error::Post file not found: $mdx_file"
-            exit 1
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            if ! [[ "$INPUT_SLUG" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+              echo "::error::Invalid post slug: $INPUT_SLUG"
+              exit 1
+            fi
+            mdx_file="src/content/posts/${INPUT_SLUG}.mdx"
+            if [ ! -f "$mdx_file" ]; then
+              echo "::error::Post file not found: $mdx_file"
+              exit 1
+            fi
+            slug="$INPUT_SLUG"
+          else
+            echo "Checking diff: $BASE_SHA -> $HEAD_SHA"
+            mdx_file=$(git diff --name-only --diff-filter=A "$BASE_SHA" "$HEAD_SHA" -- 'src/content/posts/*.mdx' | sort -r | head -1)
+            if [ -z "$mdx_file" ] || [ ! -f "$mdx_file" ]; then
+              echo "::error::No new MDX post added by this PR."
+              exit 1
+            fi
+            slug=$(basename "$mdx_file" .mdx)
+            if ! [[ "$slug" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+              echo "::error::Resolved slug does not match expected pattern: $slug"
+              exit 1
+            fi
           fi
 
           echo "file=$mdx_file" >> "$GITHUB_OUTPUT"
-          echo "slug=$INPUT_SLUG" >> "$GITHUB_OUTPUT"
-          echo "Found post: $mdx_file"
+          echo "slug=$slug" >> "$GITHUB_OUTPUT"
+          echo "Found post: $mdx_file (slug: $slug)"
 
       - name: Extract post metadata
         id: meta
@@ -238,6 +269,7 @@ jobs:
       - name: Create Kit broadcast draft
         id: draft
         env:
+          EVENT_NAME: ${{ github.event_name }}
           INPUT_AUDIENCE: ${{ inputs.audience }}
           INPUT_CONFIRM_MORNING_PORTION: ${{ inputs.confirm_morning_portion }}
           POST_TITLE: ${{ steps.meta.outputs.title }}
@@ -264,7 +296,15 @@ jobs:
             exit 1
           fi
 
-          case "$INPUT_AUDIENCE" in
+          # On PR-merge auto-fire, default to morning-portion audience. The PR
+          # label is the safety gate, so the manual confirm phrase is not required.
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            EFFECTIVE_AUDIENCE="$INPUT_AUDIENCE"
+          else
+            EFFECTIVE_AUDIENCE="morning-portion"
+          fi
+
+          case "$EFFECTIVE_AUDIENCE" in
             test)
               if ! [[ "$KIT_MORNING_PORTION_TEST_TAG_ID" =~ ^[0-9]+$ ]]; then
                 echo "::error::KIT_MORNING_PORTION_TEST_TAG_ID repository variable must be numeric for test runs."
@@ -275,8 +315,8 @@ jobs:
               DRAFT_SUBJECT="[TEST] ${POST_TITLE}"
               ;;
             morning-portion)
-              if [ "$INPUT_CONFIRM_MORNING_PORTION" != "MORNING PORTION" ]; then
-                echo "::error::To target the real Morning Portion audience, set confirm_morning_portion to: MORNING PORTION"
+              if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ "$INPUT_CONFIRM_MORNING_PORTION" != "MORNING PORTION" ]; then
+                echo "::error::To target the real Morning Portion audience via manual dispatch, set confirm_morning_portion to: MORNING PORTION"
                 exit 1
               fi
               if ! [[ "$KIT_MORNING_PORTION_TAG_ID" =~ ^[0-9]+$ ]]; then
@@ -288,7 +328,7 @@ jobs:
               DRAFT_SUBJECT="$POST_TITLE"
               ;;
             *)
-              echo "::error::Unsupported audience: $INPUT_AUDIENCE"
+              echo "::error::Unsupported audience: $EFFECTIVE_AUDIENCE"
               exit 1
               ;;
           esac
@@ -393,6 +433,9 @@ jobs:
           {
             echo "broadcast_id=${BROADCAST_ID}"
             echo "post_url=${POST_URL}"
+            echo "public_url=${PUBLIC_URL}"
+            echo "target_label=${TARGET_LABEL}"
+            echo "draft_subject=${DRAFT_SUBJECT}"
           } >> "$GITHUB_OUTPUT"
 
           {
@@ -408,3 +451,40 @@ jobs:
               echo "- Public URL: ${PUBLIC_URL}"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          POST_URL: ${{ steps.draft.outputs.post_url }}
+          BROADCAST_ID: ${{ steps.draft.outputs.broadcast_id }}
+          PUBLIC_URL: ${{ steps.draft.outputs.public_url }}
+          TARGET_LABEL: ${{ steps.draft.outputs.target_label }}
+          DRAFT_SUBJECT: ${{ steps.draft.outputs.draft_subject }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+
+          PUBLIC_LINE=""
+          if [ -n "$PUBLIC_URL" ] && [ "$PUBLIC_URL" != "null" ]; then
+            PUBLIC_LINE=$'\n- Kit preview: '"$PUBLIC_URL"
+          fi
+
+          COMMENT_BODY=$(cat <<EOF
+          ## Morning Portion draft created in Kit
+
+          - Post: ${DRAFT_SUBJECT}
+          - Post URL: ${POST_URL}
+          - Kit broadcast ID: ${BROADCAST_ID:-unknown}
+          - Target: ${TARGET_LABEL} (draft only, \`send_at: null\`)${PUBLIC_LINE}
+
+          Review and send from Kit. No email has been sent yet.
+          EOF
+          )
+
+          if gh pr comment "$PR_NUMBER" --body "$COMMENT_BODY"; then
+            echo "Posted PR comment for broadcast ${BROADCAST_ID:-unknown}."
+          else
+            echo "::warning::Failed to post PR comment. The draft was created in Kit and the workflow will continue."
+          fi
