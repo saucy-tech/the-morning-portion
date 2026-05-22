@@ -1,0 +1,410 @@
+name: Devotion Broadcast Draft
+
+# Manually creates a Kit draft for one Morning Portion post.
+# This workflow never schedules or sends the email; final review and send happen in Kit.
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: 'Post slug (e.g. 2026-05-22-the-blood-cleanseth-now)'
+        required: true
+        type: string
+      audience:
+        description: 'Audience tag to target. Use test while validating the workflow.'
+        required: true
+        default: test
+        type: choice
+        options:
+          - test
+          - morning-portion
+      confirm_morning_portion:
+        description: 'Required only for the real audience. Type: MORNING PORTION'
+        required: false
+        type: string
+
+jobs:
+  create_draft:
+    name: Create Kit Draft
+    runs-on: ubuntu-latest
+    environment: morning-portion-broadcast
+    permissions:
+      contents: read
+
+    env:
+      NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL }}
+      KIT_API_KEY: ${{ secrets.KIT_API_KEY }}
+      KIT_EMAIL_ADDRESS: ${{ vars.KIT_EMAIL_ADDRESS }}
+      KIT_MORNING_PORTION_TAG_ID: ${{ vars.KIT_MORNING_PORTION_TAG_ID }}
+      KIT_MORNING_PORTION_TEST_TAG_ID: ${{ vars.KIT_MORNING_PORTION_TEST_TAG_ID }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Resolve post file
+        id: post
+        env:
+          INPUT_SLUG: ${{ inputs.slug }}
+        run: |
+          set -euo pipefail
+
+          if ! [[ "$INPUT_SLUG" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+            echo "::error::Invalid post slug: $INPUT_SLUG"
+            exit 1
+          fi
+
+          mdx_file="src/content/posts/${INPUT_SLUG}.mdx"
+          if [ ! -f "$mdx_file" ]; then
+            echo "::error::Post file not found: $mdx_file"
+            exit 1
+          fi
+
+          echo "file=$mdx_file" >> "$GITHUB_OUTPUT"
+          echo "slug=$INPUT_SLUG" >> "$GITHUB_OUTPUT"
+          echo "Found post: $mdx_file"
+
+      - name: Extract post metadata
+        id: meta
+        env:
+          MDX_FILE: ${{ steps.post.outputs.file }}
+        run: |
+          set -euo pipefail
+
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const { randomUUID } = require('crypto');
+
+          const matter = require('gray-matter');
+          const yaml = require('js-yaml');
+
+          matter.engines.yaml = {
+            parse: (str) => yaml.load(str),
+            stringify: (obj) => yaml.dump(obj),
+          };
+
+          const filePath = process.env.MDX_FILE;
+          const outputPath = process.env.GITHUB_OUTPUT;
+          const raw = fs.readFileSync(filePath, 'utf8');
+          const { data, content } = matter(raw);
+
+          const title = String(data.title || '').trim();
+          const excerpt = String(data.excerpt || '').trim();
+          const date = String(data.date || '').trim();
+          const slug = path.basename(filePath, path.extname(filePath));
+
+          if (!title || !excerpt || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+            throw new Error(`Missing required frontmatter in ${filePath}`);
+          }
+
+          const formattedDate = new Intl.DateTimeFormat('en-US', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+            timeZone: 'UTC',
+          }).format(new Date(`${date}T00:00:00Z`));
+
+          const entityMap = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+          };
+
+          function escapeHtml(value) {
+            return String(value).replace(/[&<>"']/g, (char) => entityMap[char]);
+          }
+
+          function inlineMarkdown(value) {
+            return escapeHtml(value)
+              .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+              .replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, '<em>$1</em>')
+              .replace(/(?<!_)_([^_\n]+?)_(?!_)/g, '<em>$1</em>');
+          }
+
+          const bodyLines = content.split(/\r?\n/);
+          let verse = '';
+          let lines = bodyLines;
+
+          for (let i = 0; i < bodyLines.length; i += 1) {
+            const stripped = bodyLines[i].trim();
+            if (stripped.startsWith('> ') || stripped === '>') {
+              verse = stripped.replace(/^>\s?/, '').trim();
+              let cut = i + 1;
+              while (cut < bodyLines.length && !bodyLines[cut].trim()) {
+                cut += 1;
+              }
+              lines = bodyLines.slice(cut);
+              break;
+            }
+            if (stripped) {
+              break;
+            }
+          }
+
+          const blocks = [];
+          let buffer = [];
+          let mode = 'p';
+
+          function flush() {
+            const text = buffer.map((line) => line.trim()).join(' ').trim();
+            buffer = [];
+            if (!text) return;
+
+            if (mode === 'blockquote') {
+              blocks.push(
+                `<blockquote style="border-left:3px solid #d0b26b;margin:0 0 22px 0;padding:8px 0 8px 16px;">` +
+                  `<p style="font-family:Georgia,serif;font-size:16px;line-height:1.7;font-style:italic;color:#5a4a2c;margin:0;">${inlineMarkdown(text)}</p>` +
+                `</blockquote>`
+              );
+              return;
+            }
+
+            blocks.push(
+              `<p style="font-family:Georgia,serif;font-size:16px;line-height:1.7;color:#2f2a22;margin:0 0 18px 0;">${inlineMarkdown(text)}</p>`
+            );
+          }
+
+          for (const rawLine of lines) {
+            const stripped = rawLine.trim();
+            if (!stripped) {
+              flush();
+              mode = 'p';
+              continue;
+            }
+
+            if (stripped.startsWith('## ')) {
+              flush();
+              mode = 'p';
+              blocks.push(
+                `<h2 style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#1f1b16;margin:32px 0 14px 0;line-height:1.3;">${inlineMarkdown(stripped.slice(3).trim())}</h2>`
+              );
+              continue;
+            }
+
+            if (stripped.startsWith('> ') || stripped === '>') {
+              if (mode !== 'blockquote') {
+                flush();
+                mode = 'blockquote';
+              }
+              buffer.push(stripped.replace(/^>\s?/, ''));
+              continue;
+            }
+
+            if (mode !== 'p') {
+              flush();
+              mode = 'p';
+            }
+            buffer.push(stripped);
+          }
+
+          flush();
+
+          function writeOutput(name, value) {
+            const delimiter = `EOF_${name}_${randomUUID().replace(/-/g, '')}`;
+            fs.appendFileSync(outputPath, `${name}<<${delimiter}\n${value}\n${delimiter}\n`);
+          }
+
+          console.log(`Title: ${title}`);
+          console.log(`Date: ${formattedDate}`);
+          console.log(`Slug: ${slug}`);
+          console.log(`Body HTML: ${blocks.length} blocks`);
+
+          writeOutput('title', title);
+          writeOutput('excerpt', excerpt);
+          writeOutput('formatted_date', formattedDate);
+          writeOutput('verse', verse);
+          writeOutput('body_html', blocks.join('\n'));
+          writeOutput('slug', slug);
+          NODE
+
+      - name: Create Kit broadcast draft
+        id: draft
+        env:
+          INPUT_AUDIENCE: ${{ inputs.audience }}
+          INPUT_CONFIRM_MORNING_PORTION: ${{ inputs.confirm_morning_portion }}
+          POST_TITLE: ${{ steps.meta.outputs.title }}
+          POST_EXCERPT: ${{ steps.meta.outputs.excerpt }}
+          POST_FORMATTED_DATE: ${{ steps.meta.outputs.formatted_date }}
+          POST_VERSE: ${{ steps.meta.outputs.verse }}
+          POST_BODY_HTML: ${{ steps.meta.outputs.body_html }}
+          POST_SLUG: ${{ steps.meta.outputs.slug }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "$KIT_API_KEY" ]; then
+            echo "::error::KIT_API_KEY secret is not set."
+            exit 1
+          fi
+
+          if [ -z "$NEXT_PUBLIC_APP_URL" ]; then
+            echo "::error::NEXT_PUBLIC_APP_URL repository variable is not set."
+            exit 1
+          fi
+
+          if [ -z "$KIT_EMAIL_ADDRESS" ]; then
+            echo "::error::KIT_EMAIL_ADDRESS repository variable is not set."
+            exit 1
+          fi
+
+          case "$INPUT_AUDIENCE" in
+            test)
+              if ! [[ "$KIT_MORNING_PORTION_TEST_TAG_ID" =~ ^[0-9]+$ ]]; then
+                echo "::error::KIT_MORNING_PORTION_TEST_TAG_ID repository variable must be numeric for test runs."
+                exit 1
+              fi
+              TARGET_TAG_ID="$KIT_MORNING_PORTION_TEST_TAG_ID"
+              TARGET_LABEL="test audience"
+              DRAFT_SUBJECT="[TEST] ${POST_TITLE}"
+              ;;
+            morning-portion)
+              if [ "$INPUT_CONFIRM_MORNING_PORTION" != "MORNING PORTION" ]; then
+                echo "::error::To target the real Morning Portion audience, set confirm_morning_portion to: MORNING PORTION"
+                exit 1
+              fi
+              if ! [[ "$KIT_MORNING_PORTION_TAG_ID" =~ ^[0-9]+$ ]]; then
+                echo "::error::KIT_MORNING_PORTION_TAG_ID repository variable must be numeric for real audience drafts."
+                exit 1
+              fi
+              TARGET_TAG_ID="$KIT_MORNING_PORTION_TAG_ID"
+              TARGET_LABEL="Morning Portion audience"
+              DRAFT_SUBJECT="$POST_TITLE"
+              ;;
+            *)
+              echo "::error::Unsupported audience: $INPUT_AUDIENCE"
+              exit 1
+              ;;
+          esac
+
+          APP_URL="${NEXT_PUBLIC_APP_URL%/}"
+          POST_URL="${APP_URL}/posts/${POST_SLUG}"
+          BANNER_URL="${APP_URL}/images/daily-word-banner.png"
+          DESCRIPTION="The Morning Portion ${TARGET_LABEL} draft for ${POST_SLUG}"
+
+          HTML_CONTENT=$(jq -rn \
+            --arg app_url "$APP_URL" \
+            --arg banner_url "$BANNER_URL" \
+            --arg date "$POST_FORMATTED_DATE" \
+            --arg title "$POST_TITLE" \
+            --arg verse "$POST_VERSE" \
+            --arg excerpt "$POST_EXCERPT" \
+            --arg body_html "$POST_BODY_HTML" \
+            --arg url "$POST_URL" \
+            '
+            "<div style=\"font-family:Georgia,serif;max-width:600px;margin:0 auto;color:#1f1b16;padding:0 16px;\">"
+            + "<span style=\"display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;mso-hide:all;\">" + ($excerpt | @html) + "</span>"
+            + "<p style=\"margin:0 0 24px 0;\">"
+            +   "<a href=\"" + $url + "\" style=\"display:block;text-decoration:none;\">"
+            +     "<img src=\"" + $banner_url + "\" width=\"600\" alt=\"The Morning Portion\" style=\"display:block;width:100%;max-width:600px;height:auto;margin:0 auto;border:0;\" />"
+            +   "</a>"
+            + "</p>"
+            + "<p style=\"font-size:13px;color:#7d715d;letter-spacing:0.05em;text-transform:uppercase;margin:0 0 24px 0;\">" + $date + "</p>"
+            + "<h1 style=\"font-family:Georgia,serif;font-size:24px;font-weight:bold;color:#1f1b16;margin:0 0 20px 0;line-height:1.3;\">" + ($title | @html) + "</h1>"
+            + (if $verse != "" then
+                "<blockquote style=\"border-left:3px solid #d0b26b;margin:0 0 28px 0;padding:12px 0 12px 20px;\">"
+                + "<p style=\"font-size:18px;line-height:1.6;font-style:italic;color:#2f2a22;margin:0;\">" + ($verse | @html) + "</p>"
+                + "</blockquote>"
+              else "" end)
+            + $body_html
+            + "<p style=\"margin:8px 0 0 0;font-size:14px;\">"
+            +   "<a href=\"" + $url + "\" style=\"color:#9f7a1f;text-decoration:underline;\">Read on the web &rarr;</a>"
+            + "</p>"
+            + "<hr style=\"border:none;border-top:1px solid #ded4bf;margin:32px 0 16px 0;\" />"
+            + "<p style=\"font-size:13px;line-height:1.6;color:#7d715d;text-align:center;margin:0 0 8px 0;\">Know someone who would enjoy this? <a href=\"" + $app_url + "\" style=\"color:#9f7a1f;text-decoration:underline;\">Share The Morning Portion</a></p>"
+            + "<p style=\"font-size:12px;line-height:1.6;color:#8d826f;text-align:center;margin:0;\">You&#39;re receiving this because you subscribed to The Morning Portion &middot; <a href=\"" + $app_url + "\" style=\"color:#8d826f;text-decoration:underline;\">morningportion.com</a></p>"
+            + "</div>"
+            ')
+
+          PAYLOAD=$(jq -n \
+            --arg subject "$DRAFT_SUBJECT" \
+            --arg content "$HTML_CONTENT" \
+            --arg preview_text "$POST_EXCERPT" \
+            --arg description "$DESCRIPTION" \
+            --arg email_address "$KIT_EMAIL_ADDRESS" \
+            --argjson tag_id "$TARGET_TAG_ID" \
+            '{
+              subject: $subject,
+              content: $content,
+              preview_text: $preview_text,
+              description: $description,
+              email_address: $email_address,
+              public: false,
+              published_at: null,
+              send_at: null,
+              subscriber_filter: [
+                {
+                  all: [
+                    {
+                      type: "tag",
+                      ids: [$tag_id]
+                    }
+                  ],
+                  any: null,
+                  none: null
+                }
+              ]
+            }')
+
+          echo "--- Draft details ---"
+          echo "Subject: $DRAFT_SUBJECT"
+          echo "Post URL: $POST_URL"
+          echo "Target: $TARGET_LABEL, Kit tag ID $TARGET_TAG_ID"
+          echo "Send status: draft only (send_at is null)"
+
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+            "https://api.kit.com/v4/broadcasts" \
+            -H "Content-Type: application/json" \
+            -H "Accept: application/json" \
+            -H "X-Kit-Api-Key: ${KIT_API_KEY}" \
+            -d "$PAYLOAD")
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "HTTP status: $HTTP_CODE"
+          echo "$BODY" | jq '{broadcast: {id: (.broadcast.id // .id), subject: (.broadcast.subject // .subject), send_at: (.broadcast.send_at // .send_at), email_address: (.broadcast.email_address // .email_address)}}' 2>/dev/null || true
+
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+            echo "::error::Kit API returned HTTP $HTTP_CODE."
+            echo "$BODY" | jq . 2>/dev/null || echo "$BODY"
+            exit 1
+          fi
+
+          BROADCAST_ID=$(echo "$BODY" | jq -r '.broadcast.id // .id // empty')
+          PUBLIC_URL=$(echo "$BODY" | jq -r '.broadcast.public_url // .public_url // empty')
+
+          {
+            echo "broadcast_id=${BROADCAST_ID}"
+            echo "post_url=${POST_URL}"
+          } >> "$GITHUB_OUTPUT"
+
+          {
+            echo "## Morning Portion draft created"
+            echo ""
+            echo "- Post: ${DRAFT_SUBJECT}"
+            echo "- Post URL: ${POST_URL}"
+            echo "- Kit broadcast ID: ${BROADCAST_ID:-unknown}"
+            echo "- Target: ${TARGET_LABEL}, Kit tag ID ${TARGET_TAG_ID}"
+            echo "- Sender: ${KIT_EMAIL_ADDRESS}"
+            echo "- Send status: draft only; review and send from Kit"
+            if [ -n "$PUBLIC_URL" ] && [ "$PUBLIC_URL" != "null" ]; then
+              echo "- Public URL: ${PUBLIC_URL}"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
