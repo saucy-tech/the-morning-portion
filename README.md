@@ -1,6 +1,6 @@
 # The Morning Portion
 
-Standalone Next.js application for The Morning Portion, a morning scripture reflection project spun out from `personal-site`.
+Standalone Next.js application for The Morning Portion, a morning scripture reflection project. Devotional posts are authored directly in this repo.
 
 ## Stack
 
@@ -23,13 +23,12 @@ pnpm dev
 
 ## Scripts
 
-| Script            | Purpose                                                   |
-| ----------------- | --------------------------------------------------------- |
-| `pnpm dev`        | Next.js dev server on `http://localhost:3000`             |
-| `pnpm build`      | Production build                                          |
-| `pnpm start`      | Run the production build locally                          |
-| `pnpm lint`       | ESLint over the repo                                      |
-| `pnpm sync:posts` | Pull Morning Portion MDX from `personal-site` (see below) |
+| Script       | Purpose                                       |
+| ------------ | --------------------------------------------- |
+| `pnpm dev`   | Next.js dev server on `http://localhost:3000` |
+| `pnpm build` | Production build                              |
+| `pnpm start` | Run the production build locally              |
+| `pnpm lint`  | ESLint over the repo                          |
 
 ## Project Layout
 
@@ -43,29 +42,15 @@ src/
     rss.xml/          # RSS feed
     sitemap.ts        # Sitemap
   components/         # SiteHeader, SiteFooter, PostList, SubscribeForm, ThemeToggle, Ornaments
-  content/posts/      # MDX posts (synced from personal-site, do not hand-edit)
+  content/posts/      # MDX devotion posts authored directly in this repo
   lib/                # posts.ts (load + zod-validate frontmatter), constants, format, subscribe
-scripts/
-  sync-morning-portion-posts.mjs  # Mirrors the devotional MDX stream from personal-site
 public/images/        # Logo + static images
 DESIGN.md             # Visual identity / typography notes
 ```
 
-## Content Sync
+## Authoring posts
 
-Morning Portion posts are stored in `src/content/posts`. To refresh them from the local personal-site repo:
-
-```bash
-pnpm sync:posts
-```
-
-By default, the script reads from `../personal-site/src/posts`. Override with:
-
-```bash
-PERSONAL_SITE_POSTS_DIR=/path/to/posts pnpm sync:posts
-```
-
-The authoring repo currently labels this stream as `category: Daily Word`; this app publishes that stream as The Morning Portion.
+Devotion posts live in `src/content/posts/<YYYY-MM-DD-slug>.mdx`. Add a new file, fill in the required frontmatter (see below), and open a PR with the `devotion` label. When the PR merges to `main`, the `Devotion Broadcast Draft` workflow auto-fires and creates a Kit draft for the Morning Portion audience (see GitHub Actions section below).
 
 ## Post frontmatter
 
@@ -95,7 +80,7 @@ Copy `.env.example` to `.env.local` for a fresh setup. Reuse the applicable Kit/
 This repo includes:
 
 - `CI` on pushes/PRs to `main`, running `pnpm lint` and `pnpm build`.
-- `Devotion Broadcast Draft`, a manual `workflow_dispatch` workflow that creates a Kit draft for one post. It defaults to a test tag, does not schedule or send the email, and requires a confirmation phrase before targeting the real Morning Portion audience.
+- `Devotion Broadcast Draft`, which creates a Kit draft for one post. Auto-fires when a PR labeled `devotion` is merged into `main` and defaults to the Morning Portion audience. Can also be triggered manually via `workflow_dispatch` with a slug — manual runs default to the test tag and require a confirmation phrase to target the real audience. The workflow never schedules or sends; it always creates a draft (`send_at: null`) for final review and send in Kit.
 
 Configure these in **GitHub → Settings → Secrets and variables → Actions**:
 
@@ -107,9 +92,9 @@ Configure these in **GitHub → Settings → Secrets and variables → Actions**
 | `KIT_MORNING_PORTION_TAG_ID`      | Variable | `devotion-broadcast.yml` | Numeric Kit tag ID for the Morning Portion audience       |
 | `KIT_MORNING_PORTION_TEST_TAG_ID` | Variable | `devotion-broadcast.yml` | Numeric Kit tag ID for a small test-only audience         |
 
-Also create a GitHub Environment named `morning-portion-broadcast` and add a required reviewer. The workflow references that environment before it creates the Kit draft.
+Also create a GitHub Environment named `morning-portion-broadcast` and (optionally) add a required reviewer. The workflow references that environment before it creates the Kit draft. With a required reviewer, the auto-fire on PR merge will pause until you approve the deployment.
 
-For test runs, leave the workflow `audience` input set to `test`; the generated subject is prefixed with `[TEST]` and targets `KIT_MORNING_PORTION_TEST_TAG_ID`. To draft for the real audience, choose `audience: morning-portion` and type `MORNING PORTION` in `confirm_morning_portion`.
+For manual test runs (`workflow_dispatch`), leave the `audience` input set to `test`; the generated subject is prefixed with `[TEST]` and targets `KIT_MORNING_PORTION_TEST_TAG_ID`. To draft for the real audience manually, choose `audience: morning-portion` and type `MORNING PORTION` in `confirm_morning_portion`. Auto-fire on PR merge always targets the Morning Portion audience — the `devotion` label is the safety gate.
 
 ### Vercel Environment Variables
 
