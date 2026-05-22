@@ -38,6 +38,7 @@ wrap-up-summary.txt
 # verification artifacts
 .playwright-cli/
 .claude/
+.worktrees/
 
 # agent-only files (never commit)
 CLAUDE.md
