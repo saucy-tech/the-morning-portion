@@ -42,3 +42,4 @@ wrap-up-summary.txt
 # agent-only files (never commit)
 CLAUDE.md
 AGENTS.md
+.superpowers/
