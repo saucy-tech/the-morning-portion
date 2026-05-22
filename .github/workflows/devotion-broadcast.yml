@@ -93,9 +93,24 @@ jobs:
             slug="$INPUT_SLUG"
           else
             echo "Checking diff: $BASE_SHA -> $HEAD_SHA"
-            mdx_file=$(git diff --name-only --diff-filter=A "$BASE_SHA" "$HEAD_SHA" -- 'src/content/posts/*.mdx' | sort -r | head -1)
-            if [ -z "$mdx_file" ] || [ ! -f "$mdx_file" ]; then
+            mdx_files=$(git diff --name-only --diff-filter=A "$BASE_SHA" "$HEAD_SHA" -- 'src/content/posts/*.mdx')
+            file_count=$(echo "$mdx_files" | grep -c '\.mdx$' || true)
+
+            if [ "$file_count" -eq 0 ]; then
               echo "::error::No new MDX post added by this PR."
+              exit 1
+            fi
+
+            if [ "$file_count" -gt 1 ]; then
+              echo "::error::Multiple new MDX posts added by this PR (${file_count}). The auto-broadcast workflow handles one post per PR. Split into separate PRs, one post each, and reapply the devotion label."
+              echo "Files:"
+              echo "$mdx_files"
+              exit 1
+            fi
+
+            mdx_file="$mdx_files"
+            if [ ! -f "$mdx_file" ]; then
+              echo "::error::Resolved MDX file does not exist in the checked-out tree: $mdx_file"
               exit 1
             fi
             slug=$(basename "$mdx_file" .mdx)
