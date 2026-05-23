@@ -35,24 +35,30 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
       textarea.style.opacity = '0';
       document.body.appendChild(textarea);
       textarea.select();
-      document.execCommand('copy');
+      const succeeded = document.execCommand('copy');
       textarea.remove();
+      return succeeded;
     };
 
     try {
+      let copySucceeded = false;
+      
       if (navigator.clipboard?.writeText) {
         try {
           await navigator.clipboard.writeText(url);
+          copySucceeded = true;
         } catch {
           // Fallback if clipboard API fails (permissions, insecure context, etc.)
-          fallbackCopy();
+          copySucceeded = fallbackCopy();
         }
       } else {
-        fallbackCopy();
+        copySucceeded = fallbackCopy();
       }
 
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), COPY_RESET_MS);
+      if (copySucceeded) {
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), COPY_RESET_MS);
+      }
     } catch {
       setCopied(false);
     }
@@ -67,8 +73,16 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
     try {
       await navigator.share({ title, text: shareText, url });
     } catch (error) {
-      // Only fallback to copy if it's not a user cancellation
-      if (error instanceof Error && error.name !== 'AbortError') {
+      // Distinguish between user cancellation and no share targets available
+      if (error instanceof Error && error.name === 'AbortError') {
+        // Check if it's a "no targets" error vs user cancellation
+        // If error message suggests no targets, still copy; otherwise stay silent
+        if (error.message && error.message.toLowerCase().includes('target')) {
+          await copyLink();
+        }
+        // User cancellation - do nothing
+      } else {
+        // Other errors - always fallback to copy
         await copyLink();
       }
     }
