@@ -750,6 +750,7 @@ html[data-theme='dark'] .brand-band-logo {
 .share-icon-button:hover {
   background: var(--tdw-ink);
   border-color: var(--tdw-ink);
+  color: var(--tdw-bg);
 }
 
 .share-icon {
@@ -758,15 +759,15 @@ html[data-theme='dark'] .brand-band-logo {
   display: block;
 }
 
-.share-icon-button:hover .share-icon {
+.share-icon-button:hover img.share-icon {
   filter: invert(1);
 }
 
-html[data-theme='dark'] .share-icon {
+html[data-theme='dark'] img.share-icon {
   filter: invert(1);
 }
 
-html[data-theme='dark'] .share-icon-button:hover .share-icon {
+html[data-theme='dark'] .share-icon-button:hover img.share-icon {
   filter: none;
 }
 
