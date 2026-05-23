@@ -697,6 +697,7 @@ html[data-theme='dark'] .brand-band-logo {
 
 .share-card {
   margin-top: 48px;
+  margin-bottom: 64px;
   padding: 28px;
   border: 1px solid var(--tdw-rule);
   border-radius: var(--tdw-radius);
