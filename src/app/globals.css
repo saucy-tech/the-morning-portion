@@ -695,6 +695,102 @@ html[data-theme='dark'] .brand-band-logo {
   text-underline-offset: 4px;
 }
 
+.share-card {
+  margin-top: 48px;
+  margin-bottom: 64px;
+  padding: 28px;
+  border: 1px solid var(--tdw-rule);
+  border-radius: var(--tdw-radius);
+  background: var(--tdw-paper);
+  display: grid;
+  gap: 16px;
+}
+
+.share-card h2 {
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.share-actions-mobile,
+.share-actions-desktop {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.share-actions-mobile {
+  display: none;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.share-actions-mobile .button {
+  flex: 1 1 140px;
+  width: auto;
+}
+
+.share-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--tdw-radius-pill);
+  border: 1px solid var(--tdw-rule);
+  background: transparent;
+  color: var(--tdw-ink);
+  cursor: pointer;
+  transition: all 160ms ease;
+}
+
+.share-icon-button:hover {
+  background: var(--tdw-ink);
+  border-color: var(--tdw-ink);
+  color: var(--tdw-bg);
+}
+
+.share-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.share-icon-button:hover img.share-icon {
+  filter: invert(1);
+}
+
+html[data-theme='dark'] img.share-icon {
+  filter: invert(1);
+}
+
+html[data-theme='dark'] .share-icon-button:hover img.share-icon {
+  filter: none;
+}
+
+.share-feedback {
+  margin: 0;
+  min-height: 20px;
+  font-size: 13px;
+  color: var(--tdw-ink-mute);
+}
+
+@media (max-width: 720px) {
+  .share-actions-desktop {
+    display: none;
+  }
+
+  .share-actions-mobile {
+    display: flex;
+  }
+}
+
 /* Series page */
 .series-page {
   padding: 48px 64px 96px;

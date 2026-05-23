@@ -3,6 +3,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import { notFound } from 'next/navigation';
 
 import PostList from '@/components/PostList';
+import ShareButtons from '@/components/ShareButtons';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatPostDate, getReadingTime, seriesSlug } from '@/lib/format';
 import {
@@ -108,6 +109,7 @@ export default async function PostPage({ params }: PostPageProps) {
         <div className="post-body">
           <MDXRemote source={post.content} />
         </div>
+        <ShareButtons title={post.title} excerpt={post.excerpt} url={getPostUrl(post.slug)} />
       </article>
 
       <section className="section subscribe-section">
