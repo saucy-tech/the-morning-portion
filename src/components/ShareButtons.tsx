@@ -18,7 +18,7 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
   const shareUrls = useMemo(() => {
     const encodedTitle = encodeURIComponent(title);
     const encodedUrl = encodeURIComponent(url);
-    const emailBody = encodeURIComponent(`${title}\n\n${excerpt ?? ''}\n\n${url}`);
+    const emailBody = encodeURIComponent([title, excerpt, url].filter(Boolean).join('\n\n'));
 
     return {
       x: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
