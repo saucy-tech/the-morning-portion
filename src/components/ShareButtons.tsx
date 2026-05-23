@@ -10,6 +10,7 @@ type ShareButtonsProps = {
 };
 
 const COPY_RESET_MS = 2000;
+const EMAIL_BODY_SEPARATOR = '\r\n\r\n';
 
 export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
@@ -19,7 +20,9 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
   const shareUrls = useMemo(() => {
     const encodedTitle = encodeURIComponent(title);
     const encodedUrl = encodeURIComponent(url);
-    const emailBody = encodeURIComponent([title, excerpt, url].filter(Boolean).join('\n\n'));
+    const emailBody = encodeURIComponent(
+      [title, excerpt, url].filter(Boolean).join(EMAIL_BODY_SEPARATOR),
+    );
 
     return {
       x: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
@@ -43,7 +46,7 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
 
     try {
       let copySucceeded = false;
-      
+
       if (navigator.clipboard?.writeText) {
         try {
           await navigator.clipboard.writeText(url);
