@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useCallback, useMemo, useState } from 'react';
 
 type ShareButtonsProps = {
@@ -73,16 +74,7 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
     try {
       await navigator.share({ title, text: shareText, url });
     } catch (error) {
-      // Distinguish between user cancellation and no share targets available
-      if (error instanceof Error && error.name === 'AbortError') {
-        // Check if it's a "no targets" error vs user cancellation
-        // If error message suggests no targets, still copy; otherwise stay silent
-        if (error.message && error.message.toLowerCase().includes('target')) {
-          await copyLink();
-        }
-        // User cancellation - do nothing
-      } else {
-        // Other errors - always fallback to copy
+      if (!(error instanceof Error) || error.name !== 'AbortError') {
         await copyLink();
       }
     }
@@ -97,6 +89,9 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
           <button className="button primary" type="button" onClick={handleNativeShare}>
             Share
           </button>
+          <button className="button ghost" type="button" onClick={copyLink}>
+            Copy link
+          </button>
         </div>
         <div className="share-actions-desktop">
           <a
@@ -106,7 +101,14 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
             rel="noreferrer"
             aria-label="Share on X"
           >
-            <img className="share-icon" src="/icons/x.svg" alt="" aria-hidden="true" />
+            <Image
+              className="share-icon"
+              src="/icons/x.svg"
+              alt=""
+              width={18}
+              height={18}
+              aria-hidden="true"
+            />
           </a>
           <a
             className="share-icon-button"
@@ -115,7 +117,14 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
             rel="noreferrer"
             aria-label="Share on Facebook"
           >
-            <img className="share-icon" src="/icons/facebook.svg" alt="" aria-hidden="true" />
+            <Image
+              className="share-icon"
+              src="/icons/facebook.svg"
+              alt=""
+              width={18}
+              height={18}
+              aria-hidden="true"
+            />
           </a>
           <a
             className="share-icon-button"

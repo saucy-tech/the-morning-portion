@@ -727,11 +727,13 @@ html[data-theme='dark'] .brand-band-logo {
 
 .share-actions-mobile {
   display: none;
+  flex-wrap: wrap;
   width: 100%;
 }
 
 .share-actions-mobile .button {
-  width: 100%;
+  flex: 1 1 140px;
+  width: auto;
 }
 
 .share-icon-button {
