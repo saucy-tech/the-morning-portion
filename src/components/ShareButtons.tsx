@@ -28,18 +28,27 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
   }, [excerpt, title, url]);
 
   const copyLink = useCallback(async () => {
+    const fallbackCopy = () => {
+      const textarea = document.createElement('textarea');
+      textarea.value = url;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      textarea.remove();
+    };
+
     try {
       if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(url);
+        try {
+          await navigator.clipboard.writeText(url);
+        } catch {
+          // Fallback if clipboard API fails (permissions, insecure context, etc.)
+          fallbackCopy();
+        }
       } else {
-        const textarea = document.createElement('textarea');
-        textarea.value = url;
-        textarea.style.position = 'fixed';
-        textarea.style.opacity = '0';
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        textarea.remove();
+        fallbackCopy();
       }
 
       setCopied(true);
@@ -57,8 +66,11 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
 
     try {
       await navigator.share({ title, text: shareText, url });
-    } catch {
-      await copyLink();
+    } catch (error) {
+      // Only fallback to copy if it's not a user cancellation
+      if (error instanceof Error && error.name !== 'AbortError') {
+        await copyLink();
+      }
     }
   }, [copyLink, shareText, title, url]);
 
