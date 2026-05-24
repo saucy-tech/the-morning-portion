@@ -351,11 +351,13 @@ jobs:
           APP_URL="${NEXT_PUBLIC_APP_URL%/}"
           POST_URL="${APP_URL}/posts/${POST_SLUG}"
           BANNER_URL="${APP_URL}/images/daily-word-banner.png"
+          LOGO_URL="${APP_URL}/images/the-morning-portion-logo.png"
           DESCRIPTION="The Morning Portion ${TARGET_LABEL} draft for ${POST_SLUG}"
 
           HTML_CONTENT=$(jq -rn \
             --arg app_url "$APP_URL" \
             --arg banner_url "$BANNER_URL" \
+            --arg logo_url "$LOGO_URL" \
             --arg date "$POST_FORMATTED_DATE" \
             --arg title "$POST_TITLE" \
             --arg verse "$POST_VERSE" \
@@ -365,22 +367,30 @@ jobs:
             '
             "<div style=\"font-family:Georgia,serif;max-width:600px;margin:0 auto;color:#1f1b16;padding:0 16px;\">"
             + "<span style=\"display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;mso-hide:all;\">" + ($excerpt | @html) + "</span>"
-            + "<p style=\"margin:0 0 24px 0;\">"
-            +   "<a href=\"" + $url + "\" style=\"display:block;text-decoration:none;\">"
-            +     "<img src=\"" + $banner_url + "\" width=\"600\" alt=\"The Morning Portion\" style=\"display:block;width:100%;max-width:600px;height:auto;margin:0 auto;border:0;\" />"
-            +   "</a>"
-            + "</p>"
-            + "<p style=\"font-size:13px;color:#7d715d;letter-spacing:0.05em;text-transform:uppercase;margin:0 0 24px 0;\">" + $date + "</p>"
-            + "<h1 style=\"font-family:Georgia,serif;font-size:24px;font-weight:bold;color:#1f1b16;margin:0 0 20px 0;line-height:1.3;\">" + ($title | @html) + "</h1>"
+            + "<table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-collapse:collapse;margin:0 0 24px 0;\">"
+            +   "<tr><td align=\"center\" style=\"padding:0 0 14px 0;\">"
+            +     "<a href=\"" + $app_url + "\" style=\"text-decoration:none;\">"
+            +       "<img src=\"" + $logo_url + "\" width=\"170\" height=\"170\" alt=\"The Morning Portion\" style=\"display:block;width:170px;height:170px;border:0;margin:0 auto;\" />"
+            +     "</a>"
+            +   "</td></tr>"
+            +   "<tr><td align=\"center\" style=\"padding:0;\">"
+            +     "<a href=\"" + $url + "\" style=\"display:block;text-decoration:none;\">"
+            +       "<img src=\"" + $banner_url + "\" width=\"600\" alt=\"Morning Bible and coffee\" style=\"display:block;width:100%;max-width:600px;height:auto;margin:0 auto;border:0;\" />"
+            +     "</a>"
+            +   "</td></tr>"
+            + "</table>"
+            + "<p style=\"font-size:12px;color:#8a7351;letter-spacing:0.08em;text-transform:uppercase;text-align:center;margin:0 0 10px 0;\">The Morning Portion</p>"
+            + "<p style=\"font-size:13px;color:#7d715d;letter-spacing:0.05em;text-transform:uppercase;text-align:center;margin:0 0 22px 0;\">" + $date + "</p>"
+            + "<h1 style=\"font-family:Georgia,serif;font-size:27px;font-weight:bold;color:#1f1b16;text-align:center;margin:0 0 22px 0;line-height:1.25;\">" + ($title | @html) + "</h1>"
             + (if $verse != "" then
                 "<blockquote style=\"border-left:3px solid #d0b26b;margin:0 0 28px 0;padding:12px 0 12px 20px;\">"
                 + "<p style=\"font-size:18px;line-height:1.6;font-style:italic;color:#2f2a22;margin:0;\">" + ($verse | @html) + "</p>"
                 + "</blockquote>"
               else "" end)
             + $body_html
-            + "<p style=\"margin:8px 0 0 0;font-size:14px;\">"
-            +   "<a href=\"" + $url + "\" style=\"color:#9f7a1f;text-decoration:underline;\">Read on the web &rarr;</a>"
-            + "</p>"
+            + "<table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin:18px 0 4px 0;\"><tr><td style=\"border:1px solid #b8943d;background:#f7efd9;padding:10px 16px;\">"
+            +   "<a href=\"" + $url + "\" style=\"font-family:Georgia,serif;font-size:14px;line-height:1;color:#5c4616;text-decoration:none;\">Read on the web &rarr;</a>"
+            + "</td></tr></table>"
             + "<hr style=\"border:none;border-top:1px solid #ded4bf;margin:32px 0 16px 0;\" />"
             + "<p style=\"font-size:13px;line-height:1.6;color:#7d715d;text-align:center;margin:0 0 8px 0;\">Know someone who would enjoy this? <a href=\"" + $app_url + "\" style=\"color:#9f7a1f;text-decoration:underline;\">Share The Morning Portion</a></p>"
             + "<p style=\"font-size:12px;line-height:1.6;color:#8d826f;text-align:center;margin:0;\">You&#39;re receiving this because you subscribed to The Morning Portion &middot; <a href=\"" + $app_url + "\" style=\"color:#8d826f;text-decoration:underline;\">morningportion.com</a></p>"
