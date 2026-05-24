@@ -4,10 +4,17 @@ const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_SUBSCRIBE = 5;
 const MAX_REQUEST_SIZE = 1024 * 1024;
 const REQUEST_TIMEOUT = 30_000;
+const DEFAULT_REFERRER = 'https://morningportion.com';
 
 interface RateLimitBucket {
   count: number;
   expires: number;
+}
+
+interface KitResult {
+  ok: boolean;
+  alreadySubscribed?: boolean;
+  data?: unknown;
 }
 
 const rateLimitStore = new Map<string, RateLimitBucket>();
@@ -62,12 +69,172 @@ function validateEmail(email: unknown): { valid: boolean; sanitized?: string; er
   return { valid: true, sanitized };
 }
 
+function getReferrer(request: Request): string {
+  return (
+    request.headers.get('referer') ||
+    process.env.NEXT_PUBLIC_MORNING_PORTION_URL ||
+    DEFAULT_REFERRER
+  );
+}
+
+async function readKitJson(response: Response): Promise<unknown> {
+  return response.json().catch(() => ({}));
+}
+
+function extractKitMessage(data: unknown): string {
+  if (!data || typeof data !== 'object') {
+    return '';
+  }
+
+  const record = data as Record<string, unknown>;
+  if (Array.isArray(record.errors)) {
+    return record.errors.filter((error): error is string => typeof error === 'string').join(' ');
+  }
+
+  if (typeof record.message === 'string') {
+    return record.message;
+  }
+
+  const error = record.error;
+  if (typeof error === 'string') {
+    return error;
+  }
+
+  if (
+    error &&
+    typeof error === 'object' &&
+    'message' in error &&
+    typeof (error as { message: unknown }).message === 'string'
+  ) {
+    return (error as { message: string }).message;
+  }
+
+  return '';
+}
+
+function isAlreadySubscribedMessage(message: string): boolean {
+  const normalized = message.toLowerCase();
+  return (
+    normalized.includes('already subscribed') ||
+    normalized.includes('already a subscriber') ||
+    normalized.includes('subscriber already') ||
+    normalized.includes('already exists')
+  );
+}
+
+function getSubscriberId(data: unknown): number | null {
+  if (!data || typeof data !== 'object') {
+    return null;
+  }
+
+  const subscriber = (data as Record<string, unknown>).subscriber;
+  if (!subscriber || typeof subscriber !== 'object') {
+    return null;
+  }
+
+  const id = (subscriber as Record<string, unknown>).id;
+  if (typeof id === 'number') {
+    return id;
+  }
+
+  if (typeof id === 'string') {
+    const parsed = Number.parseInt(id, 10);
+    return Number.isNaN(parsed) ? null : parsed;
+  }
+
+  return null;
+}
+
 function secureError(message: string, status: number, logDetails?: unknown) {
   if (logDetails) {
     console.error('Subscribe error:', logDetails);
   }
 
   return NextResponse.json({ error: message }, { status });
+}
+
+async function subscribeWithKitV4(
+  formId: string,
+  apiKey: string,
+  email: string,
+  referrer: string,
+  signal: AbortSignal
+): Promise<KitResult> {
+  const headers = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    'User-Agent': 'The-Morning-Portion/1.0',
+    'X-Kit-Api-Key': apiKey,
+  };
+
+  const encodedFormId = encodeURIComponent(formId);
+  const addByEmailResponse = await fetch(
+    `https://api.kit.com/v4/forms/${encodedFormId}/subscribers`,
+    {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        email_address: email,
+        referrer,
+      }),
+      signal,
+    }
+  );
+
+  if (addByEmailResponse.ok) {
+    return { ok: true };
+  }
+
+  const addByEmailData = await readKitJson(addByEmailResponse);
+  const addByEmailMessage = extractKitMessage(addByEmailData);
+  if (isAlreadySubscribedMessage(addByEmailMessage)) {
+    return { ok: true, alreadySubscribed: true };
+  }
+
+  if (addByEmailResponse.status !== 422) {
+    return { ok: false, data: addByEmailData };
+  }
+
+  const createSubscriberResponse = await fetch('https://api.kit.com/v4/subscribers', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      email_address: email,
+    }),
+    signal,
+  });
+
+  const createSubscriberData = await readKitJson(createSubscriberResponse);
+  if (!createSubscriberResponse.ok) {
+    return { ok: false, data: createSubscriberData };
+  }
+
+  const subscriberId = getSubscriberId(createSubscriberData);
+  if (!subscriberId) {
+    return { ok: false, data: { errors: ['Kit did not return a subscriber id'] } };
+  }
+
+  const addByIdResponse = await fetch(
+    `https://api.kit.com/v4/forms/${encodedFormId}/subscribers/${subscriberId}`,
+    {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ referrer }),
+      signal,
+    }
+  );
+
+  if (addByIdResponse.ok) {
+    return { ok: true };
+  }
+
+  const data = await readKitJson(addByIdResponse);
+  const message = extractKitMessage(data);
+  if (isAlreadySubscribedMessage(message)) {
+    return { ok: true, alreadySubscribed: true };
+  }
+
+  return { ok: false, data };
 }
 
 export async function handleSubscribe(req: NextRequest) {
@@ -82,7 +249,10 @@ export async function handleSubscribe(req: NextRequest) {
       { error: 'Too many requests. Please try again later.' },
       { status: 429 }
     );
-    response.headers.set('Retry-After', Math.ceil((limit.resetTime - Date.now()) / 1000).toString());
+    response.headers.set(
+      'Retry-After',
+      Math.ceil((limit.resetTime - Date.now()) / 1000).toString()
+    );
     return response;
   }
 
@@ -95,9 +265,10 @@ export async function handleSubscribe(req: NextRequest) {
 
   const { email } = body as { email?: unknown };
   const emailValidation = validateEmail(email);
-  if (!emailValidation.valid) {
+  if (!emailValidation.valid || !emailValidation.sanitized) {
     return secureError(emailValidation.error ?? 'Invalid email', 400);
   }
+  const emailAddress = emailValidation.sanitized;
 
   const formId = process.env.CONVERTKIT_FORM_ID;
   const apiKey = process.env.KIT_API_KEY;
@@ -109,28 +280,28 @@ export async function handleSubscribe(req: NextRequest) {
   const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
 
   try {
-    const response = await fetch(`https://api.kit.com/v4/forms/${formId}/subscribers`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'X-Kit-Api-Key': apiKey,
-        'User-Agent': 'The-Morning-Portion/1.0',
-      },
-      body: JSON.stringify({
-        email_address: emailValidation.sanitized,
-      }),
-      signal: controller.signal,
-    });
+    const result = await subscribeWithKitV4(
+      formId,
+      apiKey,
+      emailAddress,
+      getReferrer(req),
+      controller.signal
+    );
 
     clearTimeout(timeoutId);
 
-    if (!response.ok) {
-      const data = await response.json().catch(() => ({}));
-      return secureError('Failed to subscribe', 502, data);
+    if (!result.ok) {
+      const message = extractKitMessage(result.data);
+      if (isAlreadySubscribedMessage(message)) {
+        return NextResponse.json({ success: true, alreadySubscribed: true });
+      }
+
+      return secureError('Failed to subscribe', 502, result.data);
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json(
+      result.alreadySubscribed ? { success: true, alreadySubscribed: true } : { success: true }
+    );
   } catch (error) {
     clearTimeout(timeoutId);
 
