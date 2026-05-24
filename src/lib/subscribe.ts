@@ -241,6 +241,42 @@ async function subscribeWithKitV4(
   return { ok: false, data };
 }
 
+async function tagSubscriberWithKitV4(
+  tagId: string,
+  apiKey: string,
+  email: string,
+  signal: AbortSignal
+): Promise<KitResult> {
+  const response = await fetch(
+    `https://api.kit.com/v4/tags/${encodeURIComponent(tagId)}/subscribers`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'User-Agent': 'The-Morning-Portion/1.0',
+        'X-Kit-Api-Key': apiKey,
+      },
+      body: JSON.stringify({
+        email_address: email,
+      }),
+      signal,
+    }
+  );
+
+  if (response.ok) {
+    return { ok: true };
+  }
+
+  const data = await readKitJson(response);
+  const message = extractKitMessage(data);
+  if (isAlreadySubscribedMessage(message)) {
+    return { ok: true, alreadySubscribed: true };
+  }
+
+  return { ok: false, data };
+}
+
 export async function handleSubscribe(req: NextRequest) {
   const contentLength = req.headers.get('content-length');
   if (contentLength && parseInt(contentLength, 10) > MAX_REQUEST_SIZE) {
@@ -276,6 +312,7 @@ export async function handleSubscribe(req: NextRequest) {
 
   const formId = readServerEnv('CONVERTKIT_FORM_ID');
   const apiKey = readServerEnv('KIT_API_KEY');
+  const tagId = readServerEnv('KIT_MORNING_PORTION_TAG_ID')?.trim();
   if (!formId || !apiKey) {
     return secureError('Service temporarily unavailable', 503, 'Kit not configured');
   }
@@ -292,27 +329,57 @@ export async function handleSubscribe(req: NextRequest) {
       controller.signal
     );
 
-    clearTimeout(timeoutId);
-
     if (!result.ok) {
       const message = extractKitMessage(result.data);
       if (isAlreadySubscribedMessage(message)) {
-        return NextResponse.json({ success: true, alreadySubscribed: true });
+        if (tagId) {
+          const tagResult = await tagSubscriberWithKitV4(
+            tagId,
+            apiKey,
+            emailAddress,
+            controller.signal
+          );
+          if (!tagResult.ok) {
+            return secureError('Failed to subscribe', 502, tagResult.data);
+          }
+        }
+
+        return NextResponse.json({
+          success: true,
+          alreadySubscribed: true,
+          tagged: Boolean(tagId),
+        });
       }
 
       return secureError('Failed to subscribe', 502, result.data);
     }
 
+    if (tagId) {
+      const tagResult = await tagSubscriberWithKitV4(
+        tagId,
+        apiKey,
+        emailAddress,
+        controller.signal
+      );
+      if (!tagResult.ok) {
+        return secureError('Failed to subscribe', 502, tagResult.data);
+      }
+    } else {
+      console.warn('Subscribe warning: KIT_MORNING_PORTION_TAG_ID is not configured.');
+    }
+
     return NextResponse.json(
-      result.alreadySubscribed ? { success: true, alreadySubscribed: true } : { success: true }
+      result.alreadySubscribed
+        ? { success: true, alreadySubscribed: true, tagged: Boolean(tagId) }
+        : { success: true, tagged: Boolean(tagId) }
     );
   } catch (error) {
-    clearTimeout(timeoutId);
-
     if (error instanceof Error && error.name === 'AbortError') {
       return secureError('Request timeout', 504);
     }
 
     return secureError('Failed to subscribe', 502, error);
+  } finally {
+    clearTimeout(timeoutId);
   }
 }

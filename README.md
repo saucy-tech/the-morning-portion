@@ -104,12 +104,13 @@ Set these in Vercel after connecting or renaming the project:
 | --------------------------------- | ----------- | ------------------------------------------------------------------- |
 | `KIT_API_KEY`                     | Yes         | Kit V4 personal access token; can reuse the GitHub Actions value    |
 | `CONVERTKIT_FORM_ID`              | Yes         | Morning Portion subscribe form ID (same numeric ID on Kit V4)       |
+| `KIT_MORNING_PORTION_TAG_ID`      | Yes         | Morning Portion Kit tag ID applied during signup and used by drafts |
 | `NEXT_PUBLIC_MORNING_PORTION_URL` | Recommended | Set to the stable production URL, e.g. `https://morningportion.com` |
 | `NEXT_PUBLIC_PERSONAL_SITE_URL`   | Optional    | Defaults to `https://saucy.tech`                                    |
 
 `NEXT_PUBLIC_DAILY_WORD_URL` is still honored as a legacy fallback during the rename.
 
-The subscribe route calls Kit V4 (`api.kit.com/v4/forms/:id/subscribers`) using `KIT_API_KEY` as the `X-Kit-Api-Key` header. The same V4 token also powers the GitHub Actions draft broadcast workflow.
+The subscribe route calls Kit V4 (`api.kit.com/v4/forms/:id/subscribers`) using `KIT_API_KEY` as the `X-Kit-Api-Key` header, then applies `KIT_MORNING_PORTION_TAG_ID` so new subscribers are included in tag-targeted broadcasts. The same V4 token also powers the GitHub Actions draft broadcast workflow.
 
 Vercel should use the default project settings:
 
