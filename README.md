@@ -102,14 +102,14 @@ Set these in Vercel after connecting or renaming the project:
 
 | Name                              | Required    | Source                                                              |
 | --------------------------------- | ----------- | ------------------------------------------------------------------- |
-| `CONVERTKIT_API_KEY`              | Yes         | Copy the value from `personal-site`                                 |
-| `CONVERTKIT_FORM_ID`              | Yes         | Copy the value from `personal-site`                                 |
+| `KIT_API_KEY`                     | Yes         | Kit V4 personal access token; can reuse the GitHub Actions value    |
+| `CONVERTKIT_FORM_ID`              | Yes         | Morning Portion subscribe form ID (same numeric ID on Kit V4)       |
 | `NEXT_PUBLIC_MORNING_PORTION_URL` | Recommended | Set to the stable production URL, e.g. `https://morningportion.com` |
 | `NEXT_PUBLIC_PERSONAL_SITE_URL`   | Optional    | Defaults to `https://saucy.tech`                                    |
 
 `NEXT_PUBLIC_DAILY_WORD_URL` is still honored as a legacy fallback during the rename.
 
-Do not copy `CK_SECRET_KEY` or `CK_PUBLISHER_ID`. Those belong to the old manual fallback script in `personal-site`, not this app. This repo only needs `KIT_API_KEY` as a GitHub Actions secret for draft broadcast creation.
+The subscribe route calls Kit V4 (`api.kit.com/v4/forms/:id/subscribers`) using `KIT_API_KEY` as the `X-Kit-Api-Key` header. The same V4 token also powers the GitHub Actions draft broadcast workflow.
 
 Vercel should use the default project settings:
 
