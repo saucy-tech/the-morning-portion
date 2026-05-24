@@ -72,13 +72,17 @@ function validateEmail(email: unknown): { valid: boolean; sanitized?: string; er
 function getReferrer(request: Request): string {
   return (
     request.headers.get('referer') ||
-    process.env.NEXT_PUBLIC_MORNING_PORTION_URL ||
+    readServerEnv('NEXT_PUBLIC_MORNING_PORTION_URL') ||
     DEFAULT_REFERRER
   );
 }
 
 async function readKitJson(response: Response): Promise<unknown> {
   return response.json().catch(() => ({}));
+}
+
+function readServerEnv(name: string): string | undefined {
+  return process.env[name];
 }
 
 function extractKitMessage(data: unknown): string {
@@ -191,7 +195,7 @@ async function subscribeWithKitV4(
     return { ok: true, alreadySubscribed: true };
   }
 
-  if (addByEmailResponse.status !== 422) {
+  if (addByEmailResponse.status !== 404 && addByEmailResponse.status !== 422) {
     return { ok: false, data: addByEmailData };
   }
 
@@ -270,8 +274,8 @@ export async function handleSubscribe(req: NextRequest) {
   }
   const emailAddress = emailValidation.sanitized;
 
-  const formId = process.env.CONVERTKIT_FORM_ID;
-  const apiKey = process.env.KIT_API_KEY;
+  const formId = readServerEnv('CONVERTKIT_FORM_ID');
+  const apiKey = readServerEnv('KIT_API_KEY');
   if (!formId || !apiKey) {
     return secureError('Service temporarily unavailable', 503, 'Kit not configured');
   }
