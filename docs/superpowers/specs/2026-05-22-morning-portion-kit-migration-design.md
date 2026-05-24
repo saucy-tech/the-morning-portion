@@ -1,5 +1,7 @@
 # Morning Portion Kit Migration and Masthead Design
 
+> Status as of 2026-05-24: migration is complete. The live Morning Portion signup path uses Kit v4 with `KIT_API_KEY`, `CONVERTKIT_FORM_ID`, and `KIT_MORNING_PORTION_TAG_ID`; successful signups are added to the Morning Portion form and tagged for broadcasts. `newsletter@morningportion.com` is the verified/default sender, and broadcast automation remains draft-only (`send_at: null`).
+
 ## Goal
 
 Set up The Morning Portion as its own Kit audience surface while preserving the existing personal-site Daily Word setup. The new audience should use `newsletter@morningportion.com`, copy only active Daily Word subscribers, and stay unable to send automated post emails until a later explicit implementation phase.
@@ -50,7 +52,7 @@ Use `newsletter@morningportion.com` as the intended sender address. If Kit requi
 
 ## Site Integration Later
 
-The current Morning Portion app already subscribes users through `CONVERTKIT_FORM_ID` and `CONVERTKIT_API_KEY`. In the later site phase, update deployment environment values so `CONVERTKIT_FORM_ID` points to the new Morning Portion form. Keep the API server-side.
+The current Morning Portion app subscribes users through `CONVERTKIT_FORM_ID`, `KIT_API_KEY`, and `KIT_MORNING_PORTION_TAG_ID`. `CONVERTKIT_FORM_ID` points to the Morning Portion form, and successful signups are tagged with `KIT_MORNING_PORTION_TAG_ID` so tag-targeted broadcasts include them. Keep the API server-side.
 
 Recommended later code work:
 
