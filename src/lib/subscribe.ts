@@ -100,24 +100,25 @@ export async function handleSubscribe(req: NextRequest) {
   }
 
   const formId = process.env.CONVERTKIT_FORM_ID;
-  const apiKey = process.env.CONVERTKIT_API_KEY;
+  const apiKey = process.env.KIT_API_KEY;
   if (!formId || !apiKey) {
-    return secureError('Service temporarily unavailable', 503, 'ConvertKit not configured');
+    return secureError('Service temporarily unavailable', 503, 'Kit not configured');
   }
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
 
   try {
-    const response = await fetch(`https://api.convertkit.com/v3/forms/${formId}/subscribe`, {
+    const response = await fetch(`https://api.kit.com/v4/forms/${formId}/subscribers`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': 'The-Daily-Word/1.0',
+        'Accept': 'application/json',
+        'X-Kit-Api-Key': apiKey,
+        'User-Agent': 'The-Morning-Portion/1.0',
       },
       body: JSON.stringify({
-        email: emailValidation.sanitized,
-        api_key: apiKey,
+        email_address: emailValidation.sanitized,
       }),
       signal: controller.signal,
     });
