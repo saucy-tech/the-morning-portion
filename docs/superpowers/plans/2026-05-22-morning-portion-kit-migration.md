@@ -1,5 +1,7 @@
 # Morning Portion Kit Migration Implementation Plan
 
+> Status as of 2026-05-24: this is a historical implementation plan, not the current runbook. The live integration now uses Kit v4 with `KIT_API_KEY`, `CONVERTKIT_FORM_ID`, and `KIT_MORNING_PORTION_TAG_ID`; references below to `CONVERTKIT_API_KEY` are legacy. The production signup endpoint has been verified to return `success: true` with `tagged: true`, and broadcasts remain draft-only (`send_at: null`).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Create a separate Morning Portion Kit audience, copy only active Daily Word subscribers into it after a dry-run confirmation, and update the site masthead/subscribe integration without enabling automated sends.

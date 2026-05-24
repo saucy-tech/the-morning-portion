@@ -9,7 +9,7 @@ Standalone Next.js application for The Morning Portion, a morning scripture refl
 - MDX content via `next-mdx-remote`
 - Fraunces (variable serif) + Inter via `next/font/google`
 - Tailwind 3 base + custom token system in `src/app/globals.css`
-- Kit/ConvertKit for the subscribe flow and manual broadcast draft creation
+- Kit v4 for the subscribe flow and draft broadcast creation
 - `@vercel/analytics` + `@vercel/speed-insights`
 
 See [DESIGN.md](DESIGN.md) for the visual identity.
@@ -38,7 +38,7 @@ src/
     page.tsx          # Home (verse hero + post list)
     posts/[slug]/     # Post page + dynamic OG image
     series/[series]/  # Series index pages
-    api/subscribe/    # ConvertKit subscribe endpoint
+    api/subscribe/    # Kit subscribe endpoint
     rss.xml/          # RSS feed
     sitemap.ts        # Sitemap
   components/         # SiteHeader, SiteFooter, PostList, SubscribeForm, ThemeToggle, Ornaments
@@ -73,7 +73,7 @@ The numbered colophon (`№NNN`) is computed automatically from the global post 
 
 ## Environment
 
-Copy `.env.example` to `.env.local` for a fresh setup. Reuse the applicable Kit/ConvertKit values from `personal-site`; `.env.local` is ignored and must not be committed.
+Copy `.env.example` to `.env.local` for a fresh setup. Use Kit v4 values for the Morning Portion form and audience tag; `.env.local` is ignored and must not be committed.
 
 ### GitHub Actions
 

@@ -40,6 +40,11 @@ I set the known repository variables `NEXT_PUBLIC_APP_URL=https://morningportion
 **Spec section:** GitHub Actions setup
 I created a new Kit V4 API key named `the-morning-portion-github-actions`, saved it as the GitHub Actions secret `KIT_API_KEY`, verified the key against the Kit V4 broadcasts endpoint with a read-only request, and cleared the local clipboard. I also set `KIT_MORNING_PORTION_TAG_ID=19735220` and `KIT_MORNING_PORTION_TEST_TAG_ID=19735889`.
 
+### Align signups with broadcast audience tag - 2026-05-24
+
+**Spec section:** Kit audience setup
+The subscribe endpoint now uses Kit V4 for both form subscription and audience tagging. Successful signups are added to `CONVERTKIT_FORM_ID` and then tagged with `KIT_MORNING_PORTION_TAG_ID`, matching the tag-targeted GitHub broadcast workflow. Vercel Production has `KIT_MORNING_PORTION_TAG_ID` configured, and a production signup test returned `success: true` with `tagged: true`.
+
 ## Deviations from the spec
 
 ## Tradeoffs accepted
@@ -58,4 +63,4 @@ I kept the MDX-to-email renderer inside the workflow rather than adding a reusab
 
 ## Open questions for review
 
-- Run the manual GitHub workflow once with `audience: test` and a known synced slug to inspect the generated Kit draft before using the real audience option.
+- Run the manual GitHub workflow once with `audience: test` and a known devotion slug to inspect the generated Kit draft before using the real audience option.
