@@ -109,6 +109,11 @@ export default async function Home() {
               <Link className="button primary" href={`/posts/${latest.slug}`}>
                 Read today&apos;s reflection →
               </Link>
+              {latest.audio && (
+                <Link className="button ghost" href={`/posts/${latest.slug}?listen=1`}>
+                  Listen to devotion →
+                </Link>
+              )}
               <span className="meta">
                 <em>{latest.title}</em>
                 {readingTime > 0 && ` · ${readingTime} min`}

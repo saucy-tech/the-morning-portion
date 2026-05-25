@@ -6,6 +6,7 @@ import matter from 'gray-matter';
 import yaml from 'js-yaml';
 import { z } from 'zod';
 
+import { resolvePostAudio } from '@/lib/audio';
 import { SITE_NAME, SITE_URL } from '@/lib/constants';
 import { seriesSlug } from '@/lib/format';
 
@@ -18,6 +19,8 @@ export interface PostMeta {
   tags: string[];
   verse?: string;
   reference?: string;
+  audio?: string;
+  audioAlignment?: string;
 }
 
 export interface Post extends PostMeta {
@@ -44,6 +47,8 @@ const frontmatterSchema = z.object({
   tags: z.union([z.array(z.string()), z.string()]).optional(),
   verse: z.string().optional(),
   reference: z.string().optional(),
+  audio: z.string().optional(),
+  audioAlignment: z.string().optional(),
 });
 
 // Configure gray-matter to use js-yaml 4.x's load function.
@@ -106,6 +111,12 @@ function toPostMeta(slug: string, data: Record<string, unknown>): PostMeta {
     throw new Error(`Frontmatter validation failed for "${slug}.mdx":\n${issues}`);
   }
 
+  const audioFields = resolvePostAudio(
+    slug,
+    normalizeText(result.data.audio),
+    normalizeText(result.data.audioAlignment),
+  );
+
   return {
     slug,
     title: result.data.title,
@@ -115,6 +126,7 @@ function toPostMeta(slug: string, data: Record<string, unknown>): PostMeta {
     tags: normalizeTags(result.data.tags),
     verse: normalizeText(result.data.verse),
     reference: normalizeText(result.data.reference),
+    ...audioFields,
   };
 }
 

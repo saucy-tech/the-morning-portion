@@ -29,6 +29,7 @@ pnpm dev
 | `pnpm build` | Production build                              |
 | `pnpm start` | Run the production build locally              |
 | `pnpm lint`  | ESLint over the repo                          |
+| `pnpm generate-audio <slug>` | Generate devotion MP3 + alignment via ElevenLabs (`--align-only`, `--dry-run`, `--output-dir`) |
 
 ## Project Layout
 
@@ -66,8 +67,19 @@ Each MDX file in `src/content/posts/` carries:
 | `tags`      | no       | Array or comma-separated string                                                         |
 | `verse`     | no       | Activates the verse-as-typography hero on the home page when present on the latest post |
 | `reference` | no       | Companion to `verse` (e.g. `"Matthew 16:25 (KJV)"`) — printed in italic above the verse |
+| `audio`     | no       | Public URL to the devotion MP3 (e.g. `/audio/2026-05-25-slug.mp3`). Auto-detected if `public/audio/{slug}.mp3` exists. |
+| `audioAlignment` | no  | Public URL to sentence-timing JSON for synced reading (e.g. `/audio/2026-05-25-slug.alignment.json`). Auto-detected if the file exists. |
 
 When `verse` is absent on the latest post, the hero falls back to the title in big Fraunces. Schema enforced in `src/lib/posts.ts`.
+
+### Listen to devotion audio
+
+Optional audio playback with synced reading on the post page:
+
+1. **Manual:** Drop `public/audio/{slug}.mp3`, then run `pnpm generate-audio {slug} --align-only` to create alignment JSON (requires `ELEVENLABS_API_KEY` in `.env.local`).
+2. **Automated:** Run `pnpm generate-audio {slug}` to generate MP3 + alignment via ElevenLabs (requires `ELEVENLABS_API_KEY` and `ELEVENLABS_VOICE_ID`).
+
+The home hero shows a **Listen to devotion** button when audio is available; it links to `/posts/{slug}?listen=1` to auto-start playback on the post page.
 
 The numbered colophon (`№NNN`) is computed automatically from the global post ordering — no per-post field needed.
 

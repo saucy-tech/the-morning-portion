@@ -2,9 +2,11 @@ import Link from 'next/link';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { notFound } from 'next/navigation';
 
+import DevotionReadingShell from '@/components/DevotionReadingShell';
 import PostList from '@/components/PostList';
 import ShareButtons from '@/components/ShareButtons';
 import SubscribeForm from '@/components/SubscribeForm';
+import { syncedMdxComponents } from '@/components/SyncedPostBody';
 import { formatPostDate, getReadingTime, seriesSlug } from '@/lib/format';
 import {
   getAllPostsMeta,
@@ -33,10 +35,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ listen?: string }>;
 }
 
-export default async function PostPage({ params }: PostPageProps) {
+export default async function PostPage({ params, searchParams }: PostPageProps) {
   const { slug } = await params;
+  const { listen } = await searchParams;
   const post = await getPostBySlug(slug);
   if (!post) {
     notFound();
@@ -50,6 +54,10 @@ export default async function PostPage({ params }: PostPageProps) {
     .filter((candidate) => candidate.slug !== post.slug)
     .filter((candidate) => !post.series || candidate.series === post.series)
     .slice(0, 3);
+
+  const autoPlay = listen === '1';
+  const hasAudio = Boolean(post.audio);
+  const mdxComponents = post.audioAlignment ? syncedMdxComponents : undefined;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -71,6 +79,12 @@ export default async function PostPage({ params }: PostPageProps) {
     articleSection: 'Morning Scripture Reflections',
     keywords: post.tags,
   };
+
+  const postBody = (
+    <div className="post-body">
+      <MDXRemote source={post.content} components={mdxComponents} />
+    </div>
+  );
 
   return (
     <main className="post-page">
@@ -106,9 +120,18 @@ export default async function PostPage({ params }: PostPageProps) {
           </div>
         </header>
 
-        <div className="post-body">
-          <MDXRemote source={post.content} />
-        </div>
+        {hasAudio && post.audio ? (
+          <DevotionReadingShell
+            audio={post.audio}
+            audioAlignment={post.audioAlignment}
+            title={post.title}
+            autoPlay={autoPlay}
+          >
+            {postBody}
+          </DevotionReadingShell>
+        ) : (
+          postBody
+        )}
         <ShareButtons title={post.title} excerpt={post.excerpt} url={getPostUrl(post.slug)} />
       </article>
 
