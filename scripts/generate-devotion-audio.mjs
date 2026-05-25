@@ -273,8 +273,16 @@ async function generateSpeechWithTimestamps({ apiKey, voiceId, text }) {
 }
 
 async function forcedAlign({ apiKey, audioPath, text }) {
+  const audioBuffer = fs.readFileSync(audioPath);
+  if (audioBuffer.length === 0) {
+    throw new Error(
+      `Audio file is empty: ${audioPath}. Re-export the MP3 from ElevenLabs and try again.`,
+    );
+  }
+
   const formData = new FormData();
-  formData.append('file', new Blob([fs.readFileSync(audioPath)]), path.basename(audioPath));
+  const blob = new Blob([audioBuffer], { type: 'audio/mpeg' });
+  formData.append('file', blob, path.basename(audioPath));
   formData.append('text', text);
 
   const response = await fetch('https://api.elevenlabs.io/v1/forced-alignment', {
@@ -307,7 +315,9 @@ function writeOutputs({ outputDir, slug, audioBuffers, alignment, dryRun }) {
     return { audioUrl, alignmentUrl };
   }
 
-  fs.writeFileSync(mp3Path, Buffer.concat(audioBuffers));
+  if (audioBuffers.length > 0) {
+    fs.writeFileSync(mp3Path, Buffer.concat(audioBuffers));
+  }
   fs.writeFileSync(
     alignmentPath,
     JSON.stringify({ version: 1, sentences: alignment }, null, 2),
@@ -348,7 +358,16 @@ async function main() {
       process.exit(1);
     }
 
-    console.log(`Aligning existing audio for "${slug}"...`);
+    const mp3Size = fs.statSync(mp3Path).size;
+    if (mp3Size === 0) {
+      console.error(
+        `Audio file is empty (0 bytes): ${mp3Path}\n` +
+          'The previous align-only run may have overwritten it. Re-export the MP3 from ElevenLabs.',
+      );
+      process.exit(1);
+    }
+
+    console.log(`Aligning existing audio for "${slug}" (${Math.round(mp3Size / 1024)} KB)...`);
     const forced = await forcedAlign({ apiKey, audioPath: mp3Path, text: ttsScript });
     const characterAlignment = forcedAlignmentToCharacterAlignment(forced);
     const sentences = aggregateCharacterAlignmentToSentences(characterAlignment, introText);
