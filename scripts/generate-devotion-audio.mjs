@@ -354,7 +354,7 @@ async function main() {
   const apiKey = process.env.ELEVENLABS_API_KEY;
   const voiceId = process.env.ELEVENLABS_VOICE_ID;
 
-  if (!apiKey) {
+  if (!apiKey && !dryRun) {
     console.error(
       'Missing ELEVENLABS_API_KEY. Set it in .env.local or export it in your shell.',
     );
@@ -383,6 +383,26 @@ async function main() {
       process.exit(1);
     }
 
+    if (dryRun) {
+      console.log(
+        `[dry-run] Would align existing audio for "${slug}" (${Math.round(mp3Size / 1024)} KB)`,
+      );
+      console.log(`[dry-run] Would call ElevenLabs forced alignment (${ttsScript.length} chars)`);
+      const { audioUrl, alignmentUrl, canPatchFrontmatter } = writeOutputs({
+        outputDir,
+        slug,
+        audioBuffers: [],
+        alignment: [],
+        dryRun,
+      });
+
+      if (canPatchFrontmatter && audioUrl && alignmentUrl) {
+        console.log(`[dry-run] Would patch frontmatter with audio: ${audioUrl}`);
+      }
+
+      return;
+    }
+
     console.log(`Aligning existing audio for "${slug}" (${Math.round(mp3Size / 1024)} KB)...`);
     const forced = await forcedAlign({ apiKey, audioPath: mp3Path, text: ttsScript });
     const characterAlignment = forcedAlignmentToCharacterAlignment(forced);
@@ -407,11 +427,29 @@ async function main() {
     return;
   }
 
-  if (!voiceId) {
+  if (!voiceId && !dryRun) {
     console.error(
       'Missing ELEVENLABS_VOICE_ID. Set it in .env.local or export it in your shell.',
     );
     process.exit(1);
+  }
+
+  if (dryRun) {
+    console.log(`[dry-run] Would generate audio for "${slug}" (${ttsScript.length} chars)`);
+    console.log('[dry-run] Would call ElevenLabs TTS with timestamps');
+    const { audioUrl, alignmentUrl, canPatchFrontmatter } = writeOutputs({
+      outputDir,
+      slug,
+      audioBuffers: [],
+      alignment: [],
+      dryRun,
+    });
+
+    if (canPatchFrontmatter && audioUrl && alignmentUrl) {
+      console.log(`[dry-run] Would patch frontmatter with audio: ${audioUrl}`);
+    }
+
+    return;
   }
 
   console.log(`Generating audio for "${slug}" (${ttsScript.length} chars)...`);

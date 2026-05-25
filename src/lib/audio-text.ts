@@ -2,10 +2,20 @@ const SENTENCE_END = /[.!?]+(?:\s|$)/;
 
 function stripInlineMarkdown(text: string): string {
   return text
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
     .replace(/\*\*([^*]+)\*\*/g, '$1')
     .replace(/\*([^*]+)\*/g, '$1')
     .replace(/_([^_]+)_/g, '$1')
     .replace(/`([^`]+)`/g, '$1');
+}
+
+const ORDERED_LIST_MARKER = /^\d+[.)]\s/;
+const UNORDERED_LIST_MARKER = /^[-*+]\s/;
+const LIST_MARKER = /^(?:\d+[.)]|[-*+])\s/;
+
+function isListLine(line: string): boolean {
+  return LIST_MARKER.test(line);
 }
 
 export function normalizeBlockText(text: string): string {
@@ -63,8 +73,14 @@ export function extractSyncBlockTexts(content: string): string[] {
       continue;
     }
 
-    if (/^[-*+]\s/.test(trimmed)) {
+    if (UNORDERED_LIST_MARKER.test(trimmed)) {
       blocks.push(normalizeBlockText(stripInlineMarkdown(trimmed.replace(/^[-*+]\s+/, ''))));
+      index++;
+      continue;
+    }
+
+    if (ORDERED_LIST_MARKER.test(trimmed)) {
+      blocks.push(normalizeBlockText(stripInlineMarkdown(trimmed.replace(/^\d+[.)]\s+/, ''))));
       index++;
       continue;
     }
@@ -82,7 +98,7 @@ export function extractSyncBlockTexts(content: string): string[] {
     while (index < lines.length) {
       const line = lines[index].trim();
       if (!line) break;
-      if (/^#{1,6}\s/.test(line) || /^>\s?/.test(line) || /^[-*+]\s/.test(line)) break;
+      if (/^#{1,6}\s/.test(line) || /^>\s?/.test(line) || isListLine(line)) break;
       if (line.startsWith('```')) break;
       paragraphLines.push(stripInlineMarkdown(line));
       index++;
