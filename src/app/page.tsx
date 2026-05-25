@@ -88,7 +88,7 @@ export default async function Home() {
               </Link>
               {latest.audio && (
                 <Link className="button secondary" href={`/posts/${latest.slug}?listen=1`}>
-                  Listen to devotion →
+                  Listen to today&apos;s reflection →
                 </Link>
               )}
               <span className="meta">

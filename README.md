@@ -79,7 +79,7 @@ Optional audio playback with synced reading on the post page:
 1. **Manual:** Drop `public/audio/{slug}.mp3`, then run `pnpm generate-audio {slug} --align-only` to create alignment JSON (requires `ELEVENLABS_API_KEY` in `.env.local`).
 2. **Automated:** Run `pnpm generate-audio {slug}` to generate MP3 + alignment via ElevenLabs (requires `ELEVENLABS_API_KEY` and `ELEVENLABS_VOICE_ID`).
 
-The home hero shows a **Listen to devotion** button when audio is available; it links to `/posts/{slug}?listen=1` to auto-start playback on the post page.
+The home hero shows a **Listen to today's reflection** button when audio is available; it links to `/posts/{slug}?listen=1` to auto-start playback on the post page.
 
 The numbered colophon (`№NNN`) is computed automatically from the global post ordering — no per-post field needed.
 

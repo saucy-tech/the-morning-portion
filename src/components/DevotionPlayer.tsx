@@ -147,7 +147,7 @@ export default function DevotionPlayer({ audio, title, autoPlay = false }: Devot
           type="button"
           className="devotion-player__play button ghost"
           onClick={togglePlay}
-          aria-label={isPlaying ? 'Pause devotion audio' : 'Play devotion audio'}
+          aria-label={isPlaying ? 'Pause reflection audio' : 'Play reflection audio'}
         >
           {isPlaying ? 'Pause' : 'Play'}
         </button>
