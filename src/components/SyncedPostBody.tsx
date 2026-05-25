@@ -3,12 +3,13 @@
 import {
   Children,
   isValidElement,
+  useMemo,
   type ComponentPropsWithoutRef,
   type ReactNode,
 } from 'react';
 
 import { useDevotionAudio } from '@/components/DevotionAudioContext';
-import { splitIntoSentences } from '@/lib/audio-text';
+import { normalizeBlockText, splitIntoSentences } from '@/lib/audio-text';
 
 function extractTextFromChildren(children: ReactNode): string {
   return Children.toArray(children)
@@ -23,17 +24,33 @@ function extractTextFromChildren(children: ReactNode): string {
     .join('');
 }
 
+function useBlockSentenceIds(children: ReactNode): string[] {
+  const ctx = useDevotionAudio();
+  const plainText = useMemo(
+    () => normalizeBlockText(extractTextFromChildren(children)),
+    [children],
+  );
+
+  return useMemo(() => {
+    if (!ctx || plainText.length === 0) return [];
+    const blockIndex = ctx.blockTexts.indexOf(plainText);
+    if (blockIndex < 0) return [];
+    return ctx.blockSentenceIds[blockIndex] ?? [];
+  }, [ctx, plainText]);
+}
+
 function useSyncedSentenceContent(children: ReactNode): ReactNode {
   const ctx = useDevotionAudio();
-  const plainText = extractTextFromChildren(children).replace(/\s+/g, ' ').trim();
+  const sentenceIds = useBlockSentenceIds(children);
+  const plainText = normalizeBlockText(extractTextFromChildren(children));
   const sentences = splitIntoSentences(plainText);
 
-  if (!ctx || ctx.bodySentences.length === 0 || sentences.length === 0) {
+  if (!ctx || sentenceIds.length === 0 || sentences.length === 0) {
     return children;
   }
 
   return sentences.map((sentence, index) => {
-    const sentenceId = ctx.claimNextBodySentenceId();
+    const sentenceId = sentenceIds[index];
     if (!sentenceId) {
       return (
         <span key={`fallback-${index}`} className="sync-sentence">

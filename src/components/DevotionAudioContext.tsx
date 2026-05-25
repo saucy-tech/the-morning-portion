@@ -2,22 +2,22 @@
 
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 
 import type { AlignmentSentence, AudioAlignment } from '@/lib/audio';
+import { buildBlockSentenceIds, extractSyncBlockTexts } from '@/lib/audio-text';
 
 interface DevotionAudioContextValue {
   activeSentenceId: string | null;
   setActiveSentenceId: (id: string | null) => void;
   sentences: AlignmentSentence[];
   bodySentences: AlignmentSentence[];
-  claimNextBodySentenceId: () => string | undefined;
+  blockTexts: string[];
+  blockSentenceIds: string[][];
   prefersReducedMotion: boolean;
 }
 
@@ -29,10 +29,15 @@ export function useDevotionAudio() {
 
 type DevotionAudioProviderProps = {
   audioAlignment?: string;
+  content: string;
   children: React.ReactNode;
 };
 
-export function DevotionAudioProvider({ audioAlignment, children }: DevotionAudioProviderProps) {
+export function DevotionAudioProvider({
+  audioAlignment,
+  content,
+  children,
+}: DevotionAudioProviderProps) {
   const [activeSentenceId, setActiveSentenceId] = useState<string | null>(null);
   const [alignment, setAlignment] = useState<AudioAlignment | null>(null);
   const [prefersReducedMotion] = useState(
@@ -40,7 +45,6 @@ export function DevotionAudioProvider({ audioAlignment, children }: DevotionAudi
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   );
-  const bodySentenceCounter = useRef(0);
 
   useEffect(() => {
     if (!audioAlignment) return;
@@ -68,13 +72,11 @@ export function DevotionAudioProvider({ audioAlignment, children }: DevotionAudi
     () => sentences.filter((sentence) => sentence.scope !== 'intro'),
     [sentences],
   );
-
-  const claimNextBodySentenceId = useCallback(() => {
-    const sentence = bodySentences[bodySentenceCounter.current];
-    if (!sentence) return undefined;
-    bodySentenceCounter.current += 1;
-    return sentence.id;
-  }, [bodySentences]);
+  const blockTexts = useMemo(() => extractSyncBlockTexts(content), [content]);
+  const blockSentenceIds = useMemo(
+    () => buildBlockSentenceIds(content, bodySentences),
+    [content, bodySentences],
+  );
 
   const value = useMemo(
     () => ({
@@ -82,10 +84,18 @@ export function DevotionAudioProvider({ audioAlignment, children }: DevotionAudi
       setActiveSentenceId,
       sentences,
       bodySentences,
-      claimNextBodySentenceId,
+      blockTexts,
+      blockSentenceIds,
       prefersReducedMotion,
     }),
-    [activeSentenceId, sentences, bodySentences, claimNextBodySentenceId, prefersReducedMotion],
+    [
+      activeSentenceId,
+      sentences,
+      bodySentences,
+      blockTexts,
+      blockSentenceIds,
+      prefersReducedMotion,
+    ],
   );
 
   return (

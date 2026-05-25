@@ -124,6 +124,7 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
           <DevotionReadingShell
             audio={post.audio}
             audioAlignment={post.audioAlignment}
+            content={post.content}
             title={post.title}
             autoPlay={autoPlay}
           >
