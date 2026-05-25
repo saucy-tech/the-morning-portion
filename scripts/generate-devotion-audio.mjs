@@ -99,6 +99,7 @@ function mdxToPlainText(content) {
     .replace(/\*([^*]+)\*/g, '$1')
     .replace(/_([^_]+)_/g, '$1')
     .replace(/`([^`]+)`/g, '$1')
+    .replace(/^\d+[.)]\s+/gm, '')
     .replace(/^[-*+]\s+/gm, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
@@ -318,8 +319,6 @@ function publicUrlForOutput(outputDir, filename) {
 }
 
 function writeOutputs({ outputDir, slug, audioBuffers, alignment, dryRun }) {
-  fs.mkdirSync(outputDir, { recursive: true });
-
   const mp3Path = path.join(outputDir, `${slug}.mp3`);
   const alignmentPath = path.join(outputDir, `${slug}.alignment.json`);
   const audioUrl = publicUrlForOutput(outputDir, `${slug}.mp3`);
@@ -334,6 +333,8 @@ function writeOutputs({ outputDir, slug, audioBuffers, alignment, dryRun }) {
     }
     return { audioUrl, alignmentUrl, canPatchFrontmatter };
   }
+
+  fs.mkdirSync(outputDir, { recursive: true });
 
   if (audioBuffers.length > 0) {
     fs.writeFileSync(mp3Path, Buffer.concat(audioBuffers));

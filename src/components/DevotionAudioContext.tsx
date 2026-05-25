@@ -2,26 +2,21 @@
 
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 
 import type { AlignmentSentence, AudioAlignment } from '@/lib/audio';
-import { buildBlockSentenceIds, extractSyncBlockTexts } from '@/lib/audio-text';
+import { buildBlockSentenceIds } from '@/lib/audio-text';
 
 interface DevotionAudioContextValue {
   activeSentenceId: string | null;
   setActiveSentenceId: (id: string | null) => void;
   sentences: AlignmentSentence[];
   bodySentences: AlignmentSentence[];
-  blockTexts: string[];
   blockSentenceIds: string[][];
-  registerBlockIndex: (plainText: string) => number;
-  resetBlockRegistration: () => void;
   prefersReducedMotion: boolean;
 }
 
@@ -49,7 +44,6 @@ export function DevotionAudioProvider({
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   );
-  const blockOccurrenceRef = useRef(new Map<string, number>());
 
   useEffect(() => {
     if (!audioAlignment) return;
@@ -77,33 +71,9 @@ export function DevotionAudioProvider({
     () => sentences.filter((sentence) => sentence.scope !== 'intro'),
     [sentences],
   );
-  const blockTexts = useMemo(() => extractSyncBlockTexts(content), [content]);
   const blockSentenceIds = useMemo(
     () => buildBlockSentenceIds(content, bodySentences),
     [content, bodySentences],
-  );
-
-  const resetBlockRegistration = useCallback(() => {
-    blockOccurrenceRef.current = new Map();
-  }, []);
-
-  const registerBlockIndex = useCallback(
-    (plainText: string) => {
-      const occurrence = blockOccurrenceRef.current.get(plainText) ?? 0;
-      let seen = 0;
-
-      for (let index = 0; index < blockTexts.length; index++) {
-        if (blockTexts[index] !== plainText) continue;
-        if (seen === occurrence) {
-          blockOccurrenceRef.current.set(plainText, occurrence + 1);
-          return index;
-        }
-        seen++;
-      }
-
-      return -1;
-    },
-    [blockTexts],
   );
 
   const value = useMemo(
@@ -112,20 +82,14 @@ export function DevotionAudioProvider({
       setActiveSentenceId,
       sentences,
       bodySentences,
-      blockTexts,
       blockSentenceIds,
-      registerBlockIndex,
-      resetBlockRegistration,
       prefersReducedMotion,
     }),
     [
       activeSentenceId,
       sentences,
       bodySentences,
-      blockTexts,
       blockSentenceIds,
-      registerBlockIndex,
-      resetBlockRegistration,
       prefersReducedMotion,
     ],
   );

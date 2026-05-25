@@ -57,6 +57,7 @@ export function mdxToPlainText(content: string): string {
     .replace(/\*([^*]+)\*/g, '$1')
     .replace(/_([^_]+)_/g, '$1')
     .replace(/`([^`]+)`/g, '$1')
+    .replace(/^\d+[.)]\s+/gm, '')
     .replace(/^[-*+]\s+/gm, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim();

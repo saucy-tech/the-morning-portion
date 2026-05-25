@@ -6,7 +6,6 @@ import DevotionReadingShell from '@/components/DevotionReadingShell';
 import PostList from '@/components/PostList';
 import ShareButtons from '@/components/ShareButtons';
 import SubscribeForm from '@/components/SubscribeForm';
-import { syncedMdxComponents } from '@/components/SyncedPostBody';
 import { formatPostDate, getReadingTime, seriesSlug } from '@/lib/format';
 import {
   getAllPostsMeta,
@@ -35,12 +34,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ listen?: string }>;
 }
 
-export default async function PostPage({ params, searchParams }: PostPageProps) {
+export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params;
-  const { listen } = await searchParams;
   const post = await getPostBySlug(slug);
   if (!post) {
     notFound();
@@ -55,9 +52,7 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
     .filter((candidate) => !post.series || candidate.series === post.series)
     .slice(0, 3);
 
-  const autoPlay = listen === '1';
   const hasAudio = Boolean(post.audio);
-  const mdxComponents = post.audioAlignment ? syncedMdxComponents : undefined;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -82,7 +77,7 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
 
   const postBody = (
     <div className="post-body">
-      <MDXRemote source={post.content} components={mdxComponents} />
+      <MDXRemote source={post.content} />
     </div>
   );
 
@@ -126,7 +121,6 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
             audioAlignment={post.audioAlignment}
             content={post.content}
             title={post.title}
-            autoPlay={autoPlay}
           >
             {postBody}
           </DevotionReadingShell>

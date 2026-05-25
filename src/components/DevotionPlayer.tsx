@@ -7,7 +7,6 @@ import { useDevotionAudio } from '@/components/DevotionAudioContext';
 type DevotionPlayerProps = {
   audio: string;
   title: string;
-  autoPlay?: boolean;
 };
 
 function formatTime(seconds: number): string {
@@ -19,7 +18,7 @@ function formatTime(seconds: number): string {
 
 const PLAYBACK_RATES = [1, 1.25] as const;
 
-export default function DevotionPlayer({ audio, title, autoPlay = false }: DevotionPlayerProps) {
+export default function DevotionPlayer({ audio, title }: DevotionPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const lastScrolledId = useRef<string | null>(null);
   const ctx = useDevotionAudio();
@@ -46,9 +45,11 @@ export default function DevotionPlayer({ audio, title, autoPlay = false }: Devot
         activeId !== lastScrolledId.current &&
         !ctx.prefersReducedMotion
       ) {
-        lastScrolledId.current = activeId;
-        const element = document.querySelector(`[data-sentence-id="${activeId}"]`);
-        element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const element = document.querySelector(`[data-sentence-ids~="${activeId}"]`);
+        if (element) {
+          lastScrolledId.current = activeId;
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
       }
     },
     [ctx, sentences],
@@ -100,7 +101,8 @@ export default function DevotionPlayer({ audio, title, autoPlay = false }: Devot
   }, [playbackRate]);
 
   useEffect(() => {
-    if (!autoPlay) return;
+    const shouldAutoPlay = new URLSearchParams(window.location.search).get('listen') === '1';
+    if (!shouldAutoPlay) return;
 
     const el = audioRef.current;
     if (!el) return;
@@ -113,7 +115,7 @@ export default function DevotionPlayer({ audio, title, autoPlay = false }: Devot
       .catch(() => {
         setNeedsGesture(true);
       });
-  }, [autoPlay, audio]);
+  }, [audio]);
 
   useEffect(() => {
     const el = audioRef.current;

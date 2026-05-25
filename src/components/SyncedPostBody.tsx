@@ -1,97 +1,70 @@
 'use client';
 
-import {
-  Children,
-  isValidElement,
-  useMemo,
-  type ComponentPropsWithoutRef,
-  type ElementType,
-  type ReactNode,
-} from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 
 import { useDevotionAudio } from '@/components/DevotionAudioContext';
-import { normalizeBlockText } from '@/lib/audio-text';
 
-function mergeClassName(base?: string, extra?: string) {
-  return [base, extra].filter(Boolean).join(' ') || undefined;
-}
+const SYNC_SELECTOR = 'p, blockquote, li, h1, h2, h3, h4, h5, h6';
+const NESTING_SYNC_SELECTOR = 'blockquote, li';
 
-function extractTextFromChildren(children: ReactNode): string {
-  return Children.toArray(children)
-    .map((child) => {
-      if (typeof child === 'string') return child;
-      if (typeof child === 'number') return String(child);
-      if (isValidElement<{ children?: ReactNode }>(child)) {
-        return extractTextFromChildren(child.props.children);
+function getSyncElements(root: HTMLElement): HTMLElement[] {
+  return Array.from(root.querySelectorAll<HTMLElement>(SYNC_SELECTOR)).filter((element) => {
+    let parent = element.parentElement;
+
+    while (parent && parent !== root) {
+      if (parent.matches(NESTING_SYNC_SELECTOR)) {
+        return false;
       }
-      return '';
-    })
-    .join('');
+      parent = parent.parentElement;
+    }
+
+    return true;
+  });
 }
 
-export function SyncedBlockIndexReset({ children }: { children: ReactNode }) {
+export function SyncedPostBody({ children }: { children: ReactNode }) {
+  const rootRef = useRef<HTMLDivElement>(null);
   const ctx = useDevotionAudio();
-  ctx?.resetBlockRegistration();
-  return children;
+  const activeSentenceId = ctx?.activeSentenceId ?? null;
+  const blockSentenceIds = ctx?.blockSentenceIds;
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    const elements = getSyncElements(root);
+    const currentBlockSentenceIds = blockSentenceIds ?? [];
+
+    elements.forEach((element, index) => {
+      const sentenceIds = currentBlockSentenceIds[index] ?? [];
+      const sentenceIdsValue = sentenceIds.join(' ');
+      const isReading = Boolean(activeSentenceId && sentenceIds.includes(activeSentenceId));
+
+      element.classList.toggle('is-reading', isReading);
+
+      if (sentenceIdsValue) {
+        element.setAttribute('data-sentence-ids', sentenceIdsValue);
+      } else {
+        element.removeAttribute('data-sentence-ids');
+      }
+
+      if (activeSentenceId && isReading) {
+        element.setAttribute('data-sentence-id', activeSentenceId);
+      } else if (sentenceIds[0]) {
+        element.setAttribute('data-sentence-id', sentenceIds[0]);
+      } else {
+        element.removeAttribute('data-sentence-id');
+      }
+    });
+
+    return () => {
+      elements.forEach((element) => {
+        element.classList.remove('is-reading');
+        element.removeAttribute('data-sentence-id');
+        element.removeAttribute('data-sentence-ids');
+      });
+    };
+  }, [activeSentenceId, blockSentenceIds]);
+
+  return <div ref={rootRef}>{children}</div>;
 }
-
-function useSyncedBlockProps(children: ReactNode) {
-  const ctx = useDevotionAudio();
-  const plainText = useMemo(
-    () => normalizeBlockText(extractTextFromChildren(children)),
-    [children],
-  );
-  const blockIndex =
-    ctx && plainText.length > 0 ? ctx.registerBlockIndex(plainText) : -1;
-
-  const sentenceIds = blockIndex >= 0 ? (ctx?.blockSentenceIds[blockIndex] ?? []) : [];
-  const activeId = sentenceIds.find((id) => id === ctx?.activeSentenceId);
-  const isReading = Boolean(activeId);
-
-  return {
-    className: isReading ? 'is-reading' : undefined,
-    'data-sentence-id': activeId ?? sentenceIds[0],
-  };
-}
-
-function createSyncedBlockComponent<T extends ElementType>(Tag: T) {
-  return function SyncedBlockComponent(props: ComponentPropsWithoutRef<T>) {
-    const syncProps = useSyncedBlockProps(
-      (props as ComponentPropsWithoutRef<ElementType>).children as ReactNode,
-    );
-    const Component = Tag as ElementType;
-
-    return (
-      <Component
-        {...props}
-        className={mergeClassName(
-          (props as { className?: string }).className,
-          syncProps.className,
-        )}
-        data-sentence-id={syncProps['data-sentence-id']}
-      />
-    );
-  };
-}
-
-export const SyncedParagraph = createSyncedBlockComponent('p');
-export const SyncedBlockquote = createSyncedBlockComponent('blockquote');
-export const SyncedListItem = createSyncedBlockComponent('li');
-export const SyncedHeading1 = createSyncedBlockComponent('h1');
-export const SyncedHeading2 = createSyncedBlockComponent('h2');
-export const SyncedHeading3 = createSyncedBlockComponent('h3');
-export const SyncedHeading4 = createSyncedBlockComponent('h4');
-export const SyncedHeading5 = createSyncedBlockComponent('h5');
-export const SyncedHeading6 = createSyncedBlockComponent('h6');
-
-export const syncedMdxComponents = {
-  p: SyncedParagraph,
-  blockquote: SyncedBlockquote,
-  li: SyncedListItem,
-  h1: SyncedHeading1,
-  h2: SyncedHeading2,
-  h3: SyncedHeading3,
-  h4: SyncedHeading4,
-  h5: SyncedHeading5,
-  h6: SyncedHeading6,
-};
