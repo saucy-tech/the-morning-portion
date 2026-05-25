@@ -5,6 +5,7 @@ import {
   isValidElement,
   useMemo,
   type ComponentPropsWithoutRef,
+  type ElementType,
   type ReactNode,
 } from 'react';
 
@@ -53,50 +54,44 @@ function useSyncedBlockProps(children: ReactNode) {
   };
 }
 
-export function SyncedParagraph(props: ComponentPropsWithoutRef<'p'>) {
-  const syncProps = useSyncedBlockProps(props.children);
+function createSyncedBlockComponent<T extends ElementType>(Tag: T) {
+  return function SyncedBlockComponent(props: ComponentPropsWithoutRef<T>) {
+    const syncProps = useSyncedBlockProps(
+      (props as ComponentPropsWithoutRef<ElementType>).children as ReactNode,
+    );
+    const Component = Tag as ElementType;
 
-  return (
-    <p
-      {...props}
-      className={mergeClassName(props.className, syncProps.className)}
-      data-sentence-id={syncProps['data-sentence-id']}
-    >
-      {props.children}
-    </p>
-  );
+    return (
+      <Component
+        {...props}
+        className={mergeClassName(
+          (props as { className?: string }).className,
+          syncProps.className,
+        )}
+        data-sentence-id={syncProps['data-sentence-id']}
+      />
+    );
+  };
 }
 
-export function SyncedBlockquote(props: ComponentPropsWithoutRef<'blockquote'>) {
-  const syncProps = useSyncedBlockProps(props.children);
-
-  return (
-    <blockquote
-      {...props}
-      className={mergeClassName(props.className, syncProps.className)}
-      data-sentence-id={syncProps['data-sentence-id']}
-    >
-      {props.children}
-    </blockquote>
-  );
-}
-
-export function SyncedListItem(props: ComponentPropsWithoutRef<'li'>) {
-  const syncProps = useSyncedBlockProps(props.children);
-
-  return (
-    <li
-      {...props}
-      className={mergeClassName(props.className, syncProps.className)}
-      data-sentence-id={syncProps['data-sentence-id']}
-    >
-      {props.children}
-    </li>
-  );
-}
+export const SyncedParagraph = createSyncedBlockComponent('p');
+export const SyncedBlockquote = createSyncedBlockComponent('blockquote');
+export const SyncedListItem = createSyncedBlockComponent('li');
+export const SyncedHeading1 = createSyncedBlockComponent('h1');
+export const SyncedHeading2 = createSyncedBlockComponent('h2');
+export const SyncedHeading3 = createSyncedBlockComponent('h3');
+export const SyncedHeading4 = createSyncedBlockComponent('h4');
+export const SyncedHeading5 = createSyncedBlockComponent('h5');
+export const SyncedHeading6 = createSyncedBlockComponent('h6');
 
 export const syncedMdxComponents = {
   p: SyncedParagraph,
   blockquote: SyncedBlockquote,
   li: SyncedListItem,
+  h1: SyncedHeading1,
+  h2: SyncedHeading2,
+  h3: SyncedHeading3,
+  h4: SyncedHeading4,
+  h5: SyncedHeading5,
+  h6: SyncedHeading6,
 };

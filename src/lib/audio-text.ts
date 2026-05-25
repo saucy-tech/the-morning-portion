@@ -44,7 +44,7 @@ export function splitIntoSentences(text: string): string[] {
   return sentences;
 }
 
-/** Extract syncable MDX blocks (blockquote, paragraph, list item) in render order. */
+/** Extract syncable MDX blocks (heading, blockquote, paragraph, list item) in render order. */
 export function extractSyncBlockTexts(content: string): string[] {
   const blocks: string[] = [];
   const lines = content.split('\n');
@@ -59,6 +59,7 @@ export function extractSyncBlockTexts(content: string): string[] {
     }
 
     if (/^#{1,6}\s/.test(trimmed)) {
+      blocks.push(normalizeBlockText(stripInlineMarkdown(trimmed.replace(/^#{1,6}\s+/, ''))));
       index++;
       continue;
     }

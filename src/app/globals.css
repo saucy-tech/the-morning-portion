@@ -707,7 +707,7 @@ html[data-theme='dark'] .brand-band-logo {
   text-underline-offset: 4px;
 }
 
-.post-body :where(p, blockquote, li).is-reading {
+.post-body :where(p, blockquote, li, h1, h2, h3, h4, h5, h6).is-reading {
   color: var(--tdw-ink);
   background: color-mix(in srgb, var(--tdw-warm) 12%, transparent);
   border-radius: var(--tdw-radius);

@@ -60,27 +60,31 @@ const SENTENCE_END = /[.!?]+(?:\s|$)/;
 function parseArgs(argv) {
   const positional = [];
   const flags = new Set();
+  let outputDir = DEFAULT_OUTPUT_DIR;
 
-  for (const arg of argv) {
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i];
+
+    if (arg === '--output-dir') {
+      outputDir = argv[i + 1] ?? DEFAULT_OUTPUT_DIR;
+      i++;
+      continue;
+    }
+
     if (arg.startsWith('--')) {
       flags.add(arg);
-    } else {
-      positional.push(arg);
+      continue;
     }
+
+    positional.push(arg);
   }
 
   return {
     slug: positional[0],
     alignOnly: flags.has('--align-only'),
     dryRun: flags.has('--dry-run'),
-    outputDir: getFlagValue(argv, '--output-dir') ?? DEFAULT_OUTPUT_DIR,
+    outputDir,
   };
-}
-
-function getFlagValue(argv, flag) {
-  const index = argv.indexOf(flag);
-  if (index === -1 || index + 1 >= argv.length) return undefined;
-  return argv[index + 1];
 }
 
 function mdxToPlainText(content) {
