@@ -256,6 +256,18 @@ h3 {
   color: var(--tdw-bg);
 }
 
+.button.secondary {
+  background: transparent;
+  color: var(--tdw-ink);
+  box-shadow: inset 0 0 0 1px var(--tdw-ink-mute);
+}
+
+.button.secondary:hover {
+  background: color-mix(in srgb, var(--tdw-warm) 8%, transparent);
+  color: var(--tdw-warm);
+  box-shadow: inset 0 0 0 1px var(--tdw-warm);
+}
+
 .subscribe-form button:disabled {
   cursor: wait;
   opacity: 0.72;
