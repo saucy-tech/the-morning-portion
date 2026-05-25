@@ -9,7 +9,11 @@ import {
 } from 'react';
 
 import { useDevotionAudio } from '@/components/DevotionAudioContext';
-import { normalizeBlockText, splitIntoSentences } from '@/lib/audio-text';
+import { normalizeBlockText } from '@/lib/audio-text';
+
+function mergeClassName(base?: string, extra?: string) {
+  return [base, extra].filter(Boolean).join(' ') || undefined;
+}
 
 function extractTextFromChildren(children: ReactNode): string {
   return Children.toArray(children)
@@ -24,70 +28,71 @@ function extractTextFromChildren(children: ReactNode): string {
     .join('');
 }
 
-function useBlockSentenceIds(children: ReactNode): string[] {
+export function SyncedBlockIndexReset({ children }: { children: ReactNode }) {
+  const ctx = useDevotionAudio();
+  ctx?.resetBlockRegistration();
+  return children;
+}
+
+function useSyncedBlockProps(children: ReactNode) {
   const ctx = useDevotionAudio();
   const plainText = useMemo(
     () => normalizeBlockText(extractTextFromChildren(children)),
     [children],
   );
+  const blockIndex =
+    ctx && plainText.length > 0 ? ctx.registerBlockIndex(plainText) : -1;
 
-  return useMemo(() => {
-    if (!ctx || plainText.length === 0) return [];
-    const blockIndex = ctx.blockTexts.indexOf(plainText);
-    if (blockIndex < 0) return [];
-    return ctx.blockSentenceIds[blockIndex] ?? [];
-  }, [ctx, plainText]);
-}
+  const sentenceIds = blockIndex >= 0 ? (ctx?.blockSentenceIds[blockIndex] ?? []) : [];
+  const activeId = sentenceIds.find((id) => id === ctx?.activeSentenceId);
+  const isReading = Boolean(activeId);
 
-function useSyncedSentenceContent(children: ReactNode): ReactNode {
-  const ctx = useDevotionAudio();
-  const sentenceIds = useBlockSentenceIds(children);
-  const plainText = normalizeBlockText(extractTextFromChildren(children));
-  const sentences = splitIntoSentences(plainText);
-
-  if (!ctx || sentenceIds.length === 0 || sentences.length === 0) {
-    return children;
-  }
-
-  return sentences.map((sentence, index) => {
-    const sentenceId = sentenceIds[index];
-    if (!sentenceId) {
-      return (
-        <span key={`fallback-${index}`} className="sync-sentence">
-          {sentence}
-          {index < sentences.length - 1 ? ' ' : ''}
-        </span>
-      );
-    }
-
-    const isReading = ctx.activeSentenceId === sentenceId;
-
-    return (
-      <span
-        key={sentenceId}
-        data-sentence-id={sentenceId}
-        className={isReading ? 'sync-sentence is-reading' : 'sync-sentence'}
-      >
-        {sentence}
-        {index < sentences.length - 1 ? ' ' : ''}
-      </span>
-    );
-  });
+  return {
+    className: isReading ? 'is-reading' : undefined,
+    'data-sentence-id': activeId ?? sentenceIds[0],
+  };
 }
 
 export function SyncedParagraph(props: ComponentPropsWithoutRef<'p'>) {
-  const content = useSyncedSentenceContent(props.children);
-  return <p {...props}>{content}</p>;
+  const syncProps = useSyncedBlockProps(props.children);
+
+  return (
+    <p
+      {...props}
+      className={mergeClassName(props.className, syncProps.className)}
+      data-sentence-id={syncProps['data-sentence-id']}
+    >
+      {props.children}
+    </p>
+  );
 }
 
 export function SyncedBlockquote(props: ComponentPropsWithoutRef<'blockquote'>) {
-  const content = useSyncedSentenceContent(props.children);
-  return <blockquote {...props}>{content}</blockquote>;
+  const syncProps = useSyncedBlockProps(props.children);
+
+  return (
+    <blockquote
+      {...props}
+      className={mergeClassName(props.className, syncProps.className)}
+      data-sentence-id={syncProps['data-sentence-id']}
+    >
+      {props.children}
+    </blockquote>
+  );
 }
 
 export function SyncedListItem(props: ComponentPropsWithoutRef<'li'>) {
-  const content = useSyncedSentenceContent(props.children);
-  return <li {...props}>{content}</li>;
+  const syncProps = useSyncedBlockProps(props.children);
+
+  return (
+    <li
+      {...props}
+      className={mergeClassName(props.className, syncProps.className)}
+      data-sentence-id={syncProps['data-sentence-id']}
+    >
+      {props.children}
+    </li>
+  );
 }
 
 export const syncedMdxComponents = {

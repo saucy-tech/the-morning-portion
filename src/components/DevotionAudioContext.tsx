@@ -2,9 +2,11 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -18,6 +20,8 @@ interface DevotionAudioContextValue {
   bodySentences: AlignmentSentence[];
   blockTexts: string[];
   blockSentenceIds: string[][];
+  registerBlockIndex: (plainText: string) => number;
+  resetBlockRegistration: () => void;
   prefersReducedMotion: boolean;
 }
 
@@ -45,6 +49,7 @@ export function DevotionAudioProvider({
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   );
+  const blockOccurrenceRef = useRef(new Map<string, number>());
 
   useEffect(() => {
     if (!audioAlignment) return;
@@ -78,6 +83,29 @@ export function DevotionAudioProvider({
     [content, bodySentences],
   );
 
+  const resetBlockRegistration = useCallback(() => {
+    blockOccurrenceRef.current = new Map();
+  }, []);
+
+  const registerBlockIndex = useCallback(
+    (plainText: string) => {
+      const occurrence = blockOccurrenceRef.current.get(plainText) ?? 0;
+      let seen = 0;
+
+      for (let index = 0; index < blockTexts.length; index++) {
+        if (blockTexts[index] !== plainText) continue;
+        if (seen === occurrence) {
+          blockOccurrenceRef.current.set(plainText, occurrence + 1);
+          return index;
+        }
+        seen++;
+      }
+
+      return -1;
+    },
+    [blockTexts],
+  );
+
   const value = useMemo(
     () => ({
       activeSentenceId,
@@ -86,6 +114,8 @@ export function DevotionAudioProvider({
       bodySentences,
       blockTexts,
       blockSentenceIds,
+      registerBlockIndex,
+      resetBlockRegistration,
       prefersReducedMotion,
     }),
     [
@@ -94,6 +124,8 @@ export function DevotionAudioProvider({
       bodySentences,
       blockTexts,
       blockSentenceIds,
+      registerBlockIndex,
+      resetBlockRegistration,
       prefersReducedMotion,
     ],
   );

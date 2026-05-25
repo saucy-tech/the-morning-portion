@@ -707,13 +707,13 @@ html[data-theme='dark'] .brand-band-logo {
   text-underline-offset: 4px;
 }
 
-.post-body .sync-sentence.is-reading {
+.post-body :where(p, blockquote, li).is-reading {
   color: var(--tdw-ink);
   background: color-mix(in srgb, var(--tdw-warm) 12%, transparent);
   border-radius: var(--tdw-radius);
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-  padding: 0 2px;
+  box-shadow: inset 3px 0 0 var(--tdw-warm);
+  padding-left: 12px;
+  margin-left: -12px;
   transition: background 200ms ease, color 200ms ease;
 }
 

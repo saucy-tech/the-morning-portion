@@ -2,6 +2,7 @@
 
 import { DevotionAudioProvider } from '@/components/DevotionAudioContext';
 import DevotionPlayer from '@/components/DevotionPlayer';
+import { SyncedBlockIndexReset } from '@/components/SyncedPostBody';
 
 type DevotionReadingShellProps = {
   audio: string;
@@ -23,7 +24,7 @@ export default function DevotionReadingShell({
   return (
     <DevotionAudioProvider audioAlignment={audioAlignment} content={content}>
       <DevotionPlayer audio={audio} title={title} autoPlay={autoPlay} />
-      {children}
+      <SyncedBlockIndexReset>{children}</SyncedBlockIndexReset>
     </DevotionAudioProvider>
   );
 }
