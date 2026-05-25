@@ -22,6 +22,36 @@ export function normalizeBlockText(text: string): string {
   return text.replace(/\s+/g, ' ').trim();
 }
 
+function normalizeMatchText(text: string): string {
+  return normalizeBlockText(text).toLowerCase();
+}
+
+function sentenceRelatesToBlock(sentenceText: string, blockText: string): boolean {
+  const sentence = normalizeMatchText(sentenceText);
+  const block = normalizeMatchText(blockText);
+  if (!sentence || !block) return false;
+
+  if (sentence === block) return true;
+  if (block.includes(sentence)) return true;
+  if (sentence.includes(block)) return true;
+  if (sentence.startsWith(block)) return true;
+  if (block.startsWith(sentence)) return true;
+
+  const blockWords = block.split(' ');
+  const sentenceWords = sentence.split(' ');
+  for (let overlap = Math.min(blockWords.length, sentenceWords.length); overlap > 0; overlap--) {
+    const blockSuffix = blockWords.slice(-overlap).join(' ');
+    const sentencePrefix = sentenceWords.slice(0, overlap).join(' ');
+    if (blockSuffix === sentencePrefix) return true;
+  }
+
+  return false;
+}
+
+function isShortBlock(blockText: string): boolean {
+  return normalizeMatchText(blockText).split(' ').length <= 6;
+}
+
 export function splitIntoSentences(text: string): string[] {
   const normalized = text.replace(/\s+/g, ' ').trim();
   if (!normalized) return [];
@@ -115,15 +145,39 @@ export function extractSyncBlockTexts(content: string): string[] {
 
 export function buildBlockSentenceIds(
   content: string,
-  bodySentences: Array<{ id: string }>,
+  bodySentences: Array<{ id: string; text: string }>,
 ): string[][] {
   const blocks = extractSyncBlockTexts(content);
-  let bodyIndex = 0;
+  let cursor = 0;
 
   return blocks.map((blockText) => {
-    const sentenceCount = splitIntoSentences(blockText).length;
-    const ids = bodySentences.slice(bodyIndex, bodyIndex + sentenceCount).map((sentence) => sentence.id);
-    bodyIndex += sentenceCount;
+    const ids: string[] = [];
+
+    while (cursor < bodySentences.length) {
+      const sentence = bodySentences[cursor];
+
+      if (!sentenceRelatesToBlock(sentence.text, blockText)) {
+        if (ids.length > 0) break;
+
+        const sentenceNorm = normalizeMatchText(sentence.text);
+        const blockNorm = normalizeMatchText(blockText);
+        if (sentenceNorm.startsWith(blockNorm)) {
+          ids.push(sentence.id);
+          cursor++;
+        }
+        break;
+      }
+
+      ids.push(sentence.id);
+      cursor++;
+
+      if (isShortBlock(blockText)) {
+        const sentenceNorm = normalizeMatchText(sentence.text);
+        const blockNorm = normalizeMatchText(blockText);
+        if (sentenceNorm.length > blockNorm.length) break;
+      }
+    }
+
     return ids;
   });
 }
