@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import { splitIntoSentences } from '@/lib/audio-text';
+
 export interface AlignmentSentence {
   id: string;
   text: string;
@@ -63,30 +65,6 @@ export function mdxToPlainText(content: string): string {
 export function buildTtsScript(title: string, excerpt: string, content: string): string {
   const body = mdxToPlainText(content);
   return `${title}. ${excerpt} ${body}`.replace(/\s+/g, ' ').trim();
-}
-
-const SENTENCE_END = /[.!?]+(?:\s|$)/;
-
-export function splitIntoSentences(text: string): string[] {
-  const normalized = text.replace(/\s+/g, ' ').trim();
-  if (!normalized) return [];
-
-  const sentences: string[] = [];
-  let buffer = '';
-
-  for (const char of normalized) {
-    buffer += char;
-    if (SENTENCE_END.test(buffer)) {
-      const trimmed = buffer.trim();
-      if (trimmed) sentences.push(trimmed);
-      buffer = '';
-    }
-  }
-
-  const remainder = buffer.trim();
-  if (remainder) sentences.push(remainder);
-
-  return sentences;
 }
 
 export interface CharacterAlignment {
@@ -160,37 +138,4 @@ export function mergeAlignmentChunks(
   return merged;
 }
 
-/** Map MDX block plain-text sentences to sync IDs in render order. */
-export function buildSentenceIdMap(content: string): Map<number, string> {
-  const plain = mdxToPlainText(content);
-  const sentences = splitIntoSentences(plain);
-  const map = new Map<number, string>();
-  sentences.forEach((_, index) => {
-    map.set(index, `s${index}`);
-  });
-  return map;
-}
-
-export function countSyncableBlocks(content: string): number {
-  const lines = content.replace(/^---[\s\S]*?---\n?/, '').split('\n');
-  let count = 0;
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    if (/^#{1,6}\s/.test(trimmed)) continue;
-    if (/^[-*+]\s/.test(trimmed)) {
-      count++;
-      continue;
-    }
-    if (/^>\s?/.test(trimmed) || trimmed.startsWith('>')) {
-      count++;
-      continue;
-    }
-    if (!trimmed.startsWith('```')) {
-      count++;
-    }
-  }
-
-  return count;
-}
+export { splitIntoSentences } from '@/lib/audio-text';

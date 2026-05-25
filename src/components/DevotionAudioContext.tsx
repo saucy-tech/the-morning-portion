@@ -17,9 +17,8 @@ interface DevotionAudioContextValue {
   setActiveSentenceId: (id: string | null) => void;
   sentences: AlignmentSentence[];
   bodySentences: AlignmentSentence[];
-  registerBlock: () => number;
+  claimNextBodySentenceId: () => string | undefined;
   prefersReducedMotion: boolean;
-  alignmentLoaded: boolean;
 }
 
 const DevotionAudioContext = createContext<DevotionAudioContextValue | null>(null);
@@ -41,7 +40,7 @@ export function DevotionAudioProvider({ audioAlignment, children }: DevotionAudi
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   );
-  const blockCounter = useRef(0);
+  const bodySentenceCounter = useRef(0);
 
   useEffect(() => {
     if (!audioAlignment) return;
@@ -70,11 +69,12 @@ export function DevotionAudioProvider({ audioAlignment, children }: DevotionAudi
     [sentences],
   );
 
-  const registerBlock = useCallback(() => {
-    const index = blockCounter.current;
-    blockCounter.current += 1;
-    return index;
-  }, []);
+  const claimNextBodySentenceId = useCallback(() => {
+    const sentence = bodySentences[bodySentenceCounter.current];
+    if (!sentence) return undefined;
+    bodySentenceCounter.current += 1;
+    return sentence.id;
+  }, [bodySentences]);
 
   const value = useMemo(
     () => ({
@@ -82,48 +82,13 @@ export function DevotionAudioProvider({ audioAlignment, children }: DevotionAudi
       setActiveSentenceId,
       sentences,
       bodySentences,
-      registerBlock,
+      claimNextBodySentenceId,
       prefersReducedMotion,
-      alignmentLoaded: Boolean(audioAlignment ? alignment : true),
     }),
-    [
-      activeSentenceId,
-      sentences,
-      bodySentences,
-      registerBlock,
-      prefersReducedMotion,
-      audioAlignment,
-      alignment,
-    ],
+    [activeSentenceId, sentences, bodySentences, claimNextBodySentenceId, prefersReducedMotion],
   );
 
   return (
     <DevotionAudioContext.Provider value={value}>{children}</DevotionAudioContext.Provider>
   );
-}
-
-export function useSyncedBlockProps(): {
-  sentenceId?: string;
-  className?: string;
-  'data-sentence-id'?: string;
-} {
-  const ctx = useDevotionAudio();
-  const [blockIndex] = useState(() => ctx?.registerBlock() ?? -1);
-
-  if (!ctx || ctx.bodySentences.length === 0 || blockIndex < 0) {
-    return {};
-  }
-
-  const sentence = ctx.bodySentences[blockIndex];
-  if (!sentence) {
-    return {};
-  }
-
-  const isReading = ctx.activeSentenceId === sentence.id;
-
-  return {
-    sentenceId: sentence.id,
-    'data-sentence-id': sentence.id,
-    className: isReading ? 'is-reading' : undefined,
-  };
 }

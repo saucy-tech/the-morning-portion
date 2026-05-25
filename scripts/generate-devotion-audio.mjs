@@ -301,18 +301,34 @@ async function forcedAlign({ apiKey, audioPath, text }) {
   return response.json();
 }
 
+function publicUrlForOutput(outputDir, filename) {
+  const publicRoot = path.resolve(path.join(ROOT, 'public'));
+  const filePath = path.resolve(outputDir, filename);
+
+  if (!filePath.startsWith(`${publicRoot}${path.sep}`) && filePath !== publicRoot) {
+    return undefined;
+  }
+
+  const relative = path.relative(publicRoot, filePath);
+  return `/${relative.split(path.sep).join('/')}`;
+}
+
 function writeOutputs({ outputDir, slug, audioBuffers, alignment, dryRun }) {
   fs.mkdirSync(outputDir, { recursive: true });
 
   const mp3Path = path.join(outputDir, `${slug}.mp3`);
   const alignmentPath = path.join(outputDir, `${slug}.alignment.json`);
-  const audioUrl = `/audio/${slug}.mp3`;
-  const alignmentUrl = `/audio/${slug}.alignment.json`;
+  const audioUrl = publicUrlForOutput(outputDir, `${slug}.mp3`);
+  const alignmentUrl = publicUrlForOutput(outputDir, `${slug}.alignment.json`);
+  const canPatchFrontmatter = Boolean(audioUrl && alignmentUrl);
 
   if (dryRun) {
     console.log(`[dry-run] Would write ${mp3Path}`);
     console.log(`[dry-run] Would write ${alignmentPath}`);
-    return { audioUrl, alignmentUrl };
+    if (!canPatchFrontmatter) {
+      console.log('[dry-run] Output dir is outside public/; frontmatter would not be patched.');
+    }
+    return { audioUrl, alignmentUrl, canPatchFrontmatter };
   }
 
   if (audioBuffers.length > 0) {
@@ -324,7 +340,7 @@ function writeOutputs({ outputDir, slug, audioBuffers, alignment, dryRun }) {
     'utf-8',
   );
 
-  return { audioUrl, alignmentUrl };
+  return { audioUrl, alignmentUrl, canPatchFrontmatter };
 }
 
 async function main() {
@@ -371,7 +387,7 @@ async function main() {
     const forced = await forcedAlign({ apiKey, audioPath: mp3Path, text: ttsScript });
     const characterAlignment = forcedAlignmentToCharacterAlignment(forced);
     const sentences = aggregateCharacterAlignmentToSentences(characterAlignment, introText);
-    const { audioUrl, alignmentUrl } = writeOutputs({
+    const { audioUrl, alignmentUrl, canPatchFrontmatter } = writeOutputs({
       outputDir,
       slug,
       audioBuffers: [],
@@ -379,8 +395,10 @@ async function main() {
       dryRun,
     });
 
-    if (!dryRun) {
+    if (!dryRun && canPatchFrontmatter && audioUrl && alignmentUrl) {
       patchFrontmatter(postPath, raw, data, audioUrl, alignmentUrl);
+    } else if (!dryRun && !canPatchFrontmatter) {
+      console.log('Skipped frontmatter patch: output dir is outside public/.');
     }
 
     console.log(`Alignment ready for ${slug}`);
@@ -409,7 +427,7 @@ async function main() {
     throw new Error('ElevenLabs returned no audio data.');
   }
 
-  const { audioUrl, alignmentUrl } = writeOutputs({
+  const { audioUrl, alignmentUrl, canPatchFrontmatter } = writeOutputs({
     outputDir,
     slug,
     audioBuffers,
@@ -417,8 +435,10 @@ async function main() {
     dryRun,
   });
 
-  if (!dryRun) {
+  if (!dryRun && canPatchFrontmatter && audioUrl && alignmentUrl) {
     patchFrontmatter(postPath, raw, data, audioUrl, alignmentUrl);
+  } else if (!dryRun && !canPatchFrontmatter) {
+    console.log('Skipped frontmatter patch: output dir is outside public/.');
   }
 
   console.log(`Audio ready for ${slug}`);
