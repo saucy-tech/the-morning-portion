@@ -12,6 +12,44 @@ const ROOT = path.join(__dirname, '..');
 const POSTS_DIR = path.join(ROOT, 'src', 'content', 'posts');
 const DEFAULT_OUTPUT_DIR = path.join(ROOT, 'public', 'audio');
 
+function loadEnvFiles() {
+  const merged = {};
+
+  for (const filename of ['.env', '.env.local']) {
+    const envPath = path.join(ROOT, filename);
+    if (!fs.existsSync(envPath)) continue;
+
+    const lines = fs.readFileSync(envPath, 'utf-8').split('\n');
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+
+      const separator = trimmed.indexOf('=');
+      if (separator === -1) continue;
+
+      const key = trimmed.slice(0, separator).trim();
+      let value = trimmed.slice(separator + 1).trim();
+
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1);
+      }
+
+      merged[key] = value;
+    }
+  }
+
+  for (const [key, value] of Object.entries(merged)) {
+    if (!(key in process.env)) {
+      process.env[key] = value;
+    }
+  }
+}
+
+loadEnvFiles();
+
 matter.engines.yaml = {
   parse: (str) => yaml.load(str),
   stringify: (obj) => yaml.dump(obj),
@@ -291,7 +329,9 @@ async function main() {
   const voiceId = process.env.ELEVENLABS_VOICE_ID;
 
   if (!apiKey) {
-    console.error('Missing ELEVENLABS_API_KEY in environment.');
+    console.error(
+      'Missing ELEVENLABS_API_KEY. Set it in .env.local or export it in your shell.',
+    );
     process.exit(1);
   }
 
@@ -331,7 +371,9 @@ async function main() {
   }
 
   if (!voiceId) {
-    console.error('Missing ELEVENLABS_VOICE_ID in environment.');
+    console.error(
+      'Missing ELEVENLABS_VOICE_ID. Set it in .env.local or export it in your shell.',
+    );
     process.exit(1);
   }
 
