@@ -1,0 +1,236 @@
+{
+  "version": 1,
+  "sentences": [
+    {
+      "id": "s0",
+      "text": "He Did Not Scold the Doubters.",
+      "start": 0,
+      "end": 1.683,
+      "scope": "intro"
+    },
+    {
+      "id": "s1",
+      "text": "Some of the disciples on the mountain worshipped, some doubted.",
+      "start": 2.009,
+      "end": 5.062,
+      "scope": "intro"
+    },
+    {
+      "id": "s2",
+      "text": "Jesus stepped into the middle and claimed all authority in heaven and in earth.",
+      "start": 5.387,
+      "end": 9.323,
+      "scope": "intro"
+    },
+    {
+      "id": "s3",
+      "text": "And Jesus came and spake unto them, saying, All power is given unto me in heaven and in earth.",
+      "start": 9.497,
+      "end": 15.046000000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s4",
+      "text": "-- Matthew 28:18 (KJV) Eleven men climbed a mountain in Galilee to meet Jesus.",
+      "start": 15.487,
+      "end": 22.581000000000003,
+      "scope": "body"
+    },
+    {
+      "id": "s5",
+      "text": "Some worshipped Him.",
+      "start": 22.964,
+      "end": 23.997,
+      "scope": "body"
+    },
+    {
+      "id": "s6",
+      "text": "Some doubted.",
+      "start": 24.241,
+      "end": 25.031,
+      "scope": "body"
+    },
+    {
+      "id": "s7",
+      "text": "Matthew sets that detail down without comment, as if to say: that is what an honest church looks like, even on the resurrection side of Easter.",
+      "start": 25.727,
+      "end": 33.994,
+      "scope": "body"
+    },
+    {
+      "id": "s8",
+      "text": "What Jesus did next is worth pausing over.",
+      "start": 34.238,
+      "end": 36.688,
+      "scope": "body"
+    },
+    {
+      "id": "s9",
+      "text": "He did not pull the worshippers aside for a private blessing.",
+      "start": 36.931,
+      "end": 39.938,
+      "scope": "body"
+    },
+    {
+      "id": "s10",
+      "text": "He did not lecture the doubters.",
+      "start": 40.147,
+      "end": 41.738,
+      "scope": "body"
+    },
+    {
+      "id": "s11",
+      "text": "He stepped into the middle of the mixed group and made one of the largest claims in scripture: all power is given unto me in heaven and in earth.",
+      "start": 41.947,
+      "end": 50.643,
+      "scope": "body"
+    },
+    {
+      "id": "s12",
+      "text": "All Power He had been arrested, beaten, crucified.",
+      "start": 51.026,
+      "end": 55.275,
+      "scope": "body"
+    },
+    {
+      "id": "s13",
+      "text": "Three days later He stood on a mountain holding every authority in the universe.",
+      "start": 55.658,
+      "end": 60.313,
+      "scope": "body"
+    },
+    {
+      "id": "s14",
+      "text": "The grave was supposed to be the end of His story.",
+      "start": 60.488,
+      "end": 63.077,
+      "scope": "body"
+    },
+    {
+      "id": "s15",
+      "text": "Instead it was the credential that confirmed it.",
+      "start": 63.286,
+      "end": 65.991,
+      "scope": "body"
+    },
+    {
+      "id": "s16",
+      "text": "All power means there is nothing outside His reach.",
+      "start": 66.235,
+      "end": 69.091,
+      "scope": "body"
+    },
+    {
+      "id": "s17",
+      "text": "Not the future you cannot predict.",
+      "start": 69.369,
+      "end": 71.285,
+      "scope": "body"
+    },
+    {
+      "id": "s18",
+      "text": "Not the diagnosis you cannot face.",
+      "start": 71.563,
+      "end": 73.68900000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s19",
+      "text": "Not the fear that keeps repeating its argument at three in the morning.",
+      "start": 73.932,
+      "end": 77.45,
+      "scope": "body"
+    },
+    {
+      "id": "s20",
+      "text": "That is the scope of His authority, in heaven and in earth, with no exception.",
+      "start": 77.659,
+      "end": 82.628,
+      "scope": "body"
+    },
+    {
+      "id": "s21",
+      "text": "Worshippers and Doubters in the Same Room The good news of the mountain is for both camps.",
+      "start": 82.953,
+      "end": 88.57300000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s22",
+      "text": "If you are worshipping today, He receives it.",
+      "start": 88.74700000000001,
+      "end": 91.80000000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s23",
+      "text": "If you are doubting today, He does not send you away.",
+      "start": 92.12500000000001,
+      "end": 95.59700000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s24",
+      "text": "He speaks the same word to both: I hold all power.",
+      "start": 95.92200000000001,
+      "end": 100.206,
+      "scope": "body"
+    },
+    {
+      "id": "s25",
+      "text": "You do not earn this audience with the right level of faith.",
+      "start": 100.45,
+      "end": 103.921,
+      "scope": "body"
+    },
+    {
+      "id": "s26",
+      "text": "You arrive at it by being there at all.",
+      "start": 104.165,
+      "end": 106.51,
+      "scope": "body"
+    },
+    {
+      "id": "s27",
+      "text": "The disciples who doubted still got the commission.",
+      "start": 106.71900000000001,
+      "end": 109.68,
+      "scope": "body"
+    },
+    {
+      "id": "s28",
+      "text": "The mixed camp was the church Jesus chose to send out.",
+      "start": 109.959,
+      "end": 113.244,
+      "scope": "body"
+    },
+    {
+      "id": "s29",
+      "text": "If you were waiting for the day your faith was clean enough to count, that day already happened.",
+      "start": 113.569,
+      "end": 119.16600000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s30",
+      "text": "He walked up the mountain.",
+      "start": 119.444,
+      "end": 120.66300000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s31",
+      "text": "He spoke to the doubters too.",
+      "start": 120.872,
+      "end": 122.46300000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s32",
+      "text": "What would change in your life today if you took Him at His word about all power?",
+      "start": 122.67200000000001,
+      "end": 126.828,
+      "scope": "body"
+    }
+  ]
+}
