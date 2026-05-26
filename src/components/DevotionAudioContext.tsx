@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -22,6 +23,16 @@ interface DevotionAudioContextValue {
 
 const DevotionAudioContext = createContext<DevotionAudioContextValue | null>(null);
 
+type LoadedAudioAlignment = {
+  source: string;
+  data: AudioAlignment | null;
+};
+
+type ActiveSentence = {
+  source?: string;
+  id: string;
+};
+
 export function useDevotionAudio() {
   return useContext(DevotionAudioContext);
 }
@@ -37,8 +48,8 @@ export function DevotionAudioProvider({
   content,
   children,
 }: DevotionAudioProviderProps) {
-  const [activeSentenceId, setActiveSentenceId] = useState<string | null>(null);
-  const [alignment, setAlignment] = useState<AudioAlignment | null>(null);
+  const [activeSentence, setActiveSentence] = useState<ActiveSentence | null>(null);
+  const [loadedAlignment, setLoadedAlignment] = useState<LoadedAudioAlignment | null>(null);
   const [prefersReducedMotion] = useState(
     () =>
       typeof window !== 'undefined' &&
@@ -55,10 +66,10 @@ export function DevotionAudioProvider({
         return response.json() as Promise<AudioAlignment>;
       })
       .then((data) => {
-        if (!cancelled) setAlignment(data);
+        if (!cancelled) setLoadedAlignment({ source: audioAlignment, data });
       })
       .catch(() => {
-        if (!cancelled) setAlignment(null);
+        if (!cancelled) setLoadedAlignment({ source: audioAlignment, data: null });
       });
 
     return () => {
@@ -66,6 +77,16 @@ export function DevotionAudioProvider({
     };
   }, [audioAlignment]);
 
+  const setActiveSentenceId = useCallback(
+    (id: string | null) => {
+      setActiveSentence(id ? { source: audioAlignment, id } : null);
+    },
+    [audioAlignment],
+  );
+  const activeSentenceId =
+    activeSentence && activeSentence.source === audioAlignment ? activeSentence.id : null;
+  const alignment =
+    loadedAlignment && loadedAlignment.source === audioAlignment ? loadedAlignment.data : null;
   const sentences = useMemo(() => alignment?.sentences ?? [], [alignment]);
   const bodySentences = useMemo(
     () => sentences.filter((sentence) => sentence.scope !== 'intro'),
@@ -87,6 +108,7 @@ export function DevotionAudioProvider({
     }),
     [
       activeSentenceId,
+      setActiveSentenceId,
       sentences,
       bodySentences,
       blockSentenceIds,
