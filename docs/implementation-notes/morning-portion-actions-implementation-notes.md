@@ -45,6 +45,11 @@ I created a new Kit V4 API key named `the-morning-portion-github-actions`, saved
 **Spec section:** Kit audience setup
 The subscribe endpoint now uses Kit V4 for both form subscription and audience tagging. Successful signups are added to `CONVERTKIT_FORM_ID` and then tagged with `KIT_MORNING_PORTION_TAG_ID`, matching the tag-targeted GitHub broadcast workflow. Vercel Production has `KIT_MORNING_PORTION_TAG_ID` configured, and a production signup test returned `success: true` with `tagged: true`.
 
+### Add listen-to-devotion audio workflow - 2026-05-26
+
+**Spec section:** PR #23 follow-up
+The site now supports file-backed devotion audio with synced sentence highlighting. `pnpm generate-audio <slug>` reads `.env.local`, sends the post text to ElevenLabs, writes `public/audio/{slug}.mp3` and `public/audio/{slug}.alignment.json`, and patches the post frontmatter with `audio` and `audioAlignment`. The post page renders the player when audio is present; the home hero links to `/posts/{slug}?listen=1` for the latest post with audio.
+
 ## Deviations from the spec
 
 ## Tradeoffs accepted

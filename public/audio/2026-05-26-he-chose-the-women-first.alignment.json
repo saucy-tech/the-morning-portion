@@ -1,0 +1,250 @@
+{
+  "version": 1,
+  "sentences": [
+    {
+      "id": "s0",
+      "text": "He Chose the Women First.",
+      "start": 0,
+      "end": 1.811,
+      "scope": "intro"
+    },
+    {
+      "id": "s1",
+      "text": "Two witnesses were required by Jewish law, and they had to be men.",
+      "start": 2.252,
+      "end": 6.548,
+      "scope": "intro"
+    },
+    {
+      "id": "s2",
+      "text": "On the first morning of the new creation, Jesus picked two women.",
+      "start": 6.931,
+      "end": 10.762,
+      "scope": "intro"
+    },
+    {
+      "id": "s3",
+      "text": "And as they went to tell his disciples, behold, Jesus met them, saying, All hail.",
+      "start": 11.146,
+      "end": 16.544,
+      "scope": "body"
+    },
+    {
+      "id": "s4",
+      "text": "And they came and held him by the feet, and worshipped him.",
+      "start": 16.927,
+      "end": 20.236,
+      "scope": "body"
+    },
+    {
+      "id": "s5",
+      "text": "-- Matthew 28:9 (KJV) In the courts of His day, the testimony of a woman did not count.",
+      "start": 21.536,
+      "end": 28.814999999999998,
+      "scope": "body"
+    },
+    {
+      "id": "s6",
+      "text": "Two witnesses were required, and they had to be men.",
+      "start": 28.990000000000002,
+      "end": 32.101,
+      "scope": "body"
+    },
+    {
+      "id": "s7",
+      "text": "That was the rule everyone agreed to.",
+      "start": 32.31,
+      "end": 34.260999999999996,
+      "scope": "body"
+    },
+    {
+      "id": "s8",
+      "text": "Jesus broke it on the first morning of the new creation.",
+      "start": 34.864999999999995,
+      "end": 37.92999999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s9",
+      "text": "He met the two Marys on the road as they ran to tell the disciples.",
+      "start": 38.138999999999996,
+      "end": 41.632999999999996,
+      "scope": "body"
+    },
+    {
+      "id": "s10",
+      "text": "Not in the temple.",
+      "start": 41.876999999999995,
+      "end": 42.898999999999994,
+      "scope": "body"
+    },
+    {
+      "id": "s11",
+      "text": "Not in front of the rulers.",
+      "start": 43.108,
+      "end": 44.547,
+      "scope": "body"
+    },
+    {
+      "id": "s12",
+      "text": "On a road, in the early hours, with two women whose word would not stand up in any tribunal in Jerusalem.",
+      "start": 44.791,
+      "end": 50.492,
+      "scope": "body"
+    },
+    {
+      "id": "s13",
+      "text": "He greeted them, All hail, and they fell at His feet and worshipped Him.",
+      "start": 50.87499999999999,
+      "end": 54.75299999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s14",
+      "text": "The Truth-Tellers He Chose The chief priests were already buying lies that morning.",
+      "start": 56.053,
+      "end": 62.25299999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s15",
+      "text": "The guards were taking silver to say the disciples stole the body.",
+      "start": 62.577999999999996,
+      "end": 65.922,
+      "scope": "body"
+    },
+    {
+      "id": "s16",
+      "text": "Power was being used to bend the story toward something safer than resurrection.",
+      "start": 66.363,
+      "end": 71.25099999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s17",
+      "text": "Meanwhile, two women without status were running through dawn light with the only true account of what happened.",
+      "start": 71.761,
+      "end": 77.93799999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s18",
+      "text": "Jesus did not validate their witness because women had earned the standing.",
+      "start": 78.217,
+      "end": 82.25699999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s19",
+      "text": "He validated it because they saw what they saw, and they told it.",
+      "start": 82.466,
+      "end": 86.38999999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s20",
+      "text": "That is what He honors.",
+      "start": 86.565,
+      "end": 87.89999999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s21",
+      "text": "Eyes that watched, lips that spoke, feet that ran toward the disciples instead of away from the threat.",
+      "start": 88.109,
+      "end": 94.761,
+      "scope": "body"
+    },
+    {
+      "id": "s22",
+      "text": "What Their Witness Costs The world will pay for a comfortable story.",
+      "start": 95.086,
+      "end": 99.161,
+      "scope": "body"
+    },
+    {
+      "id": "s23",
+      "text": "It will pay for silence, for spin, for testimony that protects the powerful.",
+      "start": 99.405,
+      "end": 104.53699999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s24",
+      "text": "It costs something to be a truth-teller with no platform.",
+      "start": 104.746,
+      "end": 107.79899999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s25",
+      "text": "The Marys were going to be doubted.",
+      "start": 108.04299999999999,
+      "end": 109.762,
+      "scope": "body"
+    },
+    {
+      "id": "s26",
+      "text": "They knew it.",
+      "start": 109.854,
+      "end": 110.63199999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s27",
+      "text": "They went anyway.",
+      "start": 110.78299999999999,
+      "end": 111.898,
+      "scope": "body"
+    },
+    {
+      "id": "s28",
+      "text": "If you have been carrying a truth that nobody is rewarding, take heart in what happened that morning.",
+      "start": 112.223,
+      "end": 117.354,
+      "scope": "body"
+    },
+    {
+      "id": "s29",
+      "text": "The risen Jesus does not measure a witness by the platform that carries it.",
+      "start": 117.795,
+      "end": 121.836,
+      "scope": "body"
+    },
+    {
+      "id": "s30",
+      "text": "He meets the truthful in low places.",
+      "start": 122.219,
+      "end": 124.587,
+      "scope": "body"
+    },
+    {
+      "id": "s31",
+      "text": "He says All hail to the ones the powerful would dismiss.",
+      "start": 125.029,
+      "end": 128.813,
+      "scope": "body"
+    },
+    {
+      "id": "s32",
+      "text": "Who is running through the dawn in your life with a true thing nobody wants to hear?",
+      "start": 129.196,
+      "end": 134.003,
+      "scope": "body"
+    },
+    {
+      "id": "s33",
+      "text": "Listen.",
+      "start": 134.328,
+      "end": 134.804,
+      "scope": "body"
+    },
+    {
+      "id": "s34",
+      "text": "The road still belongs to them.",
+      "start": 135.129,
+      "end": 137.091,
+      "scope": "body"
+    }
+  ]
+}
