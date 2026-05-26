@@ -1,0 +1,264 @@
+{
+  "version": 1,
+  "sentences": [
+    {
+      "id": "s0",
+      "text": "The Blood Cleanseth Now.",
+      "start": 0,
+      "end": 1.556,
+      "scope": "intro"
+    },
+    {
+      "id": "s1",
+      "text": "John writes in the present tense because the blood of Jesus meets confessed sin today.",
+      "start": 1.881,
+      "end": 6.467,
+      "scope": "intro"
+    },
+    {
+      "id": "s2",
+      "text": "Clean is a promise the believer can stand on.",
+      "start": 6.745,
+      "end": 9.346,
+      "scope": "intro"
+    },
+    {
+      "id": "s3",
+      "text": "But if we walk in the light, as he is in the light, we have fellowship one with another, and the blood of Jesus Christ his Son cleanseth us from all sin.",
+      "start": 9.671,
+      "end": 18.82,
+      "scope": "body"
+    },
+    {
+      "id": "s4",
+      "text": "-- 1 John 1:7 (KJV) John does not treat the blood of Jesus like a relic from a closed chapter.",
+      "start": 19.203,
+      "end": 26.274,
+      "scope": "body"
+    },
+    {
+      "id": "s5",
+      "text": "He says it cleanseth.",
+      "start": 26.517000000000003,
+      "end": 27.829,
+      "scope": "body"
+    },
+    {
+      "id": "s6",
+      "text": "The word meets the present moment.",
+      "start": 28.073,
+      "end": 29.826,
+      "scope": "body"
+    },
+    {
+      "id": "s7",
+      "text": "The blood that bought you is not tired, spent, or locked in history.",
+      "start": 30.035000000000004,
+      "end": 33.379000000000005,
+      "scope": "body"
+    },
+    {
+      "id": "s8",
+      "text": "It reaches confessed sin today.",
+      "start": 33.553000000000004,
+      "end": 35.515,
+      "scope": "body"
+    },
+    {
+      "id": "s9",
+      "text": "That matters because shame knows how to speak in the present tense too.",
+      "start": 35.690000000000005,
+      "end": 39.277,
+      "scope": "body"
+    },
+    {
+      "id": "s10",
+      "text": "It says you are stained now.",
+      "start": 39.486000000000004,
+      "end": 41.077,
+      "scope": "body"
+    },
+    {
+      "id": "s11",
+      "text": "You are exposed now.",
+      "start": 41.251000000000005,
+      "end": 42.656000000000006,
+      "scope": "body"
+    },
+    {
+      "id": "s12",
+      "text": "You have failed too many times now.",
+      "start": 42.86500000000001,
+      "end": 44.89600000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s13",
+      "text": "John answers with a stronger present tense: the blood of Jesus Christ his Son cleanseth us from all sin.",
+      "start": 45.221000000000004,
+      "end": 52.11800000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s14",
+      "text": "Walk in the Light Walking in the light does not mean pretending there is nothing to confess.",
+      "start": 52.81400000000001,
+      "end": 58.43300000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s15",
+      "text": "Light reveals.",
+      "start": 58.87400000000001,
+      "end": 60.01200000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s16",
+      "text": "It names what darkness hid.",
+      "start": 60.16300000000001,
+      "end": 62.03200000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s17",
+      "text": "Fellowship with God and with one another begins where hiding ends.",
+      "start": 62.357000000000006,
+      "end": 66.58300000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s18",
+      "text": "Many believers try to feel clean before they come into the light.",
+      "start": 66.90800000000002,
+      "end": 70.58900000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s19",
+      "text": "John gives the order the other way around.",
+      "start": 70.97200000000001,
+      "end": 73.03900000000002,
+      "scope": "body"
+    },
+    {
+      "id": "s20",
+      "text": "Step into the light.",
+      "start": 73.248,
+      "end": 74.409,
+      "scope": "body"
+    },
+    {
+      "id": "s21",
+      "text": "Tell the truth.",
+      "start": 74.61800000000001,
+      "end": 75.50000000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s22",
+      "text": "The blood does what your self-protection cannot do.",
+      "start": 75.74400000000001,
+      "end": 78.56500000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s23",
+      "text": "Cleanseth That old word carries mercy.",
+      "start": 78.80900000000001,
+      "end": 81.584,
+      "scope": "body"
+    },
+    {
+      "id": "s24",
+      "text": "Cleanseth.",
+      "start": 81.909,
+      "end": 82.68700000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s25",
+      "text": "Not admired from far away.",
+      "start": 82.93,
+      "end": 84.62500000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s26",
+      "text": "Not remembered as a doctrine while guilt keeps ruling the room.",
+      "start": 84.95100000000001,
+      "end": 88.42200000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s27",
+      "text": "Applied.",
+      "start": 88.631,
+      "end": 89.37400000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s28",
+      "text": "Active.",
+      "start": 89.69900000000001,
+      "end": 90.396,
+      "scope": "body"
+    },
+    {
+      "id": "s29",
+      "text": "Enough.",
+      "start": 90.77900000000001,
+      "end": 91.45200000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s30",
+      "text": "The blood does not cleanse the version of you that has everything arranged.",
+      "start": 91.96300000000001,
+      "end": 95.44600000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s31",
+      "text": "It cleanses the person who comes to God without a cover story.",
+      "start": 95.655,
+      "end": 98.929,
+      "scope": "body"
+    },
+    {
+      "id": "s32",
+      "text": "Every honest confession is met by the same sacrifice, the same Son, the same promise.",
+      "start": 99.37,
+      "end": 105.141,
+      "scope": "body"
+    },
+    {
+      "id": "s33",
+      "text": "When did you last bring a real sin into the light instead of managing the appearance of it?",
+      "start": 105.58200000000001,
+      "end": 110.14500000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s34",
+      "text": "You do not have to carry what Jesus bled to cleanse.",
+      "start": 110.47,
+      "end": 113.303,
+      "scope": "body"
+    },
+    {
+      "id": "s35",
+      "text": "Walk in the light.",
+      "start": 113.628,
+      "end": 114.638,
+      "scope": "body"
+    },
+    {
+      "id": "s36",
+      "text": "Let the blood speak in the present tense.",
+      "start": 114.812,
+      "end": 117.262,
+      "scope": "body"
+    }
+  ]
+}

@@ -1,0 +1,257 @@
+{
+  "version": 1,
+  "sentences": [
+    {
+      "id": "s0",
+      "text": "What the Marys Found in the Dark.",
+      "start": 0,
+      "end": 1.788,
+      "scope": "intro"
+    },
+    {
+      "id": "s1",
+      "text": "The two Marys came carrying spices for a corpse.",
+      "start": 2.229,
+      "end": 5.05,
+      "scope": "intro"
+    },
+    {
+      "id": "s2",
+      "text": "They left carrying the news that broke open every grave that would ever be dug.",
+      "start": 5.224,
+      "end": 9.694,
+      "scope": "intro"
+    },
+    {
+      "id": "s3",
+      "text": "He is not here: for he is risen, as he said.",
+      "start": 10.077,
+      "end": 13.34,
+      "scope": "body"
+    },
+    {
+      "id": "s4",
+      "text": "Come, see the place where the Lord lay.",
+      "start": 13.781,
+      "end": 16.533,
+      "scope": "body"
+    },
+    {
+      "id": "s5",
+      "text": "-- Matthew 28:6 (KJV) The two Marys walked toward a tomb before the sun was up.",
+      "start": 16.858,
+      "end": 23.592,
+      "scope": "body"
+    },
+    {
+      "id": "s6",
+      "text": "They carried spices, the ritual of grief, the small kindness you offer a body when there is nothing else left to do.",
+      "start": 23.869999999999997,
+      "end": 30.523,
+      "scope": "body"
+    },
+    {
+      "id": "s7",
+      "text": "They were not going to a celebration.",
+      "start": 30.964,
+      "end": 32.973,
+      "scope": "body"
+    },
+    {
+      "id": "s8",
+      "text": "They were going to a finish line.",
+      "start": 33.182,
+      "end": 34.83,
+      "scope": "body"
+    },
+    {
+      "id": "s9",
+      "text": "Then the ground shook.",
+      "start": 35.005,
+      "end": 36.2,
+      "scope": "body"
+    },
+    {
+      "id": "s10",
+      "text": "An angel rolled away a stone meant to keep the matter closed.",
+      "start": 36.375,
+      "end": 39.602000000000004,
+      "scope": "body"
+    },
+    {
+      "id": "s11",
+      "text": "And the announcement that broke the morning did not begin with comfort.",
+      "start": 39.846000000000004,
+      "end": 43.468,
+      "scope": "body"
+    },
+    {
+      "id": "s12",
+      "text": "It began with a fact: He is not here.",
+      "start": 43.747,
+      "end": 46.592000000000006,
+      "scope": "body"
+    },
+    {
+      "id": "s13",
+      "text": "Terror and Joy Matthew does not soften what happened next.",
+      "start": 46.801,
+      "end": 50.388000000000005,
+      "scope": "body"
+    },
+    {
+      "id": "s14",
+      "text": "The women left the tomb with fear and great joy at the same time.",
+      "start": 50.632000000000005,
+      "end": 54.452000000000005,
+      "scope": "body"
+    },
+    {
+      "id": "s15",
+      "text": "Not one feeling traded for the other.",
+      "start": 54.730000000000004,
+      "end": 56.762,
+      "scope": "body"
+    },
+    {
+      "id": "s16",
+      "text": "Both at once.",
+      "start": 57.006,
+      "end": 58.097,
+      "scope": "body"
+    },
+    {
+      "id": "s17",
+      "text": "That is the shape of a real encounter with the risen Jesus.",
+      "start": 58.306000000000004,
+      "end": 61.812000000000005,
+      "scope": "body"
+    },
+    {
+      "id": "s18",
+      "text": "It rearranges what you thought was settled.",
+      "start": 61.963,
+      "end": 64.506,
+      "scope": "body"
+    },
+    {
+      "id": "s19",
+      "text": "It scares you because it should.",
+      "start": 64.785,
+      "end": 66.549,
+      "scope": "body"
+    },
+    {
+      "id": "s20",
+      "text": "And it fills you with joy because the thing you had given up on is alive.",
+      "start": 66.75800000000001,
+      "end": 71.124,
+      "scope": "body"
+    },
+    {
+      "id": "s21",
+      "text": "We have heard this story so many times the edges have worn smooth.",
+      "start": 71.449,
+      "end": 75.083,
+      "scope": "body"
+    },
+    {
+      "id": "s22",
+      "text": "The angel said do not be afraid because there was something there worth being afraid of.",
+      "start": 75.292,
+      "end": 80.087,
+      "scope": "body"
+    },
+    {
+      "id": "s23",
+      "text": "The world had a new rule now.",
+      "start": 80.33,
+      "end": 82.153,
+      "scope": "body"
+    },
+    {
+      "id": "s24",
+      "text": "Death did not get the last word.",
+      "start": 82.327,
+      "end": 84.24300000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s25",
+      "text": "A Promise You Can Stand On You can sit with the resurrection as history, with the tomb empty and the witnesses preserved and the records intact.",
+      "start": 84.417,
+      "end": 92.59100000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s26",
+      "text": "That is true.",
+      "start": 92.80000000000001,
+      "end": 93.62400000000001,
+      "scope": "body"
+    },
+    {
+      "id": "s27",
+      "text": "The angel did not say He was risen so you could file the event.",
+      "start": 93.86800000000001,
+      "end": 97.688,
+      "scope": "body"
+    },
+    {
+      "id": "s28",
+      "text": "He said it so the women would go and tell the rest.",
+      "start": 97.93100000000001,
+      "end": 100.718,
+      "scope": "body"
+    },
+    {
+      "id": "s29",
+      "text": "The same risen Jesus is alive this morning.",
+      "start": 100.997,
+      "end": 103.725,
+      "scope": "body"
+    },
+    {
+      "id": "s30",
+      "text": "The same power that emptied the tomb meets you in whatever closed room you are walking past today.",
+      "start": 104.004,
+      "end": 109.6,
+      "scope": "body"
+    },
+    {
+      "id": "s31",
+      "text": "The stone that you cannot move on your own is not the obstacle you thought it was.",
+      "start": 109.879,
+      "end": 114.395,
+      "scope": "body"
+    },
+    {
+      "id": "s32",
+      "text": "Where in your life have you carried spices toward a finish line that God has already opened?",
+      "start": 114.836,
+      "end": 120.304,
+      "scope": "body"
+    },
+    {
+      "id": "s33",
+      "text": "Walk past the stone.",
+      "start": 120.629,
+      "end": 121.883,
+      "scope": "body"
+    },
+    {
+      "id": "s34",
+      "text": "The place is empty.",
+      "start": 122.05799999999999,
+      "end": 123.126,
+      "scope": "body"
+    },
+    {
+      "id": "s35",
+      "text": "He is alive.",
+      "start": 123.242,
+      "end": 124.275,
+      "scope": "body"
+    }
+  ]
+}

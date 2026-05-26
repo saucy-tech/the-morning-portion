@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { notFound } from 'next/navigation';
 
+import DevotionReadingShell from '@/components/DevotionReadingShell';
 import PostList from '@/components/PostList';
 import ShareButtons from '@/components/ShareButtons';
 import SubscribeForm from '@/components/SubscribeForm';
@@ -51,6 +52,8 @@ export default async function PostPage({ params }: PostPageProps) {
     .filter((candidate) => !post.series || candidate.series === post.series)
     .slice(0, 3);
 
+  const hasAudio = Boolean(post.audio);
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -71,6 +74,12 @@ export default async function PostPage({ params }: PostPageProps) {
     articleSection: 'Morning Scripture Reflections',
     keywords: post.tags,
   };
+
+  const postBody = (
+    <div className="post-body">
+      <MDXRemote source={post.content} />
+    </div>
+  );
 
   return (
     <main className="post-page">
@@ -106,9 +115,18 @@ export default async function PostPage({ params }: PostPageProps) {
           </div>
         </header>
 
-        <div className="post-body">
-          <MDXRemote source={post.content} />
-        </div>
+        {hasAudio && post.audio ? (
+          <DevotionReadingShell
+            audio={post.audio}
+            audioAlignment={post.audioAlignment}
+            content={post.content}
+            title={post.title}
+          >
+            {postBody}
+          </DevotionReadingShell>
+        ) : (
+          postBody
+        )}
         <ShareButtons title={post.title} excerpt={post.excerpt} url={getPostUrl(post.slug)} />
       </article>
 
