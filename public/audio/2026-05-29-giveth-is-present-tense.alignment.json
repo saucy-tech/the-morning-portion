@@ -1,0 +1,313 @@
+{
+  "version": 1,
+  "sentences": [
+    {
+      "id": "s0",
+      "text": "Giveth Is Present Tense.",
+      "start": 0,
+      "end": 1.753,
+      "scope": "intro"
+    },
+    {
+      "id": "s1",
+      "text": "Paul writes one verb at the end of First Corinthians 15 that changes the timeline of every fear you carry.",
+      "start": 1.927,
+      "end": 8.092,
+      "scope": "intro"
+    },
+    {
+      "id": "s2",
+      "text": "He says giveth.",
+      "start": 8.336,
+      "end": 9.601,
+      "scope": "intro"
+    },
+    {
+      "id": "s3",
+      "text": "Not will give.",
+      "start": 9.776,
+      "end": 10.739,
+      "scope": "intro"
+    },
+    {
+      "id": "s4",
+      "text": "Now.",
+      "start": 11.064,
+      "end": 11.622,
+      "scope": "intro"
+    },
+    {
+      "id": "s5",
+      "text": "O death, where is thy sting?",
+      "start": 11.796,
+      "end": 14.164,
+      "scope": "body"
+    },
+    {
+      "id": "s6",
+      "text": "O grave, where is thy victory?",
+      "start": 14.373,
+      "end": 16.649,
+      "scope": "body"
+    },
+    {
+      "id": "s7",
+      "text": ".",
+      "start": 16.649,
+      "end": 16.672,
+      "scope": "body"
+    },
+    {
+      "id": "s8",
+      "text": ".",
+      "start": 16.672,
+      "end": 16.707,
+      "scope": "body"
+    },
+    {
+      "id": "s9",
+      "text": ".",
+      "start": 16.707,
+      "end": 16.73,
+      "scope": "body"
+    },
+    {
+      "id": "s10",
+      "text": "Thanks be to God, which giveth us the victory through our Lord Jesus Christ.",
+      "start": 16.974,
+      "end": 21.571,
+      "scope": "body"
+    },
+    {
+      "id": "s11",
+      "text": "-- 1 Corinthians 15:55, 57 (KJV) Paul writes one verb at the end of First Corinthians 15 that changes the timeline of every fear you carry.",
+      "start": 21.85,
+      "end": 32.624,
+      "scope": "body"
+    },
+    {
+      "id": "s12",
+      "text": "He does not say will give.",
+      "start": 33.007,
+      "end": 34.493,
+      "scope": "body"
+    },
+    {
+      "id": "s13",
+      "text": "He does not say gave once, long ago.",
+      "start": 34.818,
+      "end": 36.978,
+      "scope": "body"
+    },
+    {
+      "id": "s14",
+      "text": "He says giveth.",
+      "start": 37.221,
+      "end": 38.336,
+      "scope": "body"
+    },
+    {
+      "id": "s15",
+      "text": "Present tense.",
+      "start": 38.452,
+      "end": 39.346,
+      "scope": "body"
+    },
+    {
+      "id": "s16",
+      "text": "Right now, through Jesus, the victory is being handed to you.",
+      "start": 39.671,
+      "end": 42.678,
+      "scope": "body"
+    },
+    {
+      "id": "s17",
+      "text": "That is the whole reason he taunts death in the same paragraph.",
+      "start": 42.957,
+      "end": 46.103,
+      "scope": "body"
+    },
+    {
+      "id": "s18",
+      "text": "O death, where is thy sting?",
+      "start": 46.428,
+      "end": 48.135,
+      "scope": "body"
+    },
+    {
+      "id": "s19",
+      "text": "O grave, where is thy victory?",
+      "start": 48.378,
+      "end": 50.294,
+      "scope": "body"
+    },
+    {
+      "id": "s20",
+      "text": "He is not bracing for a future fight.",
+      "start": 50.467999999999996,
+      "end": 52.419,
+      "scope": "body"
+    },
+    {
+      "id": "s21",
+      "text": "He is celebrating a battle that was settled when the stone rolled away, with the receipts being delivered every morning since.",
+      "start": 52.663,
+      "end": 58.607,
+      "scope": "body"
+    },
+    {
+      "id": "s22",
+      "text": "The Sting Was Pulled A bee can sting once.",
+      "start": 58.815999999999995,
+      "end": 61.718,
+      "scope": "body"
+    },
+    {
+      "id": "s23",
+      "text": "Then it is finished.",
+      "start": 61.892,
+      "end": 62.937000000000005,
+      "scope": "body"
+    },
+    {
+      "id": "s24",
+      "text": "Paul is reaching for that picture when he names the sting of death.",
+      "start": 63.32,
+      "end": 66.304,
+      "scope": "body"
+    },
+    {
+      "id": "s25",
+      "text": "The cross took the sting.",
+      "start": 66.513,
+      "end": 67.848,
+      "scope": "body"
+    },
+    {
+      "id": "s26",
+      "text": "The tomb confirmed it.",
+      "start": 68.092,
+      "end": 69.381,
+      "scope": "body"
+    },
+    {
+      "id": "s27",
+      "text": "Death may still come for the body, but it cannot wound the soul of a person who trusts in the risen Christ.",
+      "start": 69.706,
+      "end": 75.163,
+      "scope": "body"
+    },
+    {
+      "id": "s28",
+      "text": "That does not mean grief is unreal.",
+      "start": 75.406,
+      "end": 77.241,
+      "scope": "body"
+    },
+    {
+      "id": "s29",
+      "text": "It does not mean a funeral feels light or a diagnosis hurts less.",
+      "start": 77.415,
+      "end": 81.362,
+      "scope": "body"
+    },
+    {
+      "id": "s30",
+      "text": "It means that none of those is final.",
+      "start": 81.745,
+      "end": 83.777,
+      "scope": "body"
+    },
+    {
+      "id": "s31",
+      "text": "Loss does not have the last say over a child of God.",
+      "start": 84.021,
+      "end": 87.051,
+      "scope": "body"
+    },
+    {
+      "id": "s32",
+      "text": "Death itself is something Paul mocks now, the way you mock a beaten opponent who is still talking.",
+      "start": 87.376,
+      "end": 93.03,
+      "scope": "body"
+    },
+    {
+      "id": "s33",
+      "text": "Victory In the Tense You Live In Most of us are good at past-tense faith, the one that remembers He rose and saved.",
+      "start": 93.727,
+      "end": 102.841,
+      "scope": "body"
+    },
+    {
+      "id": "s34",
+      "text": "We are also good at future-tense faith, the one that trusts He will come back and heaven is real.",
+      "start": 103.22399999999999,
+      "end": 109.389,
+      "scope": "body"
+    },
+    {
+      "id": "s35",
+      "text": "Present-tense faith is the hard one.",
+      "start": 109.714,
+      "end": 112.11699999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s36",
+      "text": "Giveth us the victory.",
+      "start": 112.49999999999999,
+      "end": 113.963,
+      "scope": "body"
+    },
+    {
+      "id": "s37",
+      "text": "Today.",
+      "start": 114.24199999999999,
+      "end": 114.90299999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s38",
+      "text": "This hour.",
+      "start": 115.07799999999999,
+      "end": 115.821,
+      "scope": "body"
+    },
+    {
+      "id": "s39",
+      "text": "In this fear.",
+      "start": 115.99499999999999,
+      "end": 117.08599999999998,
+      "scope": "body"
+    },
+    {
+      "id": "s40",
+      "text": "The resurrection is not a memory you observe once a year.",
+      "start": 117.41099999999999,
+      "end": 120.84799999999998,
+      "scope": "body"
+    },
+    {
+      "id": "s41",
+      "text": "It is a current account you can draw from this morning.",
+      "start": 121.09199999999998,
+      "end": 123.98299999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s42",
+      "text": "What sting are you carrying that Paul would already be taunting?",
+      "start": 124.261,
+      "end": 127.442,
+      "scope": "body"
+    },
+    {
+      "id": "s43",
+      "text": "Walk into the day He is already winning.",
+      "start": 127.72099999999999,
+      "end": 130.49599999999998,
+      "scope": "body"
+    }
+  ]
+}
