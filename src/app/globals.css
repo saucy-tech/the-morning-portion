@@ -1097,6 +1097,10 @@ html[data-theme='dark'] .share-icon-button:hover img.share-icon {
     width: 100%;
   }
 
+  .devotion-player__play {
+    width: auto;
+  }
+
   .post-row {
     grid-template-columns: auto minmax(0, 1fr);
     gap: 16px;
