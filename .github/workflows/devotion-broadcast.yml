@@ -76,7 +76,7 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           INPUT_SLUG: ${{ inputs.slug }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
 
