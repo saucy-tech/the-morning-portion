@@ -1,0 +1,236 @@
+{
+  "version": 1,
+  "sentences": [
+    {
+      "id": "s0",
+      "text": "Stay Until the Promise Comes.",
+      "start": 0,
+      "end": 2.02,
+      "scope": "intro"
+    },
+    {
+      "id": "s1",
+      "text": "The risen Jesus had given His disciples a message for all nations, then told them to wait.",
+      "start": 2.531,
+      "end": 7.802,
+      "scope": "intro"
+    },
+    {
+      "id": "s2",
+      "text": "Some work cannot begin until God gives power from on high.",
+      "start": 8.243,
+      "end": 11.773,
+      "scope": "intro"
+    },
+    {
+      "id": "s3",
+      "text": "And, behold, I send the promise of my Father upon you: but tarry ye in the city of Jerusalem, until ye be endued with power from on high.",
+      "start": 12.016,
+      "end": 20.724,
+      "scope": "body"
+    },
+    {
+      "id": "s4",
+      "text": "-- Luke 24:49 (KJV) The disciples had every reason to run out of the room.",
+      "start": 20.933,
+      "end": 27.016,
+      "scope": "body"
+    },
+    {
+      "id": "s5",
+      "text": "Jesus stood alive in front of them.",
+      "start": 27.26,
+      "end": 29.129,
+      "scope": "body"
+    },
+    {
+      "id": "s6",
+      "text": "He showed them His hands and His feet.",
+      "start": 29.338,
+      "end": 31.301,
+      "scope": "body"
+    },
+    {
+      "id": "s7",
+      "text": "He ate fish where grief had been sitting.",
+      "start": 31.579,
+      "end": 33.809,
+      "scope": "body"
+    },
+    {
+      "id": "s8",
+      "text": "Then He opened their understanding so they could see the cross and resurrection written into the scriptures.",
+      "start": 34.192,
+      "end": 39.114,
+      "scope": "body"
+    },
+    {
+      "id": "s9",
+      "text": "They had a message now.",
+      "start": 39.393,
+      "end": 40.751,
+      "scope": "body"
+    },
+    {
+      "id": "s10",
+      "text": "Repentance and remission of sins would be preached in His name among all nations, beginning at Jerusalem.",
+      "start": 40.995,
+      "end": 46.788000000000004,
+      "scope": "body"
+    },
+    {
+      "id": "s11",
+      "text": "The next word should have sounded like go.",
+      "start": 46.939,
+      "end": 49.308,
+      "scope": "body"
+    },
+    {
+      "id": "s12",
+      "text": "Jesus said wait.",
+      "start": 49.633,
+      "end": 50.863,
+      "scope": "body"
+    },
+    {
+      "id": "s13",
+      "text": "The Pause He Commanded Waiting can feel like wasted obedience when the need is obvious.",
+      "start": 51.676,
+      "end": 58.004000000000005,
+      "scope": "body"
+    },
+    {
+      "id": "s14",
+      "text": "The disciples could name the story.",
+      "start": 58.213,
+      "end": 60.302,
+      "scope": "body"
+    },
+    {
+      "id": "s15",
+      "text": "They had seen the wounds.",
+      "start": 60.476,
+      "end": 61.823,
+      "scope": "body"
+    },
+    {
+      "id": "s16",
+      "text": "They had heard the teaching.",
+      "start": 61.997,
+      "end": 63.449,
+      "scope": "body"
+    },
+    {
+      "id": "s17",
+      "text": "Still, Jesus did not trust the mission to memory, emotion, or momentum.",
+      "start": 63.832,
+      "end": 68.731,
+      "scope": "body"
+    },
+    {
+      "id": "s18",
+      "text": "He told them to stay in Jerusalem until the Father clothed them with power.",
+      "start": 69.114,
+      "end": 73.212,
+      "scope": "body"
+    },
+    {
+      "id": "s19",
+      "text": "That pause protects us from confusing urgency with anointing.",
+      "start": 73.53699999999999,
+      "end": 77.345,
+      "scope": "body"
+    },
+    {
+      "id": "s20",
+      "text": "A person can work hard, speak often, plan well, and still move from an empty place.",
+      "start": 77.728,
+      "end": 83.39399999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s21",
+      "text": "Jesus knew the nations would not be reached by men who had stirred themselves up for a few brave weeks.",
+      "start": 83.835,
+      "end": 90.035,
+      "scope": "body"
+    },
+    {
+      "id": "s22",
+      "text": "They needed the promise of the Father.",
+      "start": 90.279,
+      "end": 92.52,
+      "scope": "body"
+    },
+    {
+      "id": "s23",
+      "text": "Power From on High Some assignments expose the limits of your own strength.",
+      "start": 92.845,
+      "end": 97.477,
+      "scope": "body"
+    },
+    {
+      "id": "s24",
+      "text": "You can love the truth and still lack power to carry it well.",
+      "start": 97.80199999999999,
+      "end": 101.262,
+      "scope": "body"
+    },
+    {
+      "id": "s25",
+      "text": "You can see the need and still need God to steady your heart before you step into it.",
+      "start": 101.541,
+      "end": 105.976,
+      "scope": "body"
+    },
+    {
+      "id": "s26",
+      "text": "Ask where Jesus may be saying wait when you wanted Him to say move.",
+      "start": 106.127,
+      "end": 110.132,
+      "scope": "body"
+    },
+    {
+      "id": "s27",
+      "text": "This kind of waiting is not drift.",
+      "start": 110.376,
+      "end": 112.582,
+      "scope": "body"
+    },
+    {
+      "id": "s28",
+      "text": "It prays.",
+      "start": 112.733,
+      "end": 113.569,
+      "scope": "body"
+    },
+    {
+      "id": "s29",
+      "text": "It listens.",
+      "start": 113.813,
+      "end": 114.637,
+      "scope": "body"
+    },
+    {
+      "id": "s30",
+      "text": "It stays where He said to stay until His strength replaces your strain.",
+      "start": 114.846,
+      "end": 119.61699999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s31",
+      "text": "Do not despise the upper room season.",
+      "start": 119.826,
+      "end": 122.20599999999999,
+      "scope": "body"
+    },
+    {
+      "id": "s32",
+      "text": "The promise of the Father can do more with a waiting witness than self-made effort can do with a running start.",
+      "start": 122.381,
+      "end": 128.778,
+      "scope": "body"
+    }
+  ]
+}
