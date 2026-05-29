@@ -4,7 +4,6 @@ import { Sun } from '@/components/Ornaments';
 import PostList from '@/components/PostList';
 import SubscribeForm from '@/components/SubscribeForm';
 import { getReadingTime, seriesSlug } from '@/lib/format';
-import { SITE_NAME } from '@/lib/constants';
 import {
   getAllPostsMeta,
   getAllSeries,
@@ -90,12 +89,6 @@ export default async function Home() {
           </div>
         </section>
       )}
-      {latest && (
-        <section className="brand-band" aria-label={SITE_NAME}>
-          <div className="brand-band-logo" role="img" aria-label={SITE_NAME} />
-        </section>
-      )}
-
       <section className="section" id="archive">
         <div className="section-inner">
           <div className="section-heading">

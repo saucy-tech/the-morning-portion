@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
 const FALLBACK_ERROR = 'Something went wrong. Try again.';
 
@@ -13,6 +13,7 @@ export default function SubscribeForm({
   cta = 'Subscribe',
   loadingLabel = 'Subscribing',
 }: SubscribeFormProps = {}) {
+  const emailId = useId();
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string>(FALLBACK_ERROR);
@@ -51,11 +52,11 @@ export default function SubscribeForm({
 
   return (
     <form className="subscribe-form" onSubmit={handleSubmit}>
-      <label className="sr-only" htmlFor="email">
+      <label className="sr-only" htmlFor={emailId}>
         Email address
       </label>
       <input
-        id="email"
+        id={emailId}
         name="email"
         type="email"
         required

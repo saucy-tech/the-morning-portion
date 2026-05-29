@@ -20,7 +20,6 @@
   --tdw-gold: #c89a38;
   --tdw-success: #166534;
   --tdw-error: #b42318;
-  --tdw-logo-image: url('/images/the-morning-portion-logo.png');
 
   --tdw-radius: 6px;
   --tdw-radius-pill: 999px;
@@ -48,7 +47,6 @@ html[data-theme='dark'] {
   --tdw-blue: #7faebd;
   --tdw-success: #8fd19e;
   --tdw-error: #f2a19b;
-  --tdw-logo-image: url('/images/the-morning-portion-logo-dark.png');
 }
 
 * {
@@ -426,47 +424,6 @@ h3 {
 .hero-today-time {
   color: var(--tdw-ink-mute);
   font-weight: 400;
-}
-
-/* Brand band — logo masthead above the verse hero (home only) */
-.brand-band {
-  display: flex;
-  width: 100%;
-  min-height: 260px;
-  align-items: center;
-  justify-content: center;
-  padding: 36px 24px 20px;
-  background: var(--tdw-bg);
-  border-top: 1px solid var(--tdw-rule-soft);
-  border-bottom: 1px solid var(--tdw-rule-soft);
-}
-
-.brand-band-logo {
-  width: min(420px, 72vw);
-  aspect-ratio: 1;
-  background-image: var(--tdw-logo-image);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  opacity: 0.96;
-  mix-blend-mode: multiply;
-}
-
-html[data-theme='dark'] .brand-band-logo {
-  opacity: 0.94;
-  mix-blend-mode: normal;
-}
-
-@media (max-width: 860px) {
-  .brand-band {
-    min-height: 210px;
-  }
-}
-
-@media (max-width: 520px) {
-  .brand-band {
-    min-height: 170px;
-  }
 }
 
 /* Sections */
