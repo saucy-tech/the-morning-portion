@@ -1,6 +1,5 @@
 import Link from 'next/link';
 
-import LogoPreload from '@/components/LogoPreload';
 import { Sun } from '@/components/Ornaments';
 import PostList from '@/components/PostList';
 import SubscribeForm from '@/components/SubscribeForm';
@@ -48,55 +47,52 @@ export default async function Home() {
   return (
     <main>
       {latest && (
-        <>
-          <LogoPreload />
-          <section className="brand-band" aria-label={SITE_NAME}>
-            <div className="brand-band-logo" role="img" aria-label={SITE_NAME} />
-          </section>
-        </>
-      )}
-      {latest && (
-        <section className="hero" aria-label="Today's reflection">
+        <section className="hero" aria-label="The Morning Portion — a daily scripture reading">
           <div className="hero-ornament">
             <Sun size={300} />
           </div>
-          <div className="hero-inner">
-            <div className="hero-meta-row">
-              <span className="eyebrow">{formatHeroDate(latest.date)}</span>
-              <span className="rule" aria-hidden="true" />
-              <span className="stamp">{devotionNumber(totalCount)}</span>
-            </div>
-            {reference && (
-              <p className="hero-source">
-                From today&apos;s reading — <em>{reference}</em>
-              </p>
-            )}
-            <h1 className="tdw-display hero-verse">
-              {verse ? (
-                <>
-                  <span className="quote">&ldquo;</span>
-                  {verse}
-                  <span className="quote">&rdquo;</span>
-                </>
-              ) : (
-                latest.title
-              )}
+          <div className="hero-inner hero-pitch">
+            <p className="eyebrow">Every weekday morning</p>
+            <h1 className="tdw-display hero-headline">
+              The Word, before the day gets <span className="accent">loud.</span>
             </h1>
-            <div className="hero-actions">
-              <Link className="button primary" href={`/posts/${latest.slug}`}>
-                Read today&apos;s reflection →
-              </Link>
-              {latest.audio && (
-                <Link className="button secondary" href={`/posts/${latest.slug}?listen=1`}>
-                  Listen to today&apos;s reflection →
-                </Link>
-              )}
-              <span className="meta">
-                <em>{latest.title}</em>
-                {readingTime > 0 && ` · ${readingTime} min`}
-              </span>
+            <p className="hero-lede">
+              A short, KJV-rooted reading in your inbox each weekday morning. Always free.
+              Unsubscribe anytime.
+            </p>
+            <div className="hero-subscribe">
+              <SubscribeForm cta="Receive the morning portion" loadingLabel="Sending" />
             </div>
+            <Link className="hero-today" href={`/posts/${latest.slug}`}>
+              <span className="hero-today-meta">
+                <span className="eyebrow">Today · {formatHeroDate(latest.date)}</span>
+                <span className="rule" aria-hidden="true" />
+                <span className="stamp">{devotionNumber(totalCount)}</span>
+              </span>
+              <h2 className="hero-today-title">{latest.title}</h2>
+              {verse ? (
+                <p className="hero-today-verse verse">
+                  &ldquo;{verse}&rdquo;
+                  {reference && <span className="hero-today-ref"> — {reference}</span>}
+                </p>
+              ) : (
+                <p className="hero-today-excerpt">{latest.excerpt}</p>
+              )}
+              <span className="hero-today-cta">
+                Read today&apos;s portion
+                {readingTime > 0 && <span className="hero-today-time"> · {readingTime} min</span>}
+                <span className="arrow" aria-hidden="true">
+                  {' '}
+                  →
+                </span>
+              </span>
+            </Link>
           </div>
+        </section>
+      )}
+      {latest && (
+        <section className="brand-band" aria-label={SITE_NAME}>
+          <div className="brand-band-logo" role="img" aria-label={SITE_NAME} />
         </section>
       )}
 
