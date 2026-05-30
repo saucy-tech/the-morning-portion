@@ -182,6 +182,25 @@ h3 {
   flex: 0 0 auto;
 }
 
+.brand-mark {
+  flex: 0 0 auto;
+  display: block;
+  width: auto;
+  height: 30px;
+}
+
+.brand-mark-dark {
+  display: none;
+}
+
+html[data-theme='dark'] .brand-mark-light {
+  display: none;
+}
+
+html[data-theme='dark'] .brand-mark-dark {
+  display: block;
+}
+
 .brand span {
   white-space: nowrap;
 }
