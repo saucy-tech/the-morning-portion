@@ -60,6 +60,10 @@ export default async function Home() {
               Unsubscribe anytime.
             </p>
             <div className="hero-subscribe">
+              <div className="hero-subscribe-head">
+                <span className="eyebrow">Start tomorrow morning</span>
+                <span className="rule" aria-hidden="true" />
+              </div>
               <SubscribeForm cta="Receive the morning portion" loadingLabel="Sending" />
             </div>
             <Link className="hero-today" href={`/posts/${latest.slug}`}>

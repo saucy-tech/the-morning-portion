@@ -340,6 +340,23 @@ h3 {
 .hero-subscribe {
   margin-top: 32px;
   max-width: 520px;
+  padding: 24px 28px 22px;
+  background: var(--tdw-bg-alt);
+  border: 1px solid var(--tdw-rule);
+  border-radius: var(--tdw-radius);
+}
+
+.hero-subscribe-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.hero-subscribe-head .rule {
+  height: 1px;
+  flex: 1;
+  background: var(--tdw-rule);
 }
 
 .hero-subscribe .subscribe-form {
