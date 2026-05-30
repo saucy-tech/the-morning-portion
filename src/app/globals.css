@@ -483,6 +483,48 @@ h3 {
   background: var(--tdw-bg-alt);
 }
 
+.subscribe-points {
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.subscribe-points li {
+  position: relative;
+  padding-left: 24px;
+  color: var(--tdw-ink-soft);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.subscribe-points li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tdw-warm);
+}
+
+.subscribe-sample {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 22px;
+  color: var(--tdw-warm);
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 160ms ease;
+}
+
+.subscribe-sample:hover {
+  color: var(--tdw-warm-deep);
+}
+
 .subscribe-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(320px, 440px);

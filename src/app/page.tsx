@@ -138,11 +138,24 @@ export default async function Home() {
       <section className="section subscribe-section" id="subscribe">
         <div className="section-inner subscribe-grid">
           <div className="section-heading">
-            <p className="eyebrow">Email</p>
+            <p className="eyebrow">Subscribe</p>
             <h2 className="tdw-display">
               Never miss a <span className="accent">morning.</span>
             </h2>
-            <p>Short, KJV-rooted readings for people who want the Word before the day gets loud.</p>
+            <ul className="subscribe-points">
+              <li>A short reading in your inbox every weekday morning</li>
+              <li>Rooted in the KJV and the week&apos;s Sunday School lesson</li>
+              <li>Always free — unsubscribe in one click</li>
+            </ul>
+            {latest && (
+              <Link className="subscribe-sample" href={`/posts/${latest.slug}`}>
+                Read a recent reading
+                <span className="arrow" aria-hidden="true">
+                  {' '}
+                  →
+                </span>
+              </Link>
+            )}
           </div>
           <SubscribeForm />
         </div>
