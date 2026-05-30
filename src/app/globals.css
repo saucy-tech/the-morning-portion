@@ -1100,6 +1100,27 @@ html[data-theme='dark'] .share-icon-button:hover img.share-icon {
   color: var(--tdw-warm);
 }
 
+.site-footer nav .footer-social {
+  display: inline-flex;
+  align-items: center;
+}
+
+.footer-social-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  opacity: 0.7;
+  transition: opacity 160ms ease;
+}
+
+.site-footer nav .footer-social:hover .footer-social-icon {
+  opacity: 1;
+}
+
+html[data-theme='dark'] img.footer-social-icon {
+  filter: invert(1);
+}
+
 /* 404 */
 .not-found {
   display: flex;

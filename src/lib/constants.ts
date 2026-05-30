@@ -19,3 +19,6 @@ export const SITE_URL =
   (process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://morningportion.com');
 
 export const PERSONAL_SITE_URL = process.env.NEXT_PUBLIC_PERSONAL_SITE_URL || 'https://saucy.tech';
+
+export const FACEBOOK_URL = 'https://www.facebook.com/profile.php?id=61590492474939';
+export const X_URL = 'https://x.com/TMP_Devotion';
