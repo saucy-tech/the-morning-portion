@@ -50,7 +50,8 @@ export default async function Home() {
           <div className="hero-ornament">
             <Sun size={300} />
           </div>
-          <div className="hero-inner hero-pitch">
+          <div className="hero-inner">
+            <div className="hero-pitch">
             <p className="eyebrow">Every weekday morning</p>
             <h1 className="tdw-display hero-headline">
               The Word, before the day gets <span className="accent">loud.</span>
@@ -90,6 +91,7 @@ export default async function Home() {
                 </span>
               </span>
             </Link>
+            </div>
           </div>
         </section>
       )}
@@ -105,19 +107,6 @@ export default async function Home() {
             posts={recentPosts.length > 0 ? recentPosts : allPosts}
             numbers={numbers}
           />
-        </div>
-      </section>
-
-      <section className="section subscribe-section" id="subscribe">
-        <div className="section-inner subscribe-grid">
-          <div className="section-heading">
-            <p className="eyebrow">Email</p>
-            <h2 className="tdw-display">
-              Never miss a <span className="accent">morning.</span>
-            </h2>
-            <p>Short, KJV-rooted readings for people who want the Word before the day gets loud.</p>
-          </div>
-          <SubscribeForm />
         </div>
       </section>
 
@@ -145,6 +134,19 @@ export default async function Home() {
           </div>
         </section>
       )}
+
+      <section className="section subscribe-section" id="subscribe">
+        <div className="section-inner subscribe-grid">
+          <div className="section-heading">
+            <p className="eyebrow">Email</p>
+            <h2 className="tdw-display">
+              Never miss a <span className="accent">morning.</span>
+            </h2>
+            <p>Short, KJV-rooted readings for people who want the Word before the day gets loud.</p>
+          </div>
+          <SubscribeForm />
+        </div>
+      </section>
     </main>
   );
 }
