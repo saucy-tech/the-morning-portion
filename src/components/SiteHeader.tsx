@@ -12,15 +12,15 @@ export default function SiteHeader() {
           className="brand-mark brand-mark-light"
           src="/images/mark.png"
           alt=""
-          width={773}
-          height={419}
+          width={55}
+          height={30}
         />
         <Image
           className="brand-mark brand-mark-dark"
           src="/images/mark-dark.png"
           alt=""
-          width={773}
-          height={419}
+          width={55}
+          height={30}
         />
         <span>{SITE_NAME}</span>
       </Link>
