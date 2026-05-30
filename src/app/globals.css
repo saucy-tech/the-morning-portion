@@ -374,15 +374,22 @@ h3 {
   display: block;
   margin-top: 48px;
   max-width: 620px;
-  padding: 24px 28px;
+  padding: 26px 30px;
   border: 1px solid var(--tdw-rule);
+  border-left: 3px solid var(--tdw-warm);
   border-radius: var(--tdw-radius);
   background: var(--tdw-paper);
-  transition: border-color 160ms ease;
+  box-shadow: var(--tdw-shadow);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
 }
 
 .hero-today:hover {
   border-color: var(--tdw-warm);
+  box-shadow: 0 16px 40px -16px rgba(26, 34, 54, 0.22);
+  transform: translateY(-2px);
 }
 
 .hero-today-meta {
@@ -404,7 +411,7 @@ h3 {
 .hero-today-title {
   margin: 12px 0 0;
   font-family: var(--tdw-serif), Georgia, serif;
-  font-size: 30px;
+  font-size: 34px;
   font-weight: 500;
   line-height: 1.15;
   color: var(--tdw-ink);
@@ -441,6 +448,38 @@ h3 {
 .hero-today-time {
   color: var(--tdw-ink-mute);
   font-weight: 400;
+}
+
+/* Hero image — fills the right column on wide screens only */
+.hero-figure {
+  display: none;
+}
+
+@media (min-width: 1160px) {
+  .hero-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 460px);
+    gap: 56px;
+    align-items: stretch;
+  }
+
+  .hero-figure {
+    display: block;
+    position: relative;
+    align-self: stretch;
+    min-height: 440px;
+    border: 1px solid var(--tdw-rule);
+    border-radius: var(--tdw-radius);
+    overflow: hidden;
+  }
+
+  .hero-figure-img {
+    object-fit: cover;
+  }
+
+  .hero-ornament {
+    display: none;
+  }
 }
 
 /* Sections */

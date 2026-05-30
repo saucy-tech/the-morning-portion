@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { Sun } from '@/components/Ornaments';
@@ -91,6 +92,15 @@ export default async function Home() {
                 </span>
               </span>
             </Link>
+            </div>
+            <div className="hero-figure">
+              <Image
+                src="/images/daily-word-banner.png"
+                alt="A worn leather Bible and a steaming mug on a windowsill in the early morning light"
+                fill
+                sizes="(min-width: 1160px) 460px, 1px"
+                className="hero-figure-img"
+              />
             </div>
           </div>
         </section>
