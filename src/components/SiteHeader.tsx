@@ -1,6 +1,6 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
-import { Mark } from '@/components/Ornaments';
 import ThemeToggle from '@/components/ThemeToggle';
 import { SITE_NAME } from '@/lib/constants';
 
@@ -8,7 +8,20 @@ export default function SiteHeader() {
   return (
     <header className="site-header">
       <Link className="brand" href="/">
-        <Mark size={26} />
+        <Image
+          className="brand-mark brand-mark-light"
+          src="/images/mark.png"
+          alt=""
+          width={55}
+          height={30}
+        />
+        <Image
+          className="brand-mark brand-mark-dark"
+          src="/images/mark-dark.png"
+          alt=""
+          width={55}
+          height={30}
+        />
         <span>{SITE_NAME}</span>
       </Link>
       <nav aria-label="Main navigation">
