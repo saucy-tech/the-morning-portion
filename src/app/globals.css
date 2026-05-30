@@ -450,31 +450,41 @@ h3 {
   font-weight: 400;
 }
 
-/* Hero image — fills the right column on wide screens only */
+/* Hero logo — centered in the right column on wide screens only */
 .hero-figure {
   display: none;
+}
+
+.hero-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.hero-logo-dark {
+  display: none;
+}
+
+html[data-theme='dark'] .hero-logo-light {
+  display: none;
+}
+
+html[data-theme='dark'] .hero-logo-dark {
+  display: block;
 }
 
 @media (min-width: 1160px) {
   .hero-inner {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(340px, 460px);
-    gap: 56px;
-    align-items: stretch;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 400px);
+    gap: 48px;
+    align-items: center;
   }
 
   .hero-figure {
-    display: block;
-    position: relative;
-    align-self: stretch;
-    min-height: 440px;
-    border: 1px solid var(--tdw-rule);
-    border-radius: var(--tdw-radius);
-    overflow: hidden;
-  }
-
-  .hero-figure-img {
-    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .hero-ornament {

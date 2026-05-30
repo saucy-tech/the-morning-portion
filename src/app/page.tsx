@@ -93,13 +93,22 @@ export default async function Home() {
               </span>
             </Link>
             </div>
-            <div className="hero-figure">
+            <div className="hero-figure" aria-hidden="true">
               <Image
-                src="/images/daily-word-banner.png"
-                alt="A worn leather Bible and a steaming mug on a windowsill in the early morning light"
-                fill
-                sizes="(min-width: 1160px) 460px, 1px"
-                className="hero-figure-img"
+                className="hero-logo hero-logo-light"
+                src="/images/the-morning-portion-logo.png"
+                alt=""
+                width={1254}
+                height={1254}
+                sizes="(min-width: 1160px) 380px, 1px"
+              />
+              <Image
+                className="hero-logo hero-logo-dark"
+                src="/images/the-morning-portion-logo-dark.png"
+                alt=""
+                width={1254}
+                height={1254}
+                sizes="(min-width: 1160px) 380px, 1px"
               />
             </div>
           </div>
