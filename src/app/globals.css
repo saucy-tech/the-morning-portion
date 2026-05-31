@@ -1077,6 +1077,7 @@ html[data-theme='dark'] .share-icon-button:hover img.share-icon {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   gap: 24px;
   border-top: 1px solid var(--tdw-rule);
   padding: 32px 64px;
@@ -1092,12 +1093,35 @@ html[data-theme='dark'] .share-icon-button:hover img.share-icon {
 
 .site-footer nav {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 16px;
   font-size: 13px;
 }
 
 .site-footer nav a:hover {
   color: var(--tdw-warm);
+}
+
+.site-footer nav .footer-social {
+  display: inline-flex;
+  align-items: center;
+}
+
+.footer-social-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  opacity: 0.7;
+  transition: opacity 160ms ease;
+}
+
+.site-footer nav .footer-social:hover .footer-social-icon {
+  opacity: 1;
+}
+
+html[data-theme='dark'] img.footer-social-icon {
+  filter: invert(1);
 }
 
 /* 404 */
