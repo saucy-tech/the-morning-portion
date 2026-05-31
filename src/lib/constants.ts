@@ -25,7 +25,9 @@ function getPublicExternalUrl(value: string | undefined) {
   try {
     const url = new URL(trimmed);
     const isHttps = url.protocol === 'https:';
-    const isLocalHttp = process.env.NODE_ENV === 'development' && url.protocol === 'http:';
+    const isLocalHostname = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
+    const isLocalHttp =
+      process.env.NODE_ENV === 'development' && url.protocol === 'http:' && isLocalHostname;
 
     if (!isHttps && !isLocalHttp) {
       return undefined;
