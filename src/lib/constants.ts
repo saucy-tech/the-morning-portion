@@ -12,6 +12,33 @@ function getVercelUrl() {
   return `https://${process.env.VERCEL_URL}`;
 }
 
+function getPublicExternalUrl(value: string | undefined) {
+  if (!value) {
+    return undefined;
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return undefined;
+  }
+
+  try {
+    const url = new URL(trimmed);
+    const isHttps = url.protocol === 'https:';
+    const isLocalHostname = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
+    const isLocalHttp =
+      process.env.NODE_ENV === 'development' && url.protocol === 'http:' && isLocalHostname;
+
+    if (!isHttps && !isLocalHttp) {
+      return undefined;
+    }
+
+    return url.toString();
+  } catch {
+    return undefined;
+  }
+}
+
 export const SITE_URL =
   process.env.NEXT_PUBLIC_MORNING_PORTION_URL ||
   process.env.NEXT_PUBLIC_DAILY_WORD_URL ||
@@ -19,3 +46,11 @@ export const SITE_URL =
   (process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://morningportion.com');
 
 export const PERSONAL_SITE_URL = process.env.NEXT_PUBLIC_PERSONAL_SITE_URL || 'https://saucy.tech';
+
+export const MORNING_PORTION_LIGHTNING_URL = getPublicExternalUrl(
+  process.env.NEXT_PUBLIC_MORNING_PORTION_LIGHTNING_URL
+);
+
+export const STRIPE_PAYMENT_LINK_URL = getPublicExternalUrl(
+  process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_URL
+);

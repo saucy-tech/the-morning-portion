@@ -119,6 +119,8 @@ Set these in Vercel after connecting or renaming the project:
 | `KIT_MORNING_PORTION_TAG_ID`      | Yes         | Morning Portion Kit tag ID applied during signup and used by drafts |
 | `NEXT_PUBLIC_MORNING_PORTION_URL` | Recommended | Set to the stable production URL, e.g. `https://morningportion.com` |
 | `NEXT_PUBLIC_PERSONAL_SITE_URL`   | Optional    | Defaults to `https://saucy.tech`                                    |
+| `NEXT_PUBLIC_MORNING_PORTION_LIGHTNING_URL` | Optional | Public Alby profile/pay URL used by `/support` for one-time Lightning support |
+| `NEXT_PUBLIC_STRIPE_PAYMENT_LINK_URL`       | Optional | One-time Stripe Payment Link used by `/support` once Stripe is configured     |
 
 `NEXT_PUBLIC_DAILY_WORD_URL` is still honored as a legacy fallback during the rename.
 
