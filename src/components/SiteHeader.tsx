@@ -15,6 +15,7 @@ export default function SiteHeader() {
         <Link href="/">Today</Link>
         <Link href="/#archive">Archive</Link>
         <Link href="/#series">Series</Link>
+        <Link href="/support">Support</Link>
       </nav>
       <div className="site-header-actions">
         <ThemeToggle />
